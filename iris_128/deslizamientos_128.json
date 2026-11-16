@@ -1,0 +1,182 @@
+{
+ "name": "deslizamientos-laconvencion-128",
+ "host": "127.0.0.1",
+ "port": 5000,
+ "images": {
+  "path": {
+   "S2": "images/{id}/image.tif"
+  },
+  "shape": [
+   128,
+   128
+  ],
+  "metadata": "images/{id}/metadata.json"
+ },
+ "segmentation": {
+  "path": "masks/{id}.png",
+  "mask_encoding": "integer",
+  "mask_area": [
+   0,
+   0,
+   128,
+   128
+  ],
+  "score": "f1",
+  "prioritise_unmarked_images": false,
+  "shuffle_images": false,
+  "unverified_threshold": 1,
+  "test_images": null,
+  "ai_model": {
+   "bands": [
+    "$S2.B1",
+    "$S2.B2",
+    "$S2.B3",
+    "$S2.B4",
+    "$S2.B5",
+    "$S2.B6"
+   ],
+   "train_ratio": 0.8,
+   "max_train_pixels": 20000,
+   "n_estimators": 25,
+   "max_depth": 10,
+   "n_leaves": 12,
+   "suppression_threshold": 0,
+   "suppression_filter_size": 5,
+   "suppression_default_class": 0,
+   "use_edge_filter": true,
+   "use_superpixels": false,
+   "use_meshgrid": false,
+   "meshgrid_cells": "3x3"
+  }
+ },
+ "classes": [
+  {
+   "name": "Sin deslizamiento",
+   "colour": [
+    255,
+    255,
+    255,
+    0
+   ],
+   "user_colour": [
+    0,
+    255,
+    255,
+    70
+   ],
+   "description": "Fondo confirmado (tecla 1): bosque, pasto, río, camino, cultivo o techo."
+  },
+  {
+   "name": "Deslizamiento",
+   "colour": [
+    255,
+    40,
+    60,
+    110
+   ],
+   "description": "Cicatriz de deslizamiento visible en ladera (tecla 2): corona arriba y material arrastrado."
+  },
+  {
+   "name": "Dudoso",
+   "colour": [
+    255,
+    200,
+    0,
+    90
+   ],
+   "description": "No se puede decidir (tecla 3: nube, sombra, cauce sin arranque visible). Se ignora (255)."
+  }
+ ],
+ "views": {
+  "Color natural con cajas": {
+   "description": "Cajas amarillas del modelo como guía visual. Pinta la forma real con «Deslizamiento» (2).",
+   "type": "image",
+   "vmin": 0,
+   "vmax": 1500,
+   "data": [
+    "$S2.B4*(1-$S2.B8)+5000*$S2.B8",
+    "$S2.B3*(1-$S2.B8)+5000*$S2.B8",
+    "$S2.B2*(1-$S2.B8)"
+   ]
+  },
+  "Color natural": {
+   "description": "B4 (rojo), B3 (verde) y B2 (azul) de Sentinel-2 L2A.",
+   "type": "image",
+   "vmin": 0,
+   "vmax": 1500,
+   "data": [
+    "$S2.B4",
+    "$S2.B3",
+    "$S2.B2"
+   ]
+  },
+  "Probabilidad del modelo": {
+   "description": "Mapa de calor U-Net v4 (solo de guía: lo que vale es lo que se ve en la imagen).",
+   "type": "image",
+   "data": "$S2.B7",
+   "cmap": "magma",
+   "vmin": 0,
+   "vmax": 1
+  },
+  "Pendiente": {
+   "description": "B13 pendiente del terreno en grados (las cicatrices arrancan en ladera >= 10-15°).",
+   "type": "image",
+   "data": "$S2.B5",
+   "cmap": "viridis",
+   "vmin": 0,
+   "vmax": 60
+  },
+  "Relieve": {
+   "description": "B14 elevación DEM en metros sobre el nivel del mar.",
+   "type": "image",
+   "data": "$S2.B6",
+   "cmap": "terrain",
+   "vmin": 500,
+   "vmax": 3500
+  },
+  "Bordes": {
+   "description": "Gradiente Sobel en las bandas visibles: resalta escarpas y coronas.",
+   "type": "image",
+   "data": "edges($S2.B2+$S2.B3+$S2.B4)",
+   "cmap": "gray"
+  },
+  "Suelo vs Vegetacion": {
+   "description": "Contraste Rojo/Verde (B4-B3)/(B4+B3+1): tonos cálidos indican suelo desnudo o roca.",
+   "type": "image",
+   "data": "($S2.B4-$S2.B3)/($S2.B4+$S2.B3+1)",
+   "cmap": "RdYlGn_r",
+   "vmin": -0.3,
+   "vmax": 0.3
+  },
+  "Mapa": {
+   "description": "Mapa aéreo Bing de referencia contextual.",
+   "type": "bingmap"
+  }
+ },
+ "view_groups": {
+  "default": [
+   "Color natural con cajas",
+   "Color natural",
+   "Pendiente"
+  ],
+  "probabilidad": [
+   "Color natural",
+   "Probabilidad del modelo",
+   "Pendiente"
+  ],
+  "espectral": [
+   "Color natural",
+   "Suelo vs Vegetacion",
+   "Pendiente"
+  ],
+  "relieve": [
+   "Color natural",
+   "Relieve",
+   "Bordes"
+  ],
+  "mapa": [
+   "Color natural",
+   "Mapa"
+  ]
+ }
+}

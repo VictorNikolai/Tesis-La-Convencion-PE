@@ -318,19 +318,147 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             dir_iris = os.path.join(tmp, 'iris_128')
             n_exp = exportar_128(tmp, dir_iris, limite=1)
             self.assertEqual(n_exp, 4)
-            # Simular marcado en IRIS (1=fondo, 2=deslizamiento, 3=dudoso) en q1
-            m_iris = np.ones((128, 128), dtype=np.uint8)
-            m_iris[10:20, 10:20] = 2
-            m_iris[30:40, 30:40] = 3
-            Image.fromarray(m_iris).save(os.path.join(dir_iris, 'masks', 'datos_laconvencion__sinpad_1_001_q1.png'))
+            # Simular marcado en IRIS 0-based (0=fondo, 1=deslizamiento, 2=dudoso) en q1 y 1-based en q2
+            m_q1 = np.zeros((128, 128), dtype=np.uint8)
+            m_q1[10:20, 10:20] = 1
+            m_q1[30:40, 30:40] = 2
+            Image.fromarray(m_q1).save(os.path.join(dir_iris, 'masks', 'datos_laconvencion__sinpad_1_001_q1.png'))
+
+            m_q2 = np.ones((128, 128), dtype=np.uint8)
+            m_q2[10:20, 10:20] = 2
+            m_q2[30:40, 30:40] = 3
+            Image.fromarray(m_q2).save(os.path.join(dir_iris, 'masks', 'datos_laconvencion__sinpad_1_001_q2.png'))
+
             dir_n1 = os.path.join(tmp, 'mascaras_nivel1')
-            n_imp = importar_128(dir_iris, dir_n1)
-            self.assertEqual(n_imp, 1)
-            with rasterio.open(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', 'sinpad_1_001_q1.tif')) as dm:
-                mk = dm.read(1)
-            self.assertEqual(mk[15, 15], 1)
-            self.assertEqual(mk[35, 35], 255)
-            self.assertEqual(mk[80, 80], 0)
+            n_imp = importar_128(dir_iris, dir_n1, raiz=tmp)
+            self.assertEqual(n_imp, 2)
+            for q in ('q1', 'q2'):
+                with rasterio.open(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', f'sinpad_1_001_{q}.tif')) as dm:
+                    mk = dm.read(1)
+                self.assertEqual(mk[15, 15], 1)
+                self.assertEqual(mk[35, 35], 255)
+                self.assertEqual(mk[80, 80], 0)
+            # Verificar reconstrucción de máscara 256×256 y exportación de GeoJSON
+            self.assertTrue(os.path.exists(os.path.join(dir_n1, 'mascaras_256', 'datos_laconvencion', 'sinpad_1_001.tif')))
+            self.assertTrue(os.path.exists(os.path.join(dir_n1, 'marcas_desde_iris.geojson')))
+            with rasterio.open(os.path.join(dir_n1, 'mascaras_256', 'datos_laconvencion', 'sinpad_1_001.tif')) as d256:
+                m256 = d256.read(1)
+            self.assertEqual(m256.shape, (256, 256))
+            self.assertEqual(m256[15, 15], 1)      # q1 pintado
+            self.assertEqual(m256[15, 128 + 15], 1)  # q2 pintado
+            self.assertEqual(m256[200, 200], 255)  # q4 sin pintar -> 255 (ignorar)
+
+    def test_acuerdo_anotadores_geojson_e_iris(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as tmp:
+            t_path = os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_15525_001', 'image.tif')
+            _crear_tesela_sintetica(t_path, 750000, 8600000)
+            dir_a = os.path.join(tmp, 'iris_a')
+            dir_b = os.path.join(tmp, 'iris_b')
+            os.makedirs(os.path.join(dir_a, 'masks'), exist_ok=True)
+            os.makedirs(os.path.join(dir_b, 'masks'), exist_ok=True)
+            for q in ('q1', 'q2', 'q3', 'q4'):
+                ma = np.zeros((128, 128), dtype=np.uint8)
+                mb = np.zeros((128, 128), dtype=np.uint8)
+                if q == 'q1':
+                    ma[10:30, 10:30] = 1
+                    mb[10:30, 15:35] = 1
+                Image.fromarray(ma).save(os.path.join(dir_a, 'masks', f'datos_laconvencion__sinpad_15525_001_{q}.png'))
+                Image.fromarray(mb).save(os.path.join(dir_b, 'masks', f'datos_laconvencion__sinpad_15525_001_{q}.png'))
+            r = subprocess.run(
+                [sys.executable, os.path.join(AQUI, 'acuerdo_anotadores.py'), dir_a, dir_b,
+                 '--teselas', 'sinpad_15525_001', '--raiz', tmp],
+                capture_output=True, text=True, check=True
+            )
+            self.assertIn('IoU entre anotadores 0.600', r.stdout)
+
+    def test_proyecto_iris_real_y_vistas(self):
+        """Comprueba el proyecto iris_128 real exportado y el renderizado de todas las vistas en IRIS."""
+        from iris.project import project
+        ruta_json = os.path.join(RAIZ, 'iris_128', 'deslizamientos_128.json')
+        self.assertTrue(os.path.exists(ruta_json), 'Falta iris_128/deslizamientos_128.json')
+        project.load_from(ruta_json)
+        self.assertEqual(len(project.image_ids), 464)
+        # El primer parche debe ser la primera tesela de acuerdo entre anotadores (sinpad_15525_001_q1)
+        self.assertEqual(project.image_ids[0], 'datos_laconvencion__sinpad_15525_001_q1')
+        self.assertEqual(project.get_start_image_id(), 'datos_laconvencion__sinpad_15525_001_q1')
+        # Renderizar todas las vistas tipo imagen sobre un parche real
+        for vname, v in project['views'].items():
+            if v.get('type') == 'image':
+                arr = project.render_image(project.image_ids[0], v)
+                self.assertEqual(arr.shape, (128, 128, 3), f'Fallo shape en vista {vname}')
+                self.assertEqual(arr.dtype, np.uint8, f'Fallo dtype en vista {vname}')
+
+    def test_geomorfologia_tiers_y_poligonos_qgis(self):
+        """Comprueba Vía 3 (CURVATURA/TPI/GRVI), pesos por Tier en cargar_locales y suavizado Chaikin/.qml."""
+        from nucleo import recetas
+        import ajuste_fino
+        import exportar_poligonos_qgis as epq
+
+        # 1. Vía 3: CURVATURA, TPI y GRVI en recetas
+        r = {
+            'nombre': 'test_geom', 'onnx': 'x.onnx',
+            'canales': ['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion', 'CURVATURA', 'TPI', 'GRVI'],
+            'lado_px': 128, 'normalizacion': {'metodo': 'ninguna'}, 'salida': 'sigmoide', 'umbral': 0.5,
+        }
+        recetas.normalizar_nombres(r)
+        recetas.validar(r)
+        fuente = {c: np.random.default_rng(7).uniform(0.1, 1.0, (128, 128)).astype(np.float32)
+                  for c in ('B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion')}
+        t = recetas.armar(fuente, np.ones((128, 128), dtype=bool), r)
+        self.assertEqual(t.shape, (9, 128, 128))
+        self.assertTrue(np.isfinite(t).all())
+        self.assertGreaterEqual(float(t[6:].min()), -1.0)
+        self.assertLessEqual(float(t[6:].max()), 1.0)
+
+        # 2. Suavizado Chaikin y estilo .qml para QGIS
+        cuadrado = {'type': 'Polygon', 'coordinates': [[[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0], [0.0, 0.0]]]}
+        suave = epq._suavizar_geom_geojson(cuadrado)
+        self.assertGreater(len(suave['coordinates'][0]), 5)
+        self.assertEqual(suave['coordinates'][0][0], suave['coordinates'][0][-1])
+
+        with tempfile.TemporaryDirectory() as tmp:
+            ruta_qml = os.path.join(tmp, 'estilo.qml')
+            epq._escribir_qml_qgis(ruta_qml)
+            self.assertTrue(os.path.exists(ruta_qml))
+            self.assertIn('tier_calidad', open(ruta_qml, encoding='utf-8').read())
+
+            # 3. cargar_locales leyendo indice_parches_ampliado.csv + catalogo_parches_tiers.csv
+            p_dir = os.path.join(tmp, 'parches_128')
+            m_dir = os.path.join(tmp, 'n2', 'parches_128')
+            os.makedirs(os.path.join(p_dir, 'datos_laconvencion'), exist_ok=True)
+            os.makedirs(os.path.join(m_dir, 'datos_laconvencion'), exist_ok=True)
+            tr = from_origin(750000.0, 8600000.0, 10.0, 10.0)
+            arr6 = np.full((6, 128, 128), 500.0, dtype=np.float32)
+            with rasterio.open(os.path.join(p_dir, 'datos_laconvencion', 't1_c0.tif'), 'w',
+                               driver='GTiff', height=128, width=128, count=6, dtype='float32',
+                               crs='EPSG:32718', transform=tr) as ds:
+                ds.write(arr6)
+            mk1 = np.zeros((128, 128), dtype=np.uint8)
+            with rasterio.open(os.path.join(m_dir, 'datos_laconvencion', 't1_c0.tif'), 'w',
+                               driver='GTiff', height=128, width=128, count=1, dtype='uint8',
+                               crs='EPSG:32718', transform=tr) as ds:
+                ds.write(mk1, 1)
+            with open(os.path.join(p_dir, 'indice_parches_ampliado.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['parche', 'proyecto', 'tesela', 'conjunto', 'zona', 'archivo'])
+                w.writeheader()
+                w.writerow({'parche': 't1_c0', 'proyecto': 'datos_laconvencion', 'tesela': 't1',
+                            'conjunto': 'entrenamiento', 'zona': 'Z1', 'archivo': 'datos_laconvencion/t1_c0.tif'})
+            with open(os.path.join(tmp, 'n2', 'catalogo_parches_tiers.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['proyecto', 'parche', 'peso_perdida'])
+                w.writeheader()
+                w.writerow({'proyecto': 'datos_laconvencion', 'parche': 't1_c0', 'peso_perdida': '0.8'})
+
+            rec_base = {
+                'nombre': 'base', 'onnx': 'b.onnx',
+                'canales': ['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion'],
+                'lado_px': 128, 'normalizacion': {'metodo': 'ninguna'}, 'salida': 'sigmoide', 'umbral': 0.5,
+            }
+            recetas.normalizar_nombres(rec_base)
+            escala = {b: 1000.0 for b in ('B01', 'B02', 'B03', 'B04')}
+            X, Y, V, filas = ajuste_fino.cargar_locales(p_dir, m_dir, rec_base, escala, {'entrenamiento'}, solo_con_positivos=True)
+            self.assertEqual(len(X), 1)
+            self.assertAlmostEqual(filas[0]['_peso_tier'], 0.8)
 
 
 if __name__ == '__main__':

@@ -132,9 +132,9 @@ def main():
             ha[dec] += p['area_ha']
             capas[dec].append(g)
             mask[z] = 1 if dec == 'aceptada' else 255
-        # la regla de nube (B2 > 1000) no se aplica sobre una pieza aceptada: el suelo desnudo
-        # muy claro de una cicatriz también supera ese valor
-        sin_dato = (x[1] <= 0) | ((x[1] > 1000) & (mask != 1))
+        # la regla de nube (B2 > 1000) no se aplica sobre una pieza aceptada ni sobre suelo desnudo claro
+        suelo_claro = (x[1] <= 2000) & (x[3] > x[2]) & (x[3] > 1.2 * x[1])
+        sin_dato = (x[1] <= 0) | ((x[1] > 1000) & ~suelo_claro & (mask != 1))
         mask[sin_dato] = 255
         p8 = dict(driver='GTiff', height=forma[0], width=forma[1], count=1, dtype='uint8', crs=crs,
                   transform=tr, compress='deflate', nodata=None)

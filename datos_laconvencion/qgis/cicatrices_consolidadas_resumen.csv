@@ -1,0 +1,500 @@
+id_poligono,proyecto,tesela,zona,conjunto,area_ha,pend_media,pend_max,compacidad,tier_calidad,fuente
+1,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,2.88,25.5,33.9,1.95,oro,Multitemporal + Morfología
+2,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.32,31.0,37.2,1.6,oro,Multitemporal + Morfología
+3,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.72,30.3,41.3,2.0,oro,Multitemporal + Morfología
+4,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,1.61,28.5,38.1,1.81,oro,Multitemporal + Morfología
+5,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.48,26.9,36.5,2.09,oro,Multitemporal + Morfología
+6,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.19,25.3,35.0,1.46,plata,Multitemporal + Morfología
+7,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.2,35.5,41.5,1.54,oro,Multitemporal + Morfología
+8,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.27,32.8,41.0,1.69,oro,Multitemporal + Morfología
+9,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.24,33.4,35.0,1.6,oro,Multitemporal + Morfología
+10,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,3.16,30.9,45.0,2.14,oro,Multitemporal + Morfología
+11,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.19,25.6,31.9,1.46,plata,Multitemporal + Morfología
+12,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,1.42,36.4,43.2,1.6,oro,Multitemporal + Morfología
+13,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,0.6,31.2,35.5,2.07,oro,Multitemporal + Morfología
+14,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,1.49,35.0,39.5,2.16,oro,Multitemporal + Morfología
+15,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,4.24,26.4,40.6,1.61,oro,Multitemporal + Morfología
+16,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,2.46,28.7,37.3,4.24,oro,Multitemporal + Morfología
+17,datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,1.12,26.8,30.8,2.67,oro,Multitemporal + Morfología
+18,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.1,28.3,30.7,1.43,bronce,Multitemporal + Morfología
+19,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,3.4,33.5,36.9,3.74,oro,Multitemporal + Morfología
+20,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.29,35.4,37.9,1.53,oro,Multitemporal + Morfología
+21,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,1.14,40.1,53.9,2.53,oro,Multitemporal + Morfología
+22,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.23,40.9,43.2,1.77,oro,Multitemporal + Morfología
+23,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.59,44.3,49.3,1.9,oro,Multitemporal + Morfología
+24,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.69,40.3,48.6,1.53,oro,Multitemporal + Morfología
+25,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,3.53,32.3,48.4,2.58,oro,Multitemporal + Morfología
+26,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.21,36.4,41.2,1.5,oro,Multitemporal + Morfología
+27,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,2.02,36.5,43.3,1.91,oro,Multitemporal + Morfología
+28,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,1.3,40.9,52.2,2.41,oro,Multitemporal + Morfología
+29,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.41,35.0,38.0,2.05,oro,Multitemporal + Morfología
+30,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,1.55,40.1,48.7,2.82,oro,Multitemporal + Morfología
+31,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,1.5,31.6,37.2,1.53,oro,Multitemporal + Morfología
+32,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.43,32.3,37.9,1.54,oro,Multitemporal + Morfología
+33,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.38,37.9,42.4,2.11,oro,Multitemporal + Morfología
+34,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.26,38.2,40.7,1.73,oro,Multitemporal + Morfología
+35,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.18,37.0,40.4,1.64,plata,Multitemporal + Morfología
+36,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.44,42.5,46.6,2.1,oro,Multitemporal + Morfología
+37,datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,0.23,38.7,43.6,1.64,oro,Multitemporal + Morfología
+38,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.36,36.4,40.0,1.64,oro,Multitemporal + Morfología
+39,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.55,29.6,33.6,1.53,oro,Multitemporal + Morfología
+40,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.39,24.9,29.8,1.86,oro,Multitemporal + Morfología
+41,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.87,22.7,31.1,1.81,oro,Multitemporal + Morfología
+42,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,2.19,39.0,50.4,2.64,oro,Multitemporal + Morfología
+43,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.51,34.6,43.8,1.46,oro,Multitemporal + Morfología
+44,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.31,23.8,27.4,1.48,oro,Multitemporal + Morfología
+45,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.97,22.2,30.3,1.87,oro,Multitemporal + Morfología
+46,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.2,30.5,36.5,1.54,oro,Multitemporal + Morfología
+47,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.25,25.6,33.0,1.47,oro,Multitemporal + Morfología
+48,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,1.72,31.8,43.8,2.07,oro,Multitemporal + Morfología
+49,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.88,25.6,41.4,2.84,oro,Multitemporal + Morfología
+50,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,1.8,37.8,48.2,2.95,oro,Multitemporal + Morfología
+51,datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,0.64,42.5,48.4,2.06,oro,Multitemporal + Morfología
+52,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,1.7,44.0,65.6,2.7,oro,Multitemporal + Morfología
+53,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,1.47,43.2,55.8,3.0,oro,Multitemporal + Morfología
+54,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,0.32,39.2,45.5,1.6,oro,Multitemporal + Morfología
+55,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,1.69,49.7,73.1,2.41,oro,Multitemporal + Morfología
+56,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,0.19,32.2,36.4,1.58,plata,Multitemporal + Morfología
+57,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,1.49,39.5,52.0,2.61,oro,Multitemporal + Morfología
+58,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,0.55,27.4,41.0,2.29,oro,Multitemporal + Morfología
+59,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,1.35,37.4,48.4,2.65,oro,Multitemporal + Morfología
+60,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,0.32,46.6,55.5,1.78,oro,Multitemporal + Morfología
+61,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,0.4,43.6,46.9,1.9,oro,Multitemporal + Morfología
+62,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,3.47,34.9,44.1,3.21,oro,Multitemporal + Morfología
+63,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,0.28,26.7,31.5,1.87,oro,Multitemporal + Morfología
+64,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,1.27,31.3,39.4,2.44,oro,Multitemporal + Morfología
+65,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,4.78,43.7,69.8,2.97,oro,Multitemporal + Morfología
+66,datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,0.56,45.8,63.5,1.7,oro,Multitemporal + Morfología
+67,datos_indeci,sinpad_3814_001,Z01_SANTA_TERESA,entrenamiento,0.49,35.4,45.1,1.63,oro,Multitemporal + Morfología
+68,datos_indeci,sinpad_3814_001,Z01_SANTA_TERESA,entrenamiento,2.52,42.8,51.0,1.52,oro,Multitemporal + Morfología
+69,datos_indeci,sinpad_3814_001,Z01_SANTA_TERESA,entrenamiento,0.82,43.1,46.4,1.64,oro,Multitemporal + Morfología
+70,datos_indeci,sinpad_3814_001,Z01_SANTA_TERESA,entrenamiento,2.32,39.8,45.6,2.37,oro,Multitemporal + Morfología
+71,datos_indeci,sinpad_3814_001,Z01_SANTA_TERESA,entrenamiento,3.78,38.4,46.6,4.25,oro,Multitemporal + Morfología
+72,datos_indeci,sinpad_3814_001,Z01_SANTA_TERESA,entrenamiento,0.26,43.9,49.1,1.53,oro,Multitemporal + Morfología
+73,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,1.08,36.6,45.0,2.57,oro,Multitemporal + Morfología
+74,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,1.6,36.1,44.5,2.91,oro,Multitemporal + Morfología
+75,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,1.94,48.8,63.6,3.59,oro,Multitemporal + Morfología
+76,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,0.32,33.6,40.1,1.78,oro,Multitemporal + Morfología
+77,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,2.93,32.5,47.2,4.65,oro,Multitemporal + Morfología
+78,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,0.22,30.5,36.6,1.57,oro,Multitemporal + Morfología
+79,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,1.74,30.2,40.7,3.87,oro,Multitemporal + Morfología
+80,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,0.36,30.4,36.9,1.71,oro,Multitemporal + Morfología
+81,datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,0.56,29.7,38.8,2.15,oro,Multitemporal + Morfología
+82,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,1.23,39.7,58.2,1.89,oro,Multitemporal + Morfología
+83,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,0.4,34.8,43.1,1.67,oro,Multitemporal + Morfología
+84,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,2.61,29.6,39.6,3.78,oro,Multitemporal + Morfología
+85,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,4.73,37.6,54.7,3.26,oro,Multitemporal + Morfología
+86,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,1.6,33.5,45.8,3.33,oro,Multitemporal + Morfología
+87,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,4.35,36.0,44.6,5.06,oro,Multitemporal + Morfología
+88,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,0.66,33.9,39.6,1.74,oro,Multitemporal + Morfología
+89,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,2.79,33.4,40.0,2.07,oro,Multitemporal + Morfología
+90,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,0.96,32.9,43.5,1.57,oro,Multitemporal + Morfología
+91,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,0.53,32.7,38.3,1.66,oro,Multitemporal + Morfología
+92,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,1.19,35.1,41.8,2.9,oro,Multitemporal + Morfología
+93,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,0.73,30.6,39.1,2.03,oro,Multitemporal + Morfología
+94,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,0.98,49.3,62.6,3.27,oro,Multitemporal + Morfología
+95,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,0.94,47.1,52.4,2.35,oro,Multitemporal + Morfología
+96,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,1.11,46.4,50.6,3.0,oro,Multitemporal + Morfología
+97,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,1.43,40.2,48.3,2.65,oro,Multitemporal + Morfología
+98,datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,4.93,37.5,45.2,2.74,oro,Multitemporal + Morfología
+99,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.54,26.5,29.8,2.25,oro,Multitemporal + Morfología
+100,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.3,28.9,31.6,1.88,oro,Multitemporal + Morfología
+101,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,1.64,40.1,56.8,2.65,oro,Multitemporal + Morfología
+102,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,1.1,39.1,48.6,2.29,oro,Multitemporal + Morfología
+103,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,1.39,30.4,42.5,2.28,oro,Multitemporal + Morfología
+104,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,1.22,39.4,49.0,2.35,oro,Multitemporal + Morfología
+105,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.37,31.1,34.5,1.76,oro,Multitemporal + Morfología
+106,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.44,29.9,36.1,2.0,oro,Multitemporal + Morfología
+107,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.95,31.7,44.6,2.16,oro,Multitemporal + Morfología
+108,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.85,30.3,38.4,2.36,oro,Multitemporal + Morfología
+109,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,4.48,42.0,59.8,2.6,oro,Multitemporal + Morfología
+110,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.61,42.0,52.3,2.1,oro,Multitemporal + Morfología
+111,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.9,38.6,57.4,1.76,oro,Multitemporal + Morfología
+112,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.24,33.8,40.9,1.5,oro,Multitemporal + Morfología
+113,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.17,41.7,43.8,1.55,plata,Multitemporal + Morfología
+114,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.23,43.3,46.1,1.53,oro,Multitemporal + Morfología
+115,datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,0.44,41.3,44.3,1.91,oro,Multitemporal + Morfología
+116,datos_indeci,sinpad_92395_001,Z01_SANTA_TERESA,entrenamiento,0.3,22.6,29.4,2.0,oro,Multitemporal + Morfología
+117,datos_indeci,sinpad_92395_001,Z01_SANTA_TERESA,entrenamiento,0.31,37.4,41.4,1.55,oro,Multitemporal + Morfología
+118,datos_indeci,sinpad_92395_001,Z01_SANTA_TERESA,entrenamiento,0.81,37.5,42.5,3.12,oro,Multitemporal + Morfología
+119,datos_indeci,sinpad_92395_001,Z01_SANTA_TERESA,entrenamiento,1.17,38.8,42.3,2.85,oro,Multitemporal + Morfología
+120,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.72,39.5,43.0,2.57,oro,Multitemporal + Morfología
+121,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,4.16,41.7,50.0,2.97,oro,Multitemporal + Morfología
+122,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.68,38.6,46.9,2.27,oro,Multitemporal + Morfología
+123,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.35,62.5,66.0,1.75,oro,Multitemporal + Morfología
+124,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.28,38.0,39.9,1.56,oro,Multitemporal + Morfología
+125,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.72,33.1,39.5,1.8,oro,Multitemporal + Morfología
+126,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.28,46.8,56.6,1.87,oro,Multitemporal + Morfología
+127,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,1.63,35.8,44.1,1.92,oro,Multitemporal + Morfología
+128,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.65,41.8,47.6,1.97,oro,Multitemporal + Morfología
+129,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,1.25,42.3,49.2,2.5,oro,Multitemporal + Morfología
+130,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.81,45.5,50.1,1.65,oro,Multitemporal + Morfología
+131,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.18,43.3,44.7,1.64,plata,Multitemporal + Morfología
+132,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.66,40.4,48.8,1.65,oro,Multitemporal + Morfología
+133,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.49,40.4,43.8,1.81,oro,Multitemporal + Morfología
+134,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.89,42.7,48.9,1.68,oro,Multitemporal + Morfología
+135,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,3.05,41.2,51.6,2.07,oro,Multitemporal + Morfología
+136,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.35,40.4,46.0,1.75,oro,Multitemporal + Morfología
+137,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.78,38.7,52.8,1.81,oro,Multitemporal + Morfología
+138,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.26,54.6,59.7,1.53,oro,Multitemporal + Morfología
+139,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.25,44.8,51.0,1.67,oro,Multitemporal + Morfología
+140,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,0.52,44.9,46.9,2.08,oro,Multitemporal + Morfología
+141,datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,3.19,42.9,58.9,2.23,oro,Multitemporal + Morfología
+142,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.43,43.2,50.5,1.72,oro,INGEMMET Geológico
+143,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.29,45.9,55.8,1.93,oro,INGEMMET Geológico
+144,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.14,35.5,47.7,1.56,plata,INGEMMET Geológico
+145,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.1,27.1,28.5,1.25,bronce,INGEMMET Geológico
+146,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.2,38.7,42.4,1.54,oro,INGEMMET Geológico
+147,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.1,27.8,28.6,1.43,bronce,INGEMMET Geológico
+148,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,1.09,34.3,37.0,2.53,oro,INGEMMET Geológico
+149,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.13,31.5,34.9,1.3,plata,INGEMMET Geológico
+150,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.26,35.0,43.3,1.44,oro,INGEMMET Geológico
+151,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,2.57,39.3,51.2,3.95,oro,INGEMMET Geológico
+152,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.69,43.8,67.5,1.6,oro,INGEMMET Geológico
+153,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,1.53,35.8,59.2,1.82,oro,INGEMMET Geológico
+154,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.12,47.8,57.8,1.0,plata,INGEMMET Geológico
+155,datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,0.21,46.7,53.7,1.0,oro,INGEMMET Geológico
+156,datos_ingemmet,ingemmet_003_001,Z09_INKAWASI,validacion,0.13,44.4,53.8,1.44,plata,INGEMMET Geológico
+157,datos_ingemmet,ingemmet_003_001,Z09_INKAWASI,validacion,0.11,35.2,45.7,1.38,bronce,INGEMMET Geológico
+158,datos_ingemmet,ingemmet_003_001,Z09_INKAWASI,validacion,0.13,30.4,32.9,1.3,plata,INGEMMET Geológico
+159,datos_ingemmet,ingemmet_003_001,Z09_INKAWASI,validacion,6.97,35.4,48.6,4.01,oro,INGEMMET Geológico
+160,datos_ingemmet,ingemmet_003_001,Z09_INKAWASI,validacion,0.45,48.5,67.5,1.61,oro,INGEMMET Geológico
+161,datos_ingemmet,ingemmet_003_001,Z09_INKAWASI,validacion,0.25,48.4,57.5,1.47,oro,INGEMMET Geológico
+162,datos_ingemmet,ingemmet_004_001,Z01_SANTA_TERESA,entrenamiento,0.2,20.5,26.9,1.67,plata,INGEMMET Geológico
+163,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.26,38.0,43.8,1.73,oro,INGEMMET Geológico
+164,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.13,27.7,32.3,1.44,plata,INGEMMET Geológico
+165,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.17,23.7,33.0,1.7,plata,INGEMMET Geológico
+166,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.21,42.4,43.8,1.5,oro,INGEMMET Geológico
+167,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.1,33.9,36.5,1.43,bronce,INGEMMET Geológico
+168,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,4.04,33.3,41.9,2.73,oro,INGEMMET Geológico
+169,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.12,39.5,41.5,1.33,plata,INGEMMET Geológico
+170,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.1,8.6,10.9,1.43,bronce,INGEMMET Geológico
+171,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.21,42.1,50.9,1.5,oro,INGEMMET Geológico
+172,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,27.89,32.6,63.5,7.62,oro,INGEMMET Geológico
+173,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.19,15.3,20.2,1.46,bronce,INGEMMET Geológico
+174,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,1.9,29.7,41.6,1.94,oro,INGEMMET Geológico
+175,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.15,23.8,27.2,1.5,plata,INGEMMET Geológico
+176,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.46,18.8,22.6,1.84,plata,INGEMMET Geológico
+177,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,21.45,36.0,55.6,10.62,oro,INGEMMET Geológico
+178,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.12,21.7,28.4,1.33,plata,INGEMMET Geológico
+179,datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,0.41,25.4,33.2,1.86,oro,INGEMMET Geológico
+180,datos_ingemmet,ingemmet_006_001,Z07_VILCABAMBA,entrenamiento,0.4,24.8,29.2,1.48,oro,INGEMMET Geológico
+181,datos_ingemmet,ingemmet_007_001,Z14_KUMPIRUSHIATO,entrenamiento,0.15,21.4,22.8,1.5,plata,INGEMMET Geológico
+182,datos_ingemmet,ingemmet_008_001,Z02_ECHARATE,validacion,0.1,34.6,38.3,1.25,bronce,INGEMMET Geológico
+183,datos_ingemmet,ingemmet_008_001,Z02_ECHARATE,validacion,0.39,24.3,35.2,2.05,oro,INGEMMET Geológico
+184,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.13,34.5,35.8,1.18,plata,INGEMMET Geológico
+185,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.34,39.3,44.2,1.62,oro,INGEMMET Geológico
+186,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.11,34.7,36.4,1.38,bronce,INGEMMET Geológico
+187,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.13,32.9,34.0,1.3,plata,INGEMMET Geológico
+188,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,1.12,33.5,36.9,2.07,oro,INGEMMET Geológico
+189,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.14,33.3,34.9,1.56,plata,INGEMMET Geológico
+190,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.14,39.8,46.8,1.56,plata,INGEMMET Geológico
+191,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.12,36.3,39.6,1.5,plata,INGEMMET Geológico
+192,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.22,42.4,43.8,1.57,oro,INGEMMET Geológico
+193,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.25,31.7,36.5,1.39,oro,INGEMMET Geológico
+194,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,4.33,33.6,41.9,2.99,oro,INGEMMET Geológico
+195,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.11,39.9,41.5,1.38,bronce,INGEMMET Geológico
+196,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.1,8.6,10.9,1.43,bronce,INGEMMET Geológico
+197,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,28.32,32.5,63.5,7.72,oro,INGEMMET Geológico
+198,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.19,15.3,20.2,1.46,bronce,INGEMMET Geológico
+199,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,2.32,33.5,42.8,3.74,oro,INGEMMET Geológico
+200,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.77,47.3,54.3,2.75,oro,INGEMMET Geológico
+201,datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,0.98,28.0,41.6,1.72,oro,INGEMMET Geológico
+202,datos_ingemmet,ingemmet_010_001,Z07_VILCABAMBA,entrenamiento,0.27,38.8,42.4,1.69,oro,INGEMMET Geológico
+203,datos_ingemmet,ingemmet_010_001,Z07_VILCABAMBA,entrenamiento,0.1,20.4,23.8,1.11,bronce,INGEMMET Geológico
+204,datos_ingemmet,ingemmet_010_001,Z07_VILCABAMBA,entrenamiento,0.2,26.3,29.0,1.67,oro,INGEMMET Geológico
+205,datos_ingemmet,ingemmet_010_001,Z07_VILCABAMBA,entrenamiento,0.19,33.2,34.6,1.73,plata,INGEMMET Geológico
+206,datos_ingemmet,ingemmet_010_001,Z07_VILCABAMBA,entrenamiento,0.22,34.4,36.6,1.83,oro,INGEMMET Geológico
+207,datos_ingemmet,ingemmet_011_001,Z11_ECHARATE,entrenamiento,0.11,35.1,38.3,1.22,bronce,INGEMMET Geológico
+208,datos_ingemmet,ingemmet_011_001,Z11_ECHARATE,entrenamiento,0.8,37.0,47.3,1.51,oro,INGEMMET Geológico
+209,datos_ingemmet,ingemmet_011_001,Z11_ECHARATE,entrenamiento,0.13,53.1,56.9,1.44,plata,INGEMMET Geológico
+210,datos_ingemmet,ingemmet_011_001,Z11_ECHARATE,entrenamiento,0.11,60.0,65.1,1.38,bronce,INGEMMET Geológico
+211,datos_ingemmet,ingemmet_011_001,Z11_ECHARATE,entrenamiento,0.11,47.2,49.1,1.22,bronce,INGEMMET Geológico
+212,datos_ingemmet,ingemmet_011_001,Z11_ECHARATE,entrenamiento,0.65,43.0,55.9,1.2,oro,INGEMMET Geológico
+213,datos_ingemmet,ingemmet_012_001,Z02_ECHARATE,validacion,0.13,30.1,35.6,1.3,plata,INGEMMET Geológico
+214,datos_ingemmet,ingemmet_014_001,Z02_ECHARATE,validacion,0.2,27.8,35.6,1.33,oro,INGEMMET Geológico
+215,datos_ingemmet,ingemmet_014_001,Z02_ECHARATE,validacion,0.53,60.8,71.3,1.66,oro,INGEMMET Geológico
+216,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.11,20.1,25.8,1.1,bronce,INGEMMET Geológico
+217,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.1,20.1,26.4,1.43,bronce,INGEMMET Geológico
+218,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.48,30.9,44.8,1.5,oro,INGEMMET Geológico
+219,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.48,25.3,35.1,1.45,oro,INGEMMET Geológico
+220,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.4,28.3,42.0,1.43,oro,INGEMMET Geológico
+221,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,1.43,30.4,46.8,2.2,oro,INGEMMET Geológico
+222,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.61,34.9,44.6,2.18,oro,INGEMMET Geológico
+223,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.72,36.7,42.3,2.0,oro,INGEMMET Geológico
+224,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.11,27.4,30.4,1.38,bronce,INGEMMET Geológico
+225,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.45,30.2,35.3,2.5,oro,INGEMMET Geológico
+226,datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,0.16,20.5,28.5,1.23,plata,INGEMMET Geológico
+227,datos_ingemmet,ingemmet_018_001,Z02_ECHARATE,validacion,0.11,26.0,28.6,1.0,bronce,INGEMMET Geológico
+228,datos_ingemmet,ingemmet_018_001,Z02_ECHARATE,validacion,0.13,24.2,31.1,1.08,plata,INGEMMET Geológico
+229,datos_ingemmet,ingemmet_019_001,Z02_ECHARATE,validacion,0.12,41.6,47.7,1.33,plata,INGEMMET Geológico
+230,datos_ingemmet,ingemmet_020_001,Z88_INKAWASI,entrenamiento,0.19,19.4,29.7,1.12,plata,INGEMMET Geológico
+231,datos_ingemmet,ingemmet_020_001,Z88_INKAWASI,entrenamiento,2.5,39.5,52.0,4.24,oro,INGEMMET Geológico
+232,datos_ingemmet,ingemmet_024_001,Z90_PICHARI,validacion,0.18,26.2,34.2,1.5,plata,INGEMMET Geológico
+233,datos_ingemmet,ingemmet_025_001,Z03_SANTA_TERESA,entrenamiento,0.23,36.1,39.3,1.28,oro,INGEMMET Geológico
+234,datos_ingemmet,ingemmet_026_001,Z01_SANTA_TERESA,entrenamiento,0.1,28.1,28.9,1.25,bronce,INGEMMET Geológico
+235,datos_ingemmet,ingemmet_026_001,Z01_SANTA_TERESA,entrenamiento,0.14,35.1,37.3,1.27,plata,INGEMMET Geológico
+236,datos_ingemmet,ingemmet_027_001,Z04_SANTA_ANA,validacion,0.53,36.4,41.4,1.56,oro,INGEMMET Geológico
+237,datos_ingemmet,ingemmet_029_001,Z03_SANTA_TERESA,entrenamiento,1.53,41.0,62.5,3.26,oro,INGEMMET Geológico
+238,datos_ingemmet,ingemmet_029_001,Z03_SANTA_TERESA,entrenamiento,0.48,35.0,39.8,2.0,oro,INGEMMET Geológico
+239,datos_ingemmet,ingemmet_029_001,Z03_SANTA_TERESA,entrenamiento,0.11,39.0,41.8,1.22,bronce,INGEMMET Geológico
+240,datos_ingemmet,ingemmet_029_001,Z03_SANTA_TERESA,entrenamiento,1.75,37.8,48.8,1.77,oro,INGEMMET Geológico
+241,datos_ingemmet,ingemmet_030_001,Z06_PICHARI,entrenamiento,0.17,33.1,37.5,1.06,plata,INGEMMET Geológico
+242,datos_ingemmet,ingemmet_031_001,Z02_ECHARATE,validacion,0.24,40.4,43.8,1.6,oro,INGEMMET Geológico
+243,datos_ingemmet,ingemmet_036_001,Z09_INKAWASI,validacion,0.13,44.4,53.8,1.44,plata,INGEMMET Geológico
+244,datos_ingemmet,ingemmet_036_001,Z09_INKAWASI,validacion,0.11,35.2,45.7,1.38,bronce,INGEMMET Geológico
+245,datos_ingemmet,ingemmet_036_001,Z09_INKAWASI,validacion,0.1,34.9,37.0,1.43,bronce,INGEMMET Geológico
+246,datos_ingemmet,ingemmet_036_001,Z09_INKAWASI,validacion,0.1,32.7,34.1,1.25,bronce,INGEMMET Geológico
+247,datos_ingemmet,ingemmet_036_001,Z09_INKAWASI,validacion,6.27,35.4,48.6,4.12,oro,INGEMMET Geológico
+248,datos_ingemmet,ingemmet_036_001,Z09_INKAWASI,validacion,0.32,34.8,36.5,1.88,oro,INGEMMET Geológico
+249,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.1,27.1,28.5,1.25,bronce,INGEMMET Geológico
+250,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.22,38.6,42.4,1.57,oro,INGEMMET Geológico
+251,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.3,37.8,41.4,1.76,oro,INGEMMET Geológico
+252,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.1,27.8,28.6,1.43,bronce,INGEMMET Geológico
+253,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,1.1,34.2,38.7,2.56,oro,INGEMMET Geológico
+254,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,1.55,36.9,46.4,2.5,oro,INGEMMET Geológico
+255,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.13,31.5,34.9,1.3,plata,INGEMMET Geológico
+256,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.41,33.8,43.3,1.71,oro,INGEMMET Geológico
+257,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,2.43,39.4,51.2,3.68,oro,INGEMMET Geológico
+258,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.7,43.6,67.5,1.67,oro,INGEMMET Geológico
+259,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,1.53,35.8,59.2,1.82,oro,INGEMMET Geológico
+260,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.13,38.7,46.4,1.0,plata,INGEMMET Geológico
+261,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.12,47.8,57.8,1.0,plata,INGEMMET Geológico
+262,datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,0.21,46.7,53.7,1.0,oro,INGEMMET Geológico
+263,datos_ingemmet,ingemmet_038_001,Z02_ECHARATE,validacion,0.14,20.2,33.3,1.0,plata,INGEMMET Geológico
+264,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.16,28.5,30.6,1.33,plata,INGEMMET Geológico
+265,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.72,32.6,36.7,1.71,oro,INGEMMET Geológico
+266,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.12,31.5,32.4,1.5,plata,INGEMMET Geológico
+267,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.83,34.7,36.3,2.08,oro,INGEMMET Geológico
+268,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.16,33.6,34.8,1.6,plata,INGEMMET Geológico
+269,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.1,28.3,29.4,1.43,bronce,INGEMMET Geológico
+270,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.27,33.6,35.0,1.69,oro,INGEMMET Geológico
+271,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.79,34.4,46.8,1.76,oro,INGEMMET Geológico
+272,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,1.08,35.1,60.4,2.12,oro,INGEMMET Geológico
+273,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,1.11,36.4,53.6,2.58,oro,INGEMMET Geológico
+274,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.57,35.5,40.0,1.97,oro,INGEMMET Geológico
+275,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.15,10.4,13.9,1.5,bronce,INGEMMET Geológico
+276,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,0.17,31.8,37.1,1.55,plata,INGEMMET Geológico
+277,datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,44.31,33.7,55.6,8.49,oro,INGEMMET Geológico
+278,datos_ingemmet,ingemmet_043_001,Z01_SANTA_TERESA,entrenamiento,0.48,35.0,44.7,1.12,oro,INGEMMET Geológico
+279,datos_ingemmet,ingemmet_043_001,Z01_SANTA_TERESA,entrenamiento,10.87,37.4,52.7,5.13,oro,INGEMMET Geológico
+280,datos_ingemmet,ingemmet_045_001,Z01_SANTA_TERESA,entrenamiento,1.97,32.5,57.7,1.84,oro,INGEMMET Geológico
+281,datos_ingemmet,ingemmet_045_001,Z01_SANTA_TERESA,entrenamiento,1.54,37.0,50.3,1.73,oro,INGEMMET Geológico
+282,datos_ingemmet,ingemmet_045_001,Z01_SANTA_TERESA,entrenamiento,3.42,37.3,52.4,4.28,oro,INGEMMET Geológico
+283,datos_ingemmet,ingemmet_046_001,Z03_SANTA_TERESA,entrenamiento,5.66,40.1,51.5,3.68,oro,INGEMMET Geológico
+284,datos_ingemmet,ingemmet_049_001,Z03_SANTA_TERESA,entrenamiento,0.18,34.7,36.6,1.5,plata,INGEMMET Geológico
+285,datos_ingemmet,ingemmet_050_001,Z03_SANTA_TERESA,entrenamiento,1.53,41.0,62.5,3.26,oro,INGEMMET Geológico
+286,datos_ingemmet,ingemmet_050_001,Z03_SANTA_TERESA,entrenamiento,0.42,35.0,39.8,1.83,oro,INGEMMET Geológico
+287,datos_ingemmet,ingemmet_050_001,Z03_SANTA_TERESA,entrenamiento,1.05,38.2,47.8,1.46,oro,INGEMMET Geológico
+288,datos_ingemmet,ingemmet_055_001,Z01_SANTA_TERESA,entrenamiento,0.29,26.4,33.2,1.32,oro,INGEMMET Geológico
+289,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,1.04,39.0,46.1,1.65,oro,Multitemporal + Morfología
+290,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,0.42,35.3,38.3,1.56,oro,Multitemporal + Morfología
+291,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,0.72,38.2,44.0,1.85,oro,Multitemporal + Morfología
+292,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,0.25,39.5,44.2,1.79,oro,Multitemporal + Morfología
+293,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,0.25,42.0,52.8,1.67,oro,Multitemporal + Morfología
+294,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,0.74,47.0,65.0,1.8,oro,Multitemporal + Morfología
+295,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,1.73,38.2,48.9,3.09,oro,Multitemporal + Morfología
+296,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,1.4,29.1,39.8,3.41,oro,Multitemporal + Morfología
+297,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,1.02,34.6,43.0,3.29,oro,Multitemporal + Morfología
+298,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,0.21,36.0,40.7,1.75,oro,Multitemporal + Morfología
+299,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,0.22,39.1,42.8,1.47,oro,Multitemporal + Morfología
+300,datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,1.83,34.9,42.3,2.82,oro,Multitemporal + Morfología
+301,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.9,33.8,46.4,2.14,oro,Multitemporal + Morfología
+302,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.21,34.0,38.6,2.52,oro,Multitemporal + Morfología
+303,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.38,28.1,34.6,1.73,oro,Multitemporal + Morfología
+304,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,3.22,37.1,52.9,3.54,oro,Multitemporal + Morfología
+305,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.85,33.7,50.7,2.43,oro,Multitemporal + Morfología
+306,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.33,37.5,39.6,1.5,oro,Multitemporal + Morfología
+307,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.26,37.8,47.6,2.57,oro,Multitemporal + Morfología
+308,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.78,30.9,39.3,1.9,oro,Multitemporal + Morfología
+309,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.06,38.6,45.1,1.71,oro,Multitemporal + Morfología
+310,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,4.56,38.6,52.7,2.45,oro,Multitemporal + Morfología
+311,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,4.87,36.5,55.0,3.08,oro,Multitemporal + Morfología
+312,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,3.3,35.3,47.9,3.0,oro,Multitemporal + Morfología
+313,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.21,47.7,68.6,1.73,oro,Multitemporal + Morfología
+314,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.12,42.6,44.9,1.5,plata,Multitemporal + Morfología
+315,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.32,39.6,42.4,1.6,oro,Multitemporal + Morfología
+316,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.66,49.3,60.3,1.69,oro,Multitemporal + Morfología
+317,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.37,34.3,37.7,1.85,oro,Multitemporal + Morfología
+318,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.24,45.5,55.9,1.77,oro,Multitemporal + Morfología
+319,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.16,46.3,49.0,1.45,plata,Multitemporal + Morfología
+320,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.51,48.2,59.7,3.77,oro,Multitemporal + Morfología
+321,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.95,29.6,34.2,2.07,oro,Multitemporal + Morfología
+322,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.36,32.2,38.2,1.5,oro,Multitemporal + Morfología
+323,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.43,28.6,31.7,1.95,oro,Multitemporal + Morfología
+324,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.65,29.4,40.0,1.67,oro,Multitemporal + Morfología
+325,datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,2.0,35.0,42.6,3.39,oro,Multitemporal + Morfología
+326,datos_laconvencion,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.24,41.4,44.9,1.71,oro,Multitemporal + Morfología
+327,datos_laconvencion,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.44,45.0,76.2,1.57,oro,Multitemporal + Morfología
+328,datos_laconvencion,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.3,43.6,45.9,1.67,oro,Multitemporal + Morfología
+329,datos_laconvencion,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,2.23,48.8,62.1,2.65,oro,Multitemporal + Morfología
+330,datos_laconvencion,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.26,37.2,40.2,1.62,oro,Multitemporal + Morfología
+331,datos_laconvencion,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.22,35.2,47.3,1.47,oro,Multitemporal + Morfología
+332,datos_laconvencion,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.88,41.4,48.6,1.76,oro,Multitemporal + Morfología
+333,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.24,55.7,61.5,1.5,oro,Multitemporal + Morfología
+334,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,2.31,43.7,53.8,3.45,oro,Multitemporal + Morfología
+335,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.53,35.6,42.6,1.77,oro,Multitemporal + Morfología
+336,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.7,41.7,47.8,1.89,oro,Multitemporal + Morfología
+337,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.28,32.8,35.2,1.65,oro,Multitemporal + Morfología
+338,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.41,33.4,38.1,2.05,oro,Multitemporal + Morfología
+339,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,1.59,34.6,41.4,1.96,oro,Multitemporal + Morfología
+340,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,4.34,42.4,72.6,2.55,oro,Multitemporal + Morfología
+341,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.27,33.1,42.5,1.8,oro,Multitemporal + Morfología
+342,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.27,40.5,51.0,1.59,oro,Multitemporal + Morfología
+343,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.76,32.4,36.5,2.62,oro,Multitemporal + Morfología
+344,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.2,37.9,41.9,1.54,oro,Multitemporal + Morfología
+345,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.66,35.6,49.5,1.78,oro,Multitemporal + Morfología
+346,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.92,31.1,38.3,2.49,oro,Multitemporal + Morfología
+347,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,1.5,34.3,45.5,2.42,oro,Multitemporal + Morfología
+348,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.12,43.0,46.2,1.5,plata,Multitemporal + Morfología
+349,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,1.01,44.0,53.3,2.4,oro,Multitemporal + Morfología
+350,datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.97,48.1,54.2,1.9,oro,Multitemporal + Morfología
+351,datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,3.54,41.3,54.0,4.07,oro,Multitemporal + Morfología
+352,datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,0.76,33.2,38.7,2.05,oro,Multitemporal + Morfología
+353,datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,3.55,40.5,68.4,2.32,oro,Multitemporal + Morfología
+354,datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,1.79,38.5,45.2,2.93,oro,Multitemporal + Morfología
+355,datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,0.32,41.9,49.2,1.88,oro,Multitemporal + Morfología
+356,datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,0.12,43.0,46.2,1.5,plata,Multitemporal + Morfología
+357,datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,0.8,36.5,44.2,1.9,oro,Multitemporal + Morfología
+358,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.84,45.3,55.7,2.55,oro,Multitemporal + Morfología
+359,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.4,43.1,53.4,2.0,oro,Multitemporal + Morfología
+360,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,1.4,51.9,69.7,2.26,oro,Multitemporal + Morfología
+361,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.6,44.6,56.2,2.14,oro,Multitemporal + Morfología
+362,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.16,36.2,39.8,1.45,plata,Multitemporal + Morfología
+363,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.64,40.0,52.0,2.29,oro,Multitemporal + Morfología
+364,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.31,36.8,42.0,1.63,oro,Multitemporal + Morfología
+365,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,1.67,47.2,66.0,2.35,oro,Multitemporal + Morfología
+366,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,1.14,37.0,47.8,2.92,oro,Multitemporal + Morfología
+367,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.25,47.1,55.5,1.67,oro,Multitemporal + Morfología
+368,datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,2.54,47.7,63.5,3.48,oro,Multitemporal + Morfología
+369,datos_laconvencion,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,0.31,50.7,63.3,1.63,oro,Multitemporal + Morfología
+370,datos_laconvencion,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,0.69,35.9,42.5,2.09,oro,Multitemporal + Morfología
+371,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,0.27,26.7,29.0,1.5,oro,Multitemporal + Morfología
+372,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,1.37,36.3,47.7,2.69,oro,Multitemporal + Morfología
+373,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,0.48,37.1,42.3,2.18,oro,Multitemporal + Morfología
+374,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,0.33,35.2,40.1,1.94,oro,Multitemporal + Morfología
+375,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,0.32,32.1,35.5,1.88,oro,Multitemporal + Morfología
+376,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,2.26,31.2,42.1,3.32,oro,Multitemporal + Morfología
+377,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,0.45,38.7,45.9,2.25,oro,Multitemporal + Morfología
+378,datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,0.88,29.9,39.3,2.0,oro,Multitemporal + Morfología
+379,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,4.57,36.2,44.6,5.02,oro,Multitemporal + Morfología
+380,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,3.93,33.3,40.0,1.93,oro,Multitemporal + Morfología
+381,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.7,44.1,52.2,2.5,oro,Multitemporal + Morfología
+382,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.92,37.2,41.9,2.63,oro,Multitemporal + Morfología
+383,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.44,36.3,44.0,1.52,oro,Multitemporal + Morfología
+384,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.55,51.6,65.2,1.67,oro,Multitemporal + Morfología
+385,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,3.48,44.5,62.3,3.52,oro,Multitemporal + Morfología
+386,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,1.52,42.2,53.9,1.75,oro,Multitemporal + Morfología
+387,datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,2.31,42.9,54.4,3.04,oro,Multitemporal + Morfología
+388,datos_laconvencion,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,1.39,41.8,57.9,3.39,oro,Multitemporal + Morfología
+389,datos_laconvencion,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,0.44,42.5,45.9,2.1,oro,Multitemporal + Morfología
+390,datos_laconvencion,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,0.56,37.3,43.6,2.67,oro,Multitemporal + Morfología
+391,datos_laconvencion,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,1.43,37.9,47.4,2.38,oro,Multitemporal + Morfología
+392,datos_laconvencion,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,0.89,37.5,42.2,1.89,oro,Multitemporal + Morfología
+393,datos_laconvencion,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,2.86,40.5,52.0,2.86,oro,Multitemporal + Morfología
+394,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.33,27.9,34.4,1.57,oro,Multitemporal + Morfología
+395,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.27,31.5,33.5,1.69,oro,Multitemporal + Morfología
+396,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.4,28.9,30.6,1.6,oro,Multitemporal + Morfología
+397,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,3.7,32.4,43.7,2.64,oro,Multitemporal + Morfología
+398,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.22,29.1,36.8,1.57,oro,Multitemporal + Morfología
+399,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.79,36.5,52.9,1.97,oro,Multitemporal + Morfología
+400,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.62,31.0,38.8,2.07,oro,Multitemporal + Morfología
+401,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.44,43.6,57.6,1.52,oro,Multitemporal + Morfología
+402,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.37,37.5,46.1,1.95,oro,Multitemporal + Morfología
+403,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.52,31.4,40.4,1.53,oro,Multitemporal + Morfología
+404,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.26,34.7,36.3,1.73,oro,Multitemporal + Morfología
+405,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.39,36.1,39.9,1.56,oro,Multitemporal + Morfología
+406,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.17,42.9,45.4,1.55,plata,Multitemporal + Morfología
+407,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.22,33.6,40.4,2.49,oro,Multitemporal + Morfología
+408,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.93,38.9,44.6,2.16,oro,Multitemporal + Morfología
+409,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.25,33.5,46.9,1.67,oro,Multitemporal + Morfología
+410,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,2.62,38.8,52.7,2.57,oro,Multitemporal + Morfología
+411,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.19,43.4,46.7,1.58,plata,Multitemporal + Morfología
+412,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,3.56,35.8,48.2,2.64,oro,Multitemporal + Morfología
+413,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.8,35.3,40.2,1.86,oro,Multitemporal + Morfología
+414,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.13,45.8,68.6,2.17,oro,Multitemporal + Morfología
+415,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.7,35.0,46.6,2.79,oro,Multitemporal + Morfología
+416,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.31,25.2,28.5,1.82,oro,Multitemporal + Morfología
+417,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.31,38.6,40.8,1.63,oro,Multitemporal + Morfología
+418,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.74,43.6,58.8,1.76,oro,Multitemporal + Morfología
+419,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.32,35.0,37.7,1.52,oro,Multitemporal + Morfología
+420,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.12,42.6,44.9,1.5,plata,Multitemporal + Morfología
+421,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.32,39.6,42.4,1.6,oro,Multitemporal + Morfología
+422,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.19,32.2,50.5,1.46,plata,Multitemporal + Morfología
+423,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.53,29.4,34.5,1.71,oro,Multitemporal + Morfología
+424,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.7,43.9,55.8,1.67,oro,Multitemporal + Morfología
+425,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.13,32.9,39.9,1.95,oro,Multitemporal + Morfología
+426,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.16,45.1,49.0,1.45,plata,Multitemporal + Morfología
+427,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.45,40.0,45.2,2.05,oro,Multitemporal + Morfología
+428,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.34,28.2,33.0,1.7,oro,Multitemporal + Morfología
+429,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.78,27.6,34.4,1.73,oro,Multitemporal + Morfología
+430,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.5,33.5,40.1,1.61,oro,Multitemporal + Morfología
+431,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,6.04,40.0,59.7,2.96,oro,Multitemporal + Morfología
+432,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.55,29.7,33.1,1.62,oro,Multitemporal + Morfología
+433,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,0.58,32.4,39.8,2.0,oro,Multitemporal + Morfología
+434,datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,1.12,36.9,48.8,1.72,oro,Multitemporal + Morfología
+435,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.43,29.0,43.3,1.72,oro,Multitemporal + Morfología
+436,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.52,64.9,74.9,2.0,oro,Multitemporal + Morfología
+437,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.51,43.0,64.5,2.12,oro,Multitemporal + Morfología
+438,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.38,43.8,46.8,1.9,oro,Multitemporal + Morfología
+439,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,1.02,52.0,60.5,1.79,oro,Multitemporal + Morfología
+440,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,3.55,52.7,72.9,2.04,oro,Multitemporal + Morfología
+441,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.54,43.8,57.0,1.54,oro,Multitemporal + Morfología
+442,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,3.14,46.6,63.0,2.23,oro,Multitemporal + Morfología
+443,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,1.54,31.0,50.3,3.67,oro,Multitemporal + Morfología
+444,datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,0.21,32.5,38.5,1.75,oro,Multitemporal + Morfología
+445,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.78,28.1,37.7,2.17,oro,Multitemporal + Morfología
+446,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.48,31.4,42.1,1.85,oro,Multitemporal + Morfología
+447,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,3.44,31.0,41.4,1.75,oro,Multitemporal + Morfología
+448,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,4.89,46.3,69.5,2.86,oro,Multitemporal + Morfología
+449,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,1.16,34.7,42.8,2.97,oro,Multitemporal + Morfología
+450,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.72,56.6,70.5,1.57,oro,Multitemporal + Morfología
+451,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.32,43.2,44.8,1.68,oro,Multitemporal + Morfología
+452,datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,0.25,30.4,36.6,1.56,oro,Multitemporal + Morfología
+453,datos_laconvencion_2025,sinpad_43368_001,Z13_HUAYOPATA,entrenamiento,0.1,31.9,35.3,1.43,bronce,Multitemporal + Morfología
+454,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,1.85,45.1,53.8,2.43,oro,Multitemporal + Morfología
+455,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.65,35.3,42.5,2.32,oro,Multitemporal + Morfología
+456,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.31,31.0,35.9,1.48,oro,Multitemporal + Morfología
+457,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.41,58.1,73.6,1.58,oro,Multitemporal + Morfología
+458,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.83,41.3,47.8,2.24,oro,Multitemporal + Morfología
+459,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.81,57.6,68.7,2.08,oro,Multitemporal + Morfología
+460,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.45,34.2,37.7,1.8,oro,Multitemporal + Morfología
+461,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.84,38.7,41.7,1.91,oro,Multitemporal + Morfología
+462,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.31,33.3,37.3,1.63,oro,Multitemporal + Morfología
+463,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.5,31.9,35.3,1.52,oro,Multitemporal + Morfología
+464,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.41,33.8,39.0,2.05,oro,Multitemporal + Morfología
+465,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.46,34.0,36.2,1.84,oro,Multitemporal + Morfología
+466,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.28,33.1,36.7,1.75,oro,Multitemporal + Morfología
+467,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.44,33.4,41.9,1.76,oro,Multitemporal + Morfología
+468,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,2.96,34.2,38.3,2.43,oro,Multitemporal + Morfología
+469,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.81,31.2,37.2,1.72,oro,Multitemporal + Morfología
+470,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,2.28,33.3,48.6,2.07,oro,Multitemporal + Morfología
+471,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.24,38.5,45.5,1.5,oro,Multitemporal + Morfología
+472,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.56,30.6,34.8,1.6,oro,Multitemporal + Morfología
+473,datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,0.12,43.0,46.2,1.5,plata,Multitemporal + Morfología
+474,datos_laconvencion_2025,sinpad_5330_001,Z03_SANTA_TERESA,entrenamiento,0.13,28.1,33.2,1.44,plata,Multitemporal + Morfología
+475,datos_laconvencion_2025,sinpad_5330_001,Z03_SANTA_TERESA,entrenamiento,0.1,27.4,29.9,1.43,bronce,Multitemporal + Morfología
+476,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.66,40.1,46.8,2.28,oro,Multitemporal + Morfología
+477,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.44,45.4,56.1,1.63,oro,Multitemporal + Morfología
+478,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.21,45.5,54.2,1.5,oro,Multitemporal + Morfología
+479,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,3.6,38.8,53.9,2.12,oro,Multitemporal + Morfología
+480,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,1.93,43.7,66.0,1.53,oro,Multitemporal + Morfología
+481,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.4,35.1,52.0,1.82,oro,Multitemporal + Morfología
+482,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.63,42.4,58.3,1.66,oro,Multitemporal + Morfología
+483,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,1.23,47.1,64.1,2.46,oro,Multitemporal + Morfología
+484,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.7,39.8,47.8,2.33,oro,Multitemporal + Morfología
+485,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,3.28,43.6,72.4,3.95,oro,Multitemporal + Morfología
+486,datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,0.12,37.3,43.1,1.5,plata,Multitemporal + Morfología
+487,datos_laconvencion_2025,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,0.1,41.0,43.1,1.43,bronce,Multitemporal + Morfología
+488,datos_laconvencion_2025,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,0.47,32.0,40.2,1.68,oro,Multitemporal + Morfología
+489,datos_laconvencion_2025,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,0.84,39.0,60.6,2.71,oro,Multitemporal + Morfología
+490,datos_laconvencion_2025,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,0.68,38.6,44.4,2.19,oro,Multitemporal + Morfología
+491,datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.67,39.1,41.9,2.48,oro,Multitemporal + Morfología
+492,datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,1.67,41.9,52.2,2.88,oro,Multitemporal + Morfología
+493,datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.46,45.7,47.9,2.0,oro,Multitemporal + Morfología
+494,datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.13,30.4,35.9,1.44,plata,Multitemporal + Morfología
+495,datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,1.45,39.4,52.8,1.67,oro,Multitemporal + Morfología
+496,datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,0.97,30.9,41.2,1.87,oro,Multitemporal + Morfología
+497,datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,1.43,47.8,65.2,2.98,oro,Multitemporal + Morfología
+498,datos_laconvencion_2025,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,0.34,44.9,50.8,1.62,oro,Multitemporal + Morfología
+499,datos_laconvencion_2025,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,0.55,36.7,48.9,1.62,oro,Multitemporal + Morfología

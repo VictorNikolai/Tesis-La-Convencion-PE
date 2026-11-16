@@ -72,25 +72,71 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
     import rasterio
     from nucleo import recetas
     filas = []
-    indice = os.path.join(carpeta_parches, 'indice_parches.csv')
+    indice_amp = os.path.join(carpeta_parches, 'indice_parches_ampliado.csv')
+    indice = indice_amp if os.path.exists(indice_amp) else os.path.join(carpeta_parches, 'indice_parches.csv')
     if not os.path.exists(indice):
         raise SystemExit(f'falta {indice}: corre cortar_parches_128.py')
     with open(indice, encoding='utf-8') as f_ind:
         filas_ind = list(csv.DictReader(f_ind))
+
+    # Si existe catalogo_parches_tiers.csv, leer pesos estratificados por parche (Oro=1.0, HardNeg=0.8, Plata=0.5, Bronce=0.3/0.2)
+    pesos_tiers = None
+    posibles_tiers = [
+        os.path.join(os.path.dirname(carpeta_mascaras.rstrip('/\\')), 'catalogo_parches_tiers.csv'),
+        os.path.join(carpeta_mascaras, '..', 'catalogo_parches_tiers.csv'),
+    ]
+    for rt in posibles_tiers:
+        if os.path.exists(rt):
+            with open(rt, encoding='utf-8') as ft:
+                pesos_tiers = {
+                    (row['proyecto'], row['parche']): float(row['peso_perdida'])
+                    for row in csv.DictReader(ft)
+                    if float(row.get('peso_perdida') or 0) > 0
+                }
+            break
+
+    # Si existe mascaras_nivel2_completo.csv en el padre de carpeta_mascaras, respetar incluir_debil
+    permitidos_n2 = None
+    posibles_csv = [
+        os.path.join(os.path.dirname(carpeta_mascaras.rstrip('/\\')), 'mascaras_nivel2_completo.csv'),
+        os.path.join(carpeta_mascaras, '..', 'mascaras_nivel2_completo.csv'),
+    ]
+    for rc in posibles_csv:
+        if os.path.exists(rc):
+            with open(rc, encoding='utf-8') as fc:
+                permitidos_n2 = {
+                    (row['proyecto'], row['tesela'])
+                    for row in csv.DictReader(fc)
+                    if row.get('incluir_debil') == 'si'
+                }
+            break
+
     for r in filas_ind:
         if r['conjunto'] not in conjunto_permitido:
             continue
         m = os.path.join(carpeta_mascaras, r['proyecto'], r['parche'] + '.tif')
+        es_raiz_n2 = False
         if not os.path.exists(m):
-            m = os.path.join(carpeta_mascaras, r['parche'] + '.tif')          # nivel 2: sin subcarpeta
+            m = os.path.join(carpeta_mascaras, r['parche'] + '.tif')          # nivel 2 clásico: sin subcarpeta
+            es_raiz_n2 = True
             if not os.path.exists(m) or r['proyecto'] != 'datos_ingemmet':
                 continue
-        filas.append(dict(r, _mascara=m, _imagen=os.path.join(carpeta_parches, r['archivo'])))
+        peso_p = None
+        if solo_con_positivos and not es_raiz_n2:
+            if pesos_tiers is not None:
+                if (r['proyecto'], r['parche']) not in pesos_tiers:
+                    continue
+                peso_p = pesos_tiers[(r['proyecto'], r['parche'])]
+            elif permitidos_n2 is not None:
+                if (r['proyecto'], r['tesela']) not in permitidos_n2:
+                    continue
+        filas.append(dict(r, _mascara=m, _imagen=os.path.join(carpeta_parches, r['archivo']),
+                          _es_raiz_n2=es_raiz_n2, _peso_tier=peso_p))
     X, Y, V, usadas = [], [], [], []
     for r in filas:
         with rasterio.open(r['_mascara']) as d:
             mk = d.read(1)
-        if solo_con_positivos and not (mk == 1).any():
+        if solo_con_positivos and (pesos_tiers is None and permitidos_n2 is None or r.get('_es_raiz_n2')) and not (mk == 1).any():
             continue
         with rasterio.open(r['_imagen']) as d:
             x = d.read().astype(np.float32)
@@ -199,6 +245,8 @@ def main():
                     help='cicatrices mínimas en validación local para elegir ahí el umbral')
     ap.add_argument('--umbral-base', dest='umbral_base', type=float, default=0.45,
                     help='umbral de la receta del modelo base, para comparar a umbral fijo')
+    ap.add_argument('--geomorfologia', action='store_true',
+                    help='añade CURVATURA y TPI calculados desde el DEM como canales extra (Vía 3)')
     ap.add_argument('--semilla', type=int, default=42)
     ap.add_argument('--limite', type=int, help='solo para probar: parches de L4S por conjunto')
     a = ap.parse_args()
@@ -217,10 +265,15 @@ def main():
     ck0 = torch.load(a.desde, map_location='cpu', weights_only=False)
     cfg0 = ck0.get('config') or {}
     arq = ck0.get('arquitectura', 'unet')
-    canales = list(cfg0.get('canales') or ['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion'])
-    if canales != ['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion']:
-        raise SystemExit(f'el modelo base usa los canales {canales}; los parches locales traen B1 a B4, pendiente y DEM')
+    canales_base = list(cfg0.get('canales') or ['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion'])
+    if canales_base != ['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion']:
+        raise SystemExit(f'el modelo base usa los canales {canales_base}; los parches locales traen B1 a B4, pendiente y DEM')
+    canales = list(canales_base)
     stats = json.load(open(a.stats, encoding='utf-8'))
+    if a.geomorfologia:
+        canales.extend(['CURVATURA', 'TPI'])
+        stats['CURVATURA'] = {'media': 0.0, 'desv': 1.0}
+        stats['TPI'] = {'media': 0.0, 'desv': 1.0}
     receta = receta_de(canales, stats)
     escala = json.load(open(a.escala, encoding='utf-8'))['media_dn'] if a.escala else cfg_srv.ESCALA_L4S
     if not escala:
@@ -228,7 +281,7 @@ def main():
     ohem = a.ohem if a.ohem is not None else float((cfg0.get('v4') or {}).get('ohem', 0.0))
     indices = bool((cfg0.get('v4') or {}).get('indices_verdor')) or any(k.startswith('base.') for k in ck0['modelo'])
     print(f"base: {os.path.basename(a.desde)} | {arq} | época {ck0.get('epoca')} | IoU val {ck0.get('iou_val')} | "
-          f"índices de verdor {'sí' if indices else 'no'} | ohem {ohem} | {disp}")
+          f"índices de verdor {'sí' if indices else 'no'} | geomorfología {'sí' if a.geomorfologia else 'no'} | ohem {ohem} | {disp}")
 
     # ---------------------------------------------------------------- datos
     tr, va, te = (pares(a.l4s, s, a.limite) for s in ('train', 'validation', 'test'))
@@ -242,10 +295,11 @@ def main():
     if a.debiles:
         con_n1 = {r['parche'] for r in Fl}
         Xd, Yd, Vd, Fd = cargar_locales(a.parches, a.debiles, receta, escala, {'entrenamiento'}, solo_con_positivos=True)
-        quedan = [i for i, r in enumerate(Fd) if r['parche'] not in con_n1 and r['fecha'] == 'base']
+        quedan = [i for i, r in enumerate(Fd) if r['parche'] not in con_n1]
         if quedan:
             Xl = np.concatenate([Xl, Xd[quedan]]); Yl = np.concatenate([Yl, Yd[quedan]]); Vl = np.concatenate([Vl, Vd[quedan]])
-            Wl = np.concatenate([Wl, np.full(len(quedan), a.peso_debil, np.float32)])
+            pesos_q = np.array([Fd[i].get('_peso_tier') or a.peso_debil for i in quedan], dtype=np.float32)
+            Wl = np.concatenate([Wl, pesos_q])
             Fl = Fl + [Fd[i] for i in quedan]
             n_debiles = len(quedan)
     zonas_tr, zonas_va = {r['zona'] for r in Fl}, {r['zona'] for r in Fv}
@@ -273,7 +327,17 @@ def main():
                    in_channels=len(canales) + (2 if indices else 0), classes=1)
     if indices:
         modelo = modelo_con_indices(modelo, canales)
-    modelo.load_state_dict(ck0['modelo'], strict=True)
+    sd = dict(ck0['modelo'])
+    if a.geomorfologia:
+        clave_conv = 'base.encoder.conv1.weight' if indices else 'encoder.conv1.weight'
+        if clave_conv in sd:
+            w_old = sd[clave_conv]
+            w_new = torch.zeros((w_old.shape[0], w_old.shape[1] + 2, w_old.shape[2], w_old.shape[3]), dtype=w_old.dtype)
+            w_new[:, :6] = w_old[:, :6]
+            if w_old.shape[1] > 6:
+                w_new[:, 8:] = w_old[:, 6:]
+            sd[clave_conv] = w_new
+    modelo.load_state_dict(sd, strict=True)
     modelo = modelo.to(disp)
     nucleo_red = modelo.base if indices else modelo
     if a.congelar:
@@ -378,13 +442,13 @@ def main():
                         in_channels=len(canales) + (2 if indices else 0), classes=1)
     if indices:
         base_modelo = modelo_con_indices(base_modelo, canales)
-    base_modelo.load_state_dict(ck0['modelo'], strict=True)
+    base_modelo.load_state_dict(sd, strict=True)
     base_modelo = base_modelo.to(disp)
     mejoro = mejor['epoca'] > 0
     if mejoro:
         modelo.load_state_dict(mejor['estado'])
     else:
-        modelo.load_state_dict(ck0['modelo'], strict=True)
+        modelo.load_state_dict(sd, strict=True)
     mF = mejor['medida']
     usar_local = hay_val and hay_pos_val and cic_va >= a.min_cic
 

@@ -49,12 +49,13 @@ python herramientas/cortar_parches_128.py
 * Seguir las reglas de [`datos_laconvencion/GUIA_marcado.md`](datos_laconvencion/GUIA_marcado.md) sobre `datos_laconvencion/proyecto_marcado.qgz`.
 * Priorizar las **zonas de validación con cicatrices** (`Z04_SANTA_ANA`, `Z08_QUELLOUNO`, `Z09_INKAWASI` en [`particion.md`](particion.md)) y las cicatrices claras de Mesacancha (`005, 009, 040`), Sillapata (`002, 003, 036, 037`) y `046`.
 * Exportar la capa `marcas` en `EPSG:4326` como `datos_laconvencion/marcas.geojson` y anotar `si` en la columna `revisada` del `revisadas.csv` correspondiente.
-* *(Alternativa IRIS $128 \times 128$)*:
+* *(Alternativa IRIS $128 \times 128$ — ver guía completa en [`datos_laconvencion/GUIA_IRIS_128.md`](datos_laconvencion/GUIA_IRIS_128.md) y lámina de ejemplo en [`iris_ejemplo_demo/lamina_ejemplo_iris_128.png`](iris_ejemplo_demo/lamina_ejemplo_iris_128.png))*:
   ```powershell
   python herramientas/iris_128.py exportar --salida iris_128
-  iris label iris_128/deslizamientos_128.json
+  python herramientas/iris_128.py abrir --iris iris_128
   python herramientas/iris_128.py importar --iris iris_128 --salida mascaras_nivel1
   ```
+  *(O haz doble clic en [`iniciar_iris_128.bat`](iniciar_iris_128.bat); abre `http://127.0.0.1:5000/segmentation/` con usuario `admin` y clave `laconvencion`).*
 
 ### Paso 3. Acuerdo entre anotadores (control de calidad)
 Con las 3 teselas marcadas de forma independiente por dos personas (`sinpad_15525_001`, `sinpad_48878_001`, `sinpad_557_001`):
@@ -70,7 +71,37 @@ python herramientas/empaquetar_para_colab.py
 Esto genera `datos_locales_ajuste.zip`. Subirlo a Google Drive y ejecutar [`herramientas/Ajuste_Fino_LaConvencion.ipynb`](herramientas/Ajuste_Fino_LaConvencion.ipynb) en Google Colab con GPU T4.
 
 ### Paso 5. Pruebas automáticas de verificación
-Para ejecutar la batería de pruebas unitarias e integrales (partición sin fuga espacial, máscaras de Nivel 1, regla de nubes sobre suelo brillante, exportador IRIS 128 y componentes de ajuste fino + comparador sin aprendizaje):
+Para ejecutar la batería de pruebas unitarias e integrales (partición sin fuga espacial, máscaras de Nivel 1, regla de nubes sobre suelo brillante, exportador IRIS 128, geomorfometría `CURVATURA`/`TPI`, Tiers y suavizado Chaikin):
 ```powershell
 python herramientas/test_herramientas.py
 ```
+
+---
+
+## 4. Enmascaramiento en IRIS, Clasificación por Tiers y Resultados
+
+### Demostración visual de etiquetado en IRIS ($128 \times 128$)
+Flujo de inspección, contraste espectral (`B/GRVI`), trazado de cicatrices y guardado de máscaras:
+
+![Demostración de etiquetado en IRIS 128](iris_ejemplo_demo/video_tutorial_iris.gif)
+
+![Mapa de interfaz IRIS 128](iris_ejemplo_demo/mapa_interfaz_iris.png)
+
+### Auditoría de calidad y variables geomorfométricas
+Combinación de estratificación por Tiers (**Oro / Plata / Bronce**), aumento geofísico $D_4$, variables topográficas (`CURVATURA` y `TPI`) y minería activa de negativos difíciles (*Hard Negative Mining*):
+
+![Auditoría de calidad y variables geomorfométricas](datos_laconvencion/figuras_tesis/auditoria_calidad_tesis.png)
+
+### Resumen cuantitativo del conjunto enriquecido
+
+| Etapa / Artefacto | Resultado verificado | Archivo principal |
+| :--- | :--- | :--- |
+| **Nivel 2 multitemporal e INGEMMET** | **353 teselas** procesadas (**96** con cicatrices, **783.3 ha**) | `mascaras_provisionales/nivel2/mascaras_nivel2_completo.csv` |
+| **Ventana deslizante + Tiers** | **310 parches centrados nuevos** (**196 Oro**, **125 Plata**) | `mascaras_provisionales/nivel2/catalogo_parches_tiers.csv` |
+| **Aumento Geofísico $D_4$** | **+1,582 parches positivos** (**2,003 pos. vs 577 neg.**) | `parches_128/indice_parches_ampliado.csv` |
+| **Hard Negative Mining** | **443 negativos difíciles** detectados (peso `0.8`) | `herramientas/minar_hard_negatives.py` |
+| **Polígonos suavizados para QGIS** | **499 polígonos** (**409 Oro, 58 Plata, 32 Bronce**; **609.1 ha**) | `datos_laconvencion/qgis/cicatrices_consolidadas_qgis.geojson` |
+| **Control ciego inter-anotador** | **3 teselas** reservadas intactas (`15525`, `48878`, `557`) | `herramientas/acuerdo_anotadores.py` |
+| **Batería de pruebas** | **9 de 9 pruebas unitarias e integrales OK** | `herramientas/test_herramientas.py` |
+
+

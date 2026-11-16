@@ -21,13 +21,51 @@ import numpy as np
 BASES = ['datos_laconvencion', 'datos_indeci', 'datos_ingemmet', 'datos_azar']
 
 
-def capas(ruta, crs, tr, forma, rasterize, transform_geom):
+def _crs_de(gj):
+    nombre = ((gj.get('crs') or {}).get('properties') or {}).get('name', '')
+    if 'EPSG' in nombre:
+        cod = nombre.replace('::', ':').split(':')[-1]
+        return 'EPSG:4326' if cod in ('CRS84', '4326') else f'EPSG:{cod}'
+    return 'EPSG:4326'
+
+
+def capas(ruta, crs, tr, forma, rasterize, transform_geom, tes=None, proy=None):
     des, dud = np.zeros(forma, bool), np.zeros(forma, bool)
-    for f in json.load(open(ruta, encoding='utf-8')).get('features', []):
+    if os.path.isdir(ruta) and tes:
+        from PIL import Image
+        from cortar_parches_128 import LADO, cuadrantes
+        for q, f0, c0 in cuadrantes(forma[0], forma[1], LADO):
+            posibles = [
+                os.path.join(ruta, 'masks', f'{proy}__{tes}_{q}.png') if proy else '',
+                os.path.join(ruta, 'masks', f'datos_laconvencion__{tes}_{q}.png'),
+                os.path.join(ruta, 'masks', f'datos_indeci__{tes}_{q}.png'),
+                os.path.join(ruta, 'masks', f'datos_ingemmet__{tes}_{q}.png'),
+                os.path.join(ruta, 'masks', f'datos_azar__{tes}_{q}.png'),
+            ]
+            p_png = next((p for p in posibles if p and os.path.exists(p)), None)
+            if not p_png:
+                dud[f0:f0 + LADO, c0:c0 + LADO] = True
+                continue
+            raw = np.asarray(Image.open(p_png))
+            if raw.ndim == 3:
+                raw = raw[:, :, 0]
+            vals = set(np.unique(raw).tolist())
+            if 3 in vals:
+                q_des, q_dud = (raw == 2), (raw == 3) | (raw == 0)
+            else:
+                q_des, q_dud = (raw == 1), (raw == 2) | (raw == 255)
+            des[f0:f0 + LADO, c0:c0 + LADO] |= q_des
+            dud[f0:f0 + LADO, c0:c0 + LADO] |= q_dud
+        return des, dud
+
+    with open(ruta, encoding='utf-8') as f_gj:
+        gj = json.load(f_gj)
+    crs_m = _crs_de(gj)
+    for f in gj.get('features', []):
         if not f.get('geometry'):
             continue
         clase = ((f.get('properties') or {}).get('clase') or '').strip().lower()
-        z = rasterize([(transform_geom('EPSG:4326', crs, f['geometry']), 1)], out_shape=forma, transform=tr,
+        z = rasterize([(transform_geom(crs_m, crs, f['geometry']), 1)], out_shape=forma, transform=tr,
                       fill=0, dtype='uint8') == 1
         if clase == 'deslizamiento':
             des |= z
@@ -40,7 +78,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
     ap.add_argument('marcas_a')
     ap.add_argument('marcas_b')
-    ap.add_argument('--teselas', required=True, help='separadas por coma')
+    ap.add_argument('--teselas', default='sinpad_15525_001,sinpad_48878_001,sinpad_557_001', help='separadas por coma')
     ap.add_argument('--raiz', default='.')
     a = ap.parse_args()
     import rasterio
@@ -50,16 +88,20 @@ def main():
 
     filas, tot = [], np.zeros(4, np.int64)
     for tes in [t.strip() for t in a.teselas.split(',') if t.strip()]:
-        ruta = next((os.path.join(a.raiz, b, 'images', tes, 'image.tif') for b in BASES
-                     if os.path.exists(os.path.join(a.raiz, b, 'images', tes, 'image.tif'))), None)
-        if not ruta:
+        par_proy = next(((b, os.path.join(a.raiz, b, 'images', tes, 'image.tif')) for b in BASES
+                         if os.path.exists(os.path.join(a.raiz, b, 'images', tes, 'image.tif'))), None)
+        if not par_proy:
             print(f'no encuentro la tesela {tes}')
             continue
+        proy, ruta = par_proy
         with rasterio.open(ruta) as ds:
-            b2, tr, crs, forma = ds.read(2), ds.transform, ds.crs, ds.shape
-        da, ua = capas(a.marcas_a, crs, tr, forma, rasterize, transform_geom)
-        db, ub = capas(a.marcas_b, crs, tr, forma, rasterize, transform_geom)
-        ok = ~(ua | ub) & (b2 > 0) & (b2 <= 1000)
+            b2, b3, b4 = ds.read(2), ds.read(3), ds.read(4)
+            tr, crs, forma = ds.transform, ds.crs, ds.shape
+        da, ua = capas(a.marcas_a, crs, tr, forma, rasterize, transform_geom, tes=tes, proy=proy)
+        db, ub = capas(a.marcas_b, crs, tr, forma, rasterize, transform_geom, tes=tes, proy=proy)
+        suelo_claro = (b2 <= 2000) & (b4 > b3) & (b4 > 1.2 * b2)
+        nube = (b2 > 1000) & ~suelo_claro & ~(da | db)
+        ok = ~(ua | ub) & (b2 > 0) & ~nube
         tp, fa, fb, tn = (int((da & db & ok).sum()), int((da & ~db & ok).sum()),
                           int((~da & db & ok).sum()), int((~da & ~db & ok).sum()))
         tot += [tp, fa, fb, tn]

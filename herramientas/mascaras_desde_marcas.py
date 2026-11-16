@@ -128,9 +128,10 @@ def main():
                 capas[clave].append(z)
             une = lambda zs: np.any(zs, axis=0) if zs else np.zeros(forma, bool)
             des, des25, dud = une(capas['des']), une(capas['des2025']), une(capas['dud'])
-            # nube blanca: B2 > 1000. Dentro de un polígono de deslizamiento NO se aplica, porque
-            # el suelo desnudo muy claro también pasa de 1000 y ahí ya decidió una persona
-            sin_dato = (x[1] <= 0) | ((x[1] > 1000) & ~des)
+            # nube blanca: B2 > 1000 salvo suelo desnudo claro (B2 <= 2000, B4 > B3, B4 > 1.2*B2)
+            # o dentro de un polígono de deslizamiento marcado por una persona
+            suelo_claro = (x[1] <= 2000) & (x[3] > x[2]) & (x[3] > 1.2 * x[1])
+            sin_dato = (x[1] <= 0) | ((x[1] > 1000) & ~suelo_claro & ~des)
             mask = np.zeros(forma, 'uint8')
             mask[des] = 1
             mask[des25 | dud | sin_dato] = 255
@@ -148,12 +149,13 @@ def main():
             ruta25 = os.path.join(a.raiz, otra, 'images', tes, 'image.tif') if otra else ''
             if capas['des2025'] and ruta25 and os.path.exists(ruta25):
                 with rasterio.open(ruta25) as ds:
-                    x25 = ds.read(2)
+                    x25_b2, x25_b3, x25_b4 = ds.read(2), ds.read(3), ds.read(4)
                     perfil25, tr25, forma25 = ds.profile, ds.transform, ds.shape
                 if tr25 == tr and forma25 == forma:
+                    suelo_claro25 = (x25_b2 <= 2000) & (x25_b4 > x25_b3) & (x25_b4 > 1.2 * x25_b2)
                     m25 = np.zeros(forma, 'uint8')
                     m25[des25] = 1
-                    m25[des | dud | (x25 <= 0) | ((x25 > 1000) & ~des25)] = 255
+                    m25[des | dud | (x25_b2 <= 0) | ((x25_b2 > 1000) & ~suelo_claro25 & ~des25)] = 255
                     escribir(otra, tes, m25, perfil25, tr25, crs, forma)
                     filas.append({'proyecto': otra, 'tesela': tes, 'quien': (r.get('quien') or '').strip(),
                                   'poligonos_deslizamiento': len(capas['des2025']), 'poligonos_dudoso': len(capas['dud']),

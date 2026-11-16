@@ -38,10 +38,16 @@ mascaras_provisionales/nivel2/propuestas_nivel2.geojson
 mascaras_nivel1/**/*.tif
 ingemmet/*.geojson
 
-# Archivos temporales de QGIS y sistema
+# Archivos temporales de QGIS, IRIS y sistema
 *.qgz~
 *.gpkg-wal
 *.gpkg-shm
 .DS_Store
 Thumbs.db
 azar/_stats.json
+iris_app/
+*.iris/
+*.db
+iris_128/images/
+iris_ejemplo_demo/proyecto_iris/
+iris_ejemplo_demo/mascaras_nivel1_demo/**/*.tif

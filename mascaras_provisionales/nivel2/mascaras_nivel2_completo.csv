@@ -1,0 +1,354 @@
+proyecto,tesela,zona,conjunto,uso,tipo,incluir_debil,pre_pintada_iris,px_1,ha_1,px_0,ha_0,px_255,ha_255,motivo
+datos_azar,azar_001_001,Z28_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65377,653.77,159,1.59,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_002_001,Z29_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65481,654.81,55,0.55,negativo; confirmar con una mirada
+datos_azar,azar_003_001,Z30_?,entrenamiento,azar,dudosa_protegida,no,no,0,0.0,47924,479.24,17612,176.12,mirar primero: posible deslizamiento no registrado; nubes como dudoso
+datos_azar,azar_004_001,Z31_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65534,655.34,2,0.02,negativo difícil de altura
+datos_azar,azar_005_001,Z32_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65416,654.16,120,1.2,negativo; confirmar con una mirada
+datos_azar,azar_006_001,Z33_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65523,655.23,13,0.13,negativo; confirmar con una mirada
+datos_azar,azar_007_001,Z34_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65442,654.42,94,0.94,negativo; confirmar con una mirada
+datos_azar,azar_008_001,Z35_?,entrenamiento,azar,dudosa_protegida,no,no,0,0.0,63694,636.94,1842,18.42,mirar primero: posible deslizamiento no registrado
+datos_azar,azar_009_001,Z36_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo; confirmar con una mirada
+datos_azar,azar_010_001,Z37_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65525,655.25,11,0.11,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_011_001,Z38_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,61531,615.31,4005,40.05,negativo; marcar nubes como dudoso
+datos_azar,azar_012_001,Z39_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65534,655.34,2,0.02,falso positivo total: caso para investigar en el modelo
+datos_azar,azar_013_001,Z40_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,61048,610.48,4488,44.88,negativo difícil: bruma; nubes como dudoso
+datos_azar,azar_014_001,Z41_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65243,652.43,293,2.93,negativo; confirmar con una mirada
+datos_azar,azar_015_001,Z42_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65496,654.96,40,0.4,falso positivo total: caso para investigar en el modelo
+datos_azar,azar_016_001,Z43_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65533,655.33,3,0.03,negativo; confirmar con una mirada
+datos_azar,azar_017_001,Z44_?,validacion,azar,negativo_confirmado,no,si,0,0.0,57281,572.81,8255,82.55,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_018_001,Z45_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65495,654.95,41,0.41,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_019_001,Z46_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,60786,607.86,4750,47.5,negativo; marcar nubes como dudoso
+datos_azar,azar_020_001,Z47_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65502,655.02,34,0.34,negativo; confirmar con una mirada
+datos_azar,azar_021_001,Z48_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65528,655.28,8,0.08,negativo puro
+datos_azar,azar_022_001,Z49_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65416,654.16,120,1.2,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_023_001,Z50_?,validacion,azar,dudosa_protegida,no,no,0,0.0,64252,642.52,1284,12.84,mirar: camino o cicatriz
+datos_azar,azar_026_001,Z53_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_028_001,Z55_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,61915,619.15,3621,36.21,negativo; marcar nubes como dudoso
+datos_azar,azar_029_001,Z56_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,63415,634.15,2121,21.21,negativo; confirmar con una mirada
+datos_azar,azar_030_001,Z57_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65524,655.24,12,0.12,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_031_001,Z58_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_032_001,Z59_?,validacion,azar,negativo_confirmado,no,si,0,0.0,64553,645.53,983,9.83,negativo; confirmar con una mirada
+datos_azar,azar_033_001,Z60_?,validacion,azar,negativo_confirmado,no,si,0,0.0,63899,638.99,1637,16.37,negativo; confirmar con una mirada
+datos_azar,azar_034_001,Z61_?,validacion,azar,negativo_confirmado,no,si,0,0.0,64032,640.32,1504,15.04,negativo; confirmar con una mirada
+datos_azar,azar_036_001,Z63_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65535,655.35,1,0.01,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_037_001,Z64_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,63661,636.61,1875,18.75,negativo; confirmar con una mirada
+datos_azar,azar_038_001,Z65_?,validacion,azar,negativo_confirmado,no,si,0,0.0,59907,599.07,5629,56.29,negativo; marcar nubes como dudoso
+datos_azar,azar_039_001,Z66_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65524,655.24,12,0.12,negativo; confirmar con una mirada
+datos_azar,azar_040_001,Z67_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65163,651.63,373,3.73,negativo difícil de altura; confirmar que no hay cicatrices
+datos_azar,azar_041_001,Z68_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65486,654.86,50,0.5,negativo; confirmar con una mirada
+datos_azar,azar_042_001,Z69_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65400,654.0,136,1.36,negativo; confirmar con una mirada
+datos_azar,azar_043_001,Z70_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_044_001,Z71_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_045_001,Z72_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_046_001,Z73_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_047_001,Z74_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_048_001,Z75_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_049_001,Z76_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65535,655.35,1,0.01,negativo; confirmar con una mirada
+datos_azar,azar_050_001,Z77_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_051_001,Z78_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65535,655.35,1,0.01,negativo puro
+datos_azar,azar_052_001,Z79_?,entrenamiento,azar,dudosa_protegida,no,no,0,0.0,57720,577.2,7816,78.16,cauces de huaico: dudoso salvo arranque visible
+datos_azar,azar_053_001,Z80_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_054_001,Z81_?,validacion,azar,negativo_confirmado,no,si,0,0.0,65527,655.27,9,0.09,confusor fuerte: suelo desnudo que no es deslizamiento
+datos_azar,azar_055_001,Z82_?,validacion,azar,negativo_confirmado,no,si,0,0.0,58122,581.22,7414,74.14,negativo; marcar nubes como dudoso
+datos_azar,azar_056_001,Z83_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_057_001,Z84_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_059_001,Z86_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_azar,azar_060_001,Z87_?,entrenamiento,azar,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,negativo puro
+datos_indeci,sinpad_106123_001,Z91_VILLA_VIRGEN,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65492,654.92,44,0.44,Negativo; nubes como dudoso
+datos_indeci,sinpad_11049_001,Z08_QUELLOUNO,validacion,ronda2,positiva_multitemporal_ladera,no,si,2159,21.59,20729,207.29,42648,426.48,Evento de 2005 pero el terreno sigue inestable; manchas pardas alargadas
+datos_indeci,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,1888,18.88,21589,215.89,42059,420.59,El deposito del huaico de 2020 esta en el cauce (dudoso); buscar los arranques en las laderas y aguas arriba
+datos_indeci,sinpad_132708_001,Z07_VILCABAMBA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65421,654.21,115,1.15,Revisar si sobra tiempo
+datos_indeci,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,1164,11.64,52809,528.09,11563,115.63,Cicatriz nueva clara entre la imagen previa y la posterior: el mejor ejemplo del lote
+datos_indeci,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,1984,19.84,42563,425.63,20989,209.89,Manchas anaranjadas en ladera; pueden ser derrumbes del evento de feb 2021 o pastos secos
+datos_indeci,sinpad_134745_001,Z02_ECHARATE,validacion,validacion,negativo_confirmado,no,si,0,0.0,64930,649.3,606,6.06,Negativo con pueblo
+datos_indeci,sinpad_134852_001,Z08_QUELLOUNO,validacion,validacion,negativo_confirmado,no,si,0,0.0,64903,649.03,633,6.33,Negativo duro; la imagen previa tiene bruma
+datos_indeci,sinpad_138302_001,Z93_INKAWASI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65491,654.91,45,0.45,El evento de abr 2021 no se distingue; quizas fue en carretera
+datos_indeci,sinpad_145154_001,Z94_VILLA_KINTIARINA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65505,655.05,31,0.31,Revisar si sobra tiempo
+datos_indeci,sinpad_14574_001,Z18_HUAYOPATA,entrenamiento,reserva,dudosa_protegida,no,no,0,0.0,64421,644.21,1115,11.15,Sombra fuerte
+datos_indeci,sinpad_22258_001,Z02_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65533,655.33,3,0.03,Revisar si sobra tiempo
+datos_indeci,sinpad_25956_001,Z01_SANTA_TERESA,entrenamiento,validacion,negativo_confirmado,si,si,0,0.0,65432,654.32,104,1.04,Pasto seco: negativo duro
+datos_indeci,sinpad_27066_001,Z21_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65345,653.45,191,1.91,Revisar si sobra tiempo
+datos_indeci,sinpad_33140_001,Z99_OCOBAMBA,validacion,reserva,negativo_confirmado,no,si,0,0.0,65421,654.21,115,1.15,Revisar si sobra tiempo
+datos_indeci,sinpad_3802_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,si,0,0.0,65479,654.79,57,0.57,Revisar si sobra tiempo
+datos_indeci,sinpad_3814_001,Z01_SANTA_TERESA,entrenamiento,reserva,positiva_multitemporal_ladera,si,no,1019,10.19,60083,600.83,4434,44.34,Posibles cicatrices chicas; muchas chacras
+datos_indeci,sinpad_408_001,Z22_QUELLOUNO,validacion,reserva,negativo_confirmado,no,si,0,0.0,65528,655.28,8,0.08,Revisar si sobra tiempo
+datos_indeci,sinpad_5043_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,64967,649.67,569,5.69,Revisar si sobra tiempo
+datos_indeci,sinpad_56334_001,Z16_HUAYOPATA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65120,651.2,416,4.16,Revisar si sobra tiempo
+datos_indeci,sinpad_62629_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65111,651.11,425,4.25,Revisar si sobra tiempo
+datos_indeci,sinpad_63009_001,Z08_QUELLOUNO,validacion,reserva,negativo_confirmado,no,si,0,0.0,65504,655.04,32,0.32,Revisar si sobra tiempo
+datos_indeci,sinpad_63030_001,Z107_QUELLOUNO,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65525,655.25,11,0.11,Revisar si sobra tiempo
+datos_indeci,sinpad_63073_001,Z108_QUELLOUNO,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65489,654.89,47,0.47,Revisar si sobra tiempo
+datos_indeci,sinpad_63076_001,Z25_QUELLOUNO,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65513,655.13,23,0.23,Revisar si sobra tiempo
+datos_indeci,sinpad_63109_001,Z25_QUELLOUNO,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65532,655.32,4,0.04,Revisar si sobra tiempo
+datos_indeci,sinpad_66618_001,Z109_QUELLOUNO,validacion,reserva,negativo_confirmado,no,si,0,0.0,65109,651.09,427,4.27,Marcar huecos como dudoso
+datos_indeci,sinpad_69126_001,Z03_SANTA_TERESA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,1075,10.75,48276,482.76,16185,161.85,Zona de erosion activa de altura: marcar solo arranques con forma de cicatriz; el resto es carcava
+datos_indeci,sinpad_75302_001,Z01_SANTA_TERESA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,3117,31.17,39402,394.02,23017,230.17,Laderas desnudas junto al pueblo: candidatas
+datos_indeci,sinpad_82283_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,si,0,0.0,65513,655.13,23,0.23,Revisar si sobra tiempo
+datos_indeci,sinpad_86159_001,Z113_OCOBAMBA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65484,654.84,52,0.52,Revisar si sobra tiempo
+datos_indeci,sinpad_88103_001,Z12_VILLA_VIRGEN,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65339,653.39,197,1.97,Revisar si sobra tiempo
+datos_indeci,sinpad_91024_001,Z23_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65465,654.65,71,0.71,Negativo puro
+datos_indeci,sinpad_91026_001,Z115_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65502,655.02,34,0.34,Negativo
+datos_indeci,sinpad_91042_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,Revisar si sobra tiempo
+datos_indeci,sinpad_91049_001,Z27_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65401,654.01,135,1.35,Cambios por desbosque
+datos_indeci,sinpad_91050_001,Z02_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,64736,647.36,800,8.0,Negativo con pueblo
+datos_indeci,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,1587,15.87,53252,532.52,10697,106.97,Laderas con suelo desnudo en pendiente fuerte; revisar forma de lengua
+datos_indeci,sinpad_91293_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65136,651.36,400,4.0,"Igual que los cauces de Santa Teresa: deposito dudoso, buscar arranques"
+datos_indeci,sinpad_91374_001,Z116_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65388,653.88,148,1.48,Revisar si sobra tiempo
+datos_indeci,sinpad_91376_001,Z21_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65439,654.39,97,0.97,Revisar si sobra tiempo
+datos_indeci,sinpad_91377_001,Z02_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65225,652.25,311,3.11,Revisar si sobra tiempo
+datos_indeci,sinpad_91680_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,Erosion de altura; dificil de separar de cicatrices
+datos_indeci,sinpad_91730_001,Z117_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65489,654.89,47,0.47,Revisar si sobra tiempo
+datos_indeci,sinpad_91757_001,Z27_ECHARATE,validacion,validacion,negativo_confirmado,no,si,0,0.0,65468,654.68,68,0.68,"Los cambios son chacras nuevas, no deslizamientos: negativo duro para el detector de cambio"
+datos_indeci,sinpad_91758_001,Z26_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65328,653.28,208,2.08,Revisar si sobra tiempo
+datos_indeci,sinpad_91759_001,Z118_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65532,655.32,4,0.04,Revisar si sobra tiempo
+datos_indeci,sinpad_92000_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65534,655.34,2,0.02,Revisar si sobra tiempo
+datos_indeci,sinpad_92055_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65439,654.39,97,0.97,Negativo
+datos_indeci,sinpad_92056_001,Z119_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65473,654.73,63,0.63,Revisar si sobra tiempo
+datos_indeci,sinpad_92057_001,Z11_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65453,654.53,83,0.83,Revisar si sobra tiempo
+datos_indeci,sinpad_92060_001,Z120_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65421,654.21,115,1.15,Negativo con playas y desbosque
+datos_indeci,sinpad_92061_001,Z121_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65525,655.25,11,0.11,Pasto seco
+datos_indeci,sinpad_92075_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65180,651.8,356,3.56,Cauce de huaico
+datos_indeci,sinpad_92395_001,Z01_SANTA_TERESA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,259,2.59,59841,598.41,5436,54.36,Cambio detectado junto al cauce: revisar
+datos_indeci,sinpad_92397_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65353,653.53,183,1.83,Negativo
+datos_indeci,sinpad_92597_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,si,0,0.0,65488,654.88,48,0.48,Revisar si sobra tiempo
+datos_indeci,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,ronda2,positiva_multitemporal_ladera,si,si,2215,22.15,38809,388.09,24512,245.12,Zona de huaicos de Santa Teresa 2018; cicatrices probables en las laderas sobre el cauce
+datos_indeci,sinpad_9489_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65432,654.32,104,1.04,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_106123_001,Z91_VILLA_VIRGEN,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65092,650.92,444,4.44,Negativo; nubes como dudoso
+datos_indeci_antes,sinpad_119409_001,Z01_SANTA_TERESA,entrenamiento,ronda2,negativo_confirmado,si,no,0,0.0,64441,644.41,1095,10.95,Estado pre-evento INDECI verificado
+datos_indeci_antes,sinpad_132708_001,Z07_VILCABAMBA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65445,654.45,91,0.91,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_133797_001,Z16_HUAYOPATA,entrenamiento,ronda2,negativo_confirmado,si,no,0,0.0,65189,651.89,347,3.47,Estado pre-evento INDECI verificado
+datos_indeci_antes,sinpad_134371_001,Z10_OCOBAMBA,entrenamiento,ronda2,negativo_confirmado,si,no,0,0.0,65381,653.81,155,1.55,Estado pre-evento INDECI verificado
+datos_indeci_antes,sinpad_134745_001,Z02_ECHARATE,validacion,validacion,negativo_confirmado,no,no,0,0.0,64941,649.41,595,5.95,Negativo con pueblo
+datos_indeci_antes,sinpad_134852_001,Z08_QUELLOUNO,validacion,validacion,negativo_confirmado,no,no,0,0.0,65062,650.62,474,4.74,Negativo duro; la imagen previa tiene bruma
+datos_indeci_antes,sinpad_138302_001,Z93_INKAWASI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65493,654.93,43,0.43,El evento de abr 2021 no se distingue; quizas fue en carretera
+datos_indeci_antes,sinpad_145154_001,Z94_VILLA_KINTIARINA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65462,654.62,74,0.74,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_91024_001,Z23_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64185,641.85,1351,13.51,Negativo puro
+datos_indeci_antes,sinpad_91026_001,Z115_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65196,651.96,340,3.4,Negativo
+datos_indeci_antes,sinpad_91042_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,63822,638.22,1714,17.14,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_91049_001,Z27_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,64102,641.02,1434,14.34,Cambios por desbosque
+datos_indeci_antes,sinpad_91050_001,Z02_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,64724,647.24,812,8.12,Negativo con pueblo
+datos_indeci_antes,sinpad_91210_001,Z03_SANTA_TERESA,entrenamiento,ronda2,negativo_confirmado,si,no,0,0.0,65377,653.77,159,1.59,Estado pre-evento INDECI verificado
+datos_indeci_antes,sinpad_91293_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65219,652.19,317,3.17,"Igual que los cauces de Santa Teresa: deposito dudoso, buscar arranques"
+datos_indeci_antes,sinpad_91374_001,Z116_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,61043,610.43,4493,44.93,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_91376_001,Z21_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64505,645.05,1031,10.31,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_91377_001,Z02_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,65154,651.54,382,3.82,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_91680_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65179,651.79,357,3.57,Erosion de altura; dificil de separar de cicatrices
+datos_indeci_antes,sinpad_91730_001,Z117_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65431,654.31,105,1.05,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_91757_001,Z27_ECHARATE,validacion,validacion,negativo_confirmado,no,no,0,0.0,65400,654.0,136,1.36,"Los cambios son chacras nuevas, no deslizamientos: negativo duro para el detector de cambio"
+datos_indeci_antes,sinpad_91758_001,Z26_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64788,647.88,748,7.48,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_91759_001,Z118_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,61897,618.97,3639,36.39,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_92000_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65532,655.32,4,0.04,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_92055_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,64862,648.62,674,6.74,Negativo
+datos_indeci_antes,sinpad_92056_001,Z119_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65482,654.82,54,0.54,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_92057_001,Z11_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64770,647.7,766,7.66,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_92060_001,Z120_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64871,648.71,665,6.65,Negativo con playas y desbosque
+datos_indeci_antes,sinpad_92061_001,Z121_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65525,655.25,11,0.11,Pasto seco
+datos_indeci_antes,sinpad_92075_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65259,652.59,277,2.77,Cauce de huaico
+datos_indeci_antes,sinpad_92395_001,Z01_SANTA_TERESA,entrenamiento,ronda2,negativo_confirmado,si,no,0,0.0,64948,649.48,588,5.88,Estado pre-evento INDECI verificado
+datos_indeci_antes,sinpad_92397_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65342,653.42,194,1.94,Negativo
+datos_indeci_antes,sinpad_92597_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,no,0,0.0,61366,613.66,4170,41.7,Revisar si sobra tiempo
+datos_indeci_antes,sinpad_92622_001,Z01_SANTA_TERESA,entrenamiento,ronda2,negativo_confirmado,si,no,0,0.0,63459,634.59,2077,20.77,Estado pre-evento INDECI verificado
+datos_ingemmet,ingemmet_001_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,63590,635.9,1946,19.46,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_002_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,si,786,7.86,60063,600.63,4687,46.87,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_003_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,si,804,8.04,62818,628.18,1914,19.14,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_004_001,Z01_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,20,0.2,57987,579.87,7529,75.29,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,5796,57.96,48355,483.55,11385,113.85,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_006_001,Z07_VILCABAMBA,entrenamiento,reserva,positiva_ingemmet,si,no,40,0.4,63159,631.59,2337,23.37,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_007_001,Z14_KUMPIRUSHIATO,entrenamiento,reserva,positiva_ingemmet,si,no,15,0.15,63108,631.08,2413,24.13,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_008_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,si,49,0.49,63173,631.73,2314,23.14,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,3983,39.83,45751,457.51,15802,158.02,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_010_001,Z07_VILCABAMBA,entrenamiento,reserva,positiva_ingemmet,si,no,98,0.98,58737,587.37,6701,67.01,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_011_001,Z11_ECHARATE,entrenamiento,ronda3,positiva_ingemmet,si,si,191,1.91,63207,632.07,2138,21.38,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_012_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,si,13,0.13,63383,633.83,2140,21.4,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_013_001,Z05_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,65329,653.29,207,2.07,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_014_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,si,73,0.73,63843,638.43,1620,16.2,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_015_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,65058,650.58,478,4.78,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_016_001,Z06_PICHARI,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,65033,650.33,503,5.03,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,508,5.08,64099,640.99,929,9.29,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_018_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,si,24,0.24,62996,629.96,2516,25.16,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_019_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,si,12,0.12,64385,643.85,1139,11.39,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_020_001,Z88_INKAWASI,entrenamiento,reserva,positiva_ingemmet,si,no,269,2.69,64872,648.72,395,3.95,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_021_001,Z89_ECHARATE,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,65198,651.98,338,3.38,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_022_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,64101,641.01,1435,14.35,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_023_001,Z07_VILCABAMBA,entrenamiento,ronda3,contexto_ingemmet,si,si,0,0.0,57120,571.2,8416,84.16,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_024_001,Z90_PICHARI,validacion,reserva,positiva_ingemmet,no,si,18,0.18,63646,636.46,1872,18.72,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_025_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,23,0.23,64385,643.85,1128,11.28,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_026_001,Z01_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,24,0.24,60731,607.31,4781,47.81,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_027_001,Z04_SANTA_ANA,validacion,ronda3,positiva_ingemmet,no,si,53,0.53,54165,541.65,11318,113.18,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_028_001,Z12_VILLA_VIRGEN,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,64558,645.58,978,9.78,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_029_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,387,3.87,64369,643.69,780,7.8,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_030_001,Z06_PICHARI,entrenamiento,reserva,positiva_ingemmet,si,no,17,0.17,65434,654.34,85,0.85,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_031_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,si,24,0.24,65200,652.0,312,3.12,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_032_001,Z15_NUEVO_ASHANINKA,validacion,reserva,contexto_ingemmet,no,si,0,0.0,61032,610.32,4504,45.04,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_033_001,Z15_NUEVO_ASHANINKA,validacion,reserva,contexto_ingemmet,no,si,0,0.0,61442,614.42,4094,40.94,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_034_001,Z06_PICHARI,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,64688,646.88,848,8.48,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_035_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,63742,637.42,1794,17.94,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_036_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,si,703,7.03,62923,629.23,1910,19.1,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_037_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,si,903,9.03,61082,610.82,3551,35.51,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_038_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,si,14,0.14,65112,651.12,410,4.1,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_039_001,Z03_SANTA_TERESA,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,65536,655.36,0,0.0,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_040_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,5054,50.54,42743,427.43,17739,177.39,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_041_001,Z01_SANTA_TERESA,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,64017,640.17,1519,15.19,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_043_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,1135,11.35,62935,629.35,1466,14.66,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_044_001,Z12_VILLA_VIRGEN,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,64267,642.67,1269,12.69,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_045_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,693,6.93,63545,635.45,1298,12.98,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_046_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,566,5.66,64925,649.25,45,0.45,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_049_001,Z03_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,18,0.18,64591,645.91,927,9.27,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_050_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,si,300,3.0,64444,644.44,792,7.92,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_051_001,Z05_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,65288,652.88,248,2.48,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_052_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,64089,640.89,1447,14.47,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_053_001,Z06_PICHARI,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,65291,652.91,245,2.45,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_054_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,si,0,0.0,63905,639.05,1631,16.31,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet,ingemmet_055_001,Z01_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,29,0.29,63657,636.57,1850,18.5,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_001_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,62807,628.07,2729,27.29,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_002_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,no,784,7.84,59970,599.7,4782,47.82,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_003_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,no,804,8.04,62685,626.85,2047,20.47,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_004_001,Z01_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,20,0.2,57871,578.71,7645,76.45,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_005_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,5744,57.44,48432,484.32,11360,113.6,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_006_001,Z07_VILCABAMBA,entrenamiento,reserva,positiva_ingemmet,si,no,40,0.4,63159,631.59,2337,23.37,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_007_001,Z14_KUMPIRUSHIATO,entrenamiento,reserva,positiva_ingemmet,si,no,15,0.15,63048,630.48,2473,24.73,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_008_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,no,49,0.49,63065,630.65,2422,24.22,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_009_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,3911,39.11,44866,448.66,16759,167.59,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_010_001,Z07_VILCABAMBA,entrenamiento,reserva,positiva_ingemmet,si,no,98,0.98,58705,587.05,6733,67.33,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_011_001,Z11_ECHARATE,entrenamiento,ronda3,positiva_ingemmet,si,no,191,1.91,63596,635.96,1749,17.49,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_012_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,no,13,0.13,63203,632.03,2320,23.2,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_013_001,Z05_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,65320,653.2,216,2.16,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_014_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,no,51,0.51,63531,635.31,1954,19.54,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_015_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,65042,650.42,494,4.94,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_016_001,Z06_PICHARI,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,63583,635.83,1953,19.53,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_017_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,493,4.93,64009,640.09,1034,10.34,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_018_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,no,24,0.24,62917,629.17,2595,25.95,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_019_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,no,12,0.12,62970,629.7,2554,25.54,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_020_001,Z88_INKAWASI,entrenamiento,reserva,positiva_ingemmet,si,no,266,2.66,64688,646.88,582,5.82,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_021_001,Z89_ECHARATE,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,65015,650.15,521,5.21,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_022_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,62789,627.89,2747,27.47,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_023_001,Z07_VILCABAMBA,entrenamiento,ronda3,contexto_ingemmet,si,no,0,0.0,57133,571.33,8403,84.03,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_024_001,Z90_PICHARI,validacion,reserva,positiva_ingemmet,no,no,18,0.18,63585,635.85,1933,19.33,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_025_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,23,0.23,64184,641.84,1329,13.29,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_026_001,Z01_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,24,0.24,60719,607.19,4793,47.93,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_027_001,Z04_SANTA_ANA,validacion,ronda3,positiva_ingemmet,no,no,53,0.53,54158,541.58,11325,113.25,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_028_001,Z12_VILLA_VIRGEN,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,64554,645.54,982,9.82,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_029_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,383,3.83,64266,642.66,887,8.87,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_030_001,Z06_PICHARI,entrenamiento,reserva,positiva_ingemmet,si,no,14,0.14,54827,548.27,10695,106.95,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_031_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,no,24,0.24,65030,650.3,482,4.82,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_032_001,Z15_NUEVO_ASHANINKA,validacion,reserva,contexto_ingemmet,no,no,0,0.0,61014,610.14,4522,45.22,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_033_001,Z15_NUEVO_ASHANINKA,validacion,reserva,contexto_ingemmet,no,no,0,0.0,61428,614.28,4108,41.08,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_034_001,Z06_PICHARI,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,64557,645.57,979,9.79,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_035_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,62260,622.6,3276,32.76,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_036_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,no,703,7.03,62870,628.7,1963,19.63,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_037_001,Z09_INKAWASI,validacion,ronda3,positiva_ingemmet,no,no,901,9.01,60993,609.93,3642,36.42,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_038_001,Z02_ECHARATE,validacion,reserva,positiva_ingemmet,no,no,14,0.14,64994,649.94,528,5.28,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_039_001,Z03_SANTA_TERESA,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,65536,655.36,0,0.0,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_043_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,1135,11.35,62830,628.3,1571,15.71,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_044_001,Z12_VILLA_VIRGEN,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,64212,642.12,1324,13.24,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_045_001,Z01_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,693,6.93,63456,634.56,1387,13.87,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_046_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,566,5.66,64930,649.3,40,0.4,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_049_001,Z03_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,18,0.18,64415,644.15,1103,11.03,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_050_001,Z03_SANTA_TERESA,entrenamiento,ronda3,positiva_ingemmet,si,no,297,2.97,64360,643.6,879,8.79,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_051_001,Z05_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,63895,638.95,1641,16.41,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_052_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,64084,640.84,1452,14.52,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_053_001,Z06_PICHARI,entrenamiento,reserva,contexto_ingemmet,si,no,0,0.0,61468,614.68,4068,40.68,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_054_001,Z02_ECHARATE,validacion,reserva,contexto_ingemmet,no,no,0,0.0,63888,638.88,1648,16.48,INGEMMET geológico + propuestas visibles Nivel 2
+datos_ingemmet_antes,ingemmet_055_001,Z01_SANTA_TERESA,entrenamiento,reserva,positiva_ingemmet,si,no,29,0.29,63136,631.36,2371,23.71,INGEMMET geológico + propuestas visibles Nivel 2
+datos_laconvencion,sinpad_13640_001,Z92_QUELLOUNO,validacion,validacion,negativo_confirmado,no,si,0,0.0,65507,655.07,29,0.29,El modelo pinta de probable todo el pasto seco: negativo duro muy valioso para medir
+datos_laconvencion,sinpad_14467_001,Z13_HUAYOPATA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65457,654.57,79,0.79,Negativo con un confusor (cultivo claro)
+datos_laconvencion,sinpad_14872_001,Z19_KIMBIRI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65043,650.43,493,4.93,Negativo con pueblo
+datos_laconvencion,sinpad_15534_001,Z20_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65447,654.47,89,0.89,Negativo
+datos_laconvencion,sinpad_20522_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65535,655.35,1,0.01,Negativo puro
+datos_laconvencion,sinpad_21603_001,Z08_QUELLOUNO,validacion,ronda1,positiva_multitemporal_ladera,no,si,983,9.83,40302,403.02,24251,242.51,Algunas manchas pardas alargadas ladera abajo podrian ser cicatrices; muchas son chacras
+datos_laconvencion,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,si,3270,32.7,45670,456.7,16596,165.96,Parches pardos alargados en ladera: revisar
+datos_laconvencion,sinpad_21605_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,si,0,0.0,65525,655.25,11,0.11,Negativo
+datos_laconvencion,sinpad_21606_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,si,0,0.0,64315,643.15,1221,12.21,Depositos de huaico en el cauce; las terrazas confunden
+datos_laconvencion,sinpad_21607_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65194,651.94,342,3.42,Negativo
+datos_laconvencion,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,si,321,3.21,55569,555.69,9646,96.46,La quebrada de la derecha tiene aspecto de derrumbes; sombras complican
+datos_laconvencion,sinpad_28446_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65519,655.19,17,0.17,Mayormente negativo (campos)
+datos_laconvencion,sinpad_31059_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65118,651.18,418,4.18,Negativo; marcar la nube como dudoso
+datos_laconvencion,sinpad_341_001,Z100_PICHARI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65464,654.64,72,0.72,Relieve suave; pocas laderas
+datos_laconvencion,sinpad_3566_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65197,651.97,339,3.39,Bruma: si hace falta rebajar con --anio 2019
+datos_laconvencion,sinpad_36869_001,Z02_ECHARATE,validacion,validacion,negativo_confirmado,no,si,0,0.0,65023,650.23,513,5.13,Negativo con pueblo (confusor)
+datos_laconvencion,sinpad_37418_001,Z04_SANTA_ANA,validacion,ronda1,positiva_multitemporal_ladera,no,si,136,1.36,49173,491.73,16227,162.27,Los taludes anaranjados sobre la carretera parecen cortes o derrumbes de talud
+datos_laconvencion,sinpad_41972_001,Z11_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65431,654.31,105,1.05,Negativo puro
+datos_laconvencion,sinpad_42949_001,Z101_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65455,654.55,81,0.81,Negativo puro
+datos_laconvencion,sinpad_43368_001,Z13_HUAYOPATA,entrenamiento,ronda1,dudosa_protegida,no,no,0,0.0,55251,552.51,10285,102.85,Buen ejemplo de confusor (te) mas posibles cicatrices arriba a la izquierda
+datos_laconvencion,sinpad_43963_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65475,654.75,61,0.61,Mayormente negativo
+datos_laconvencion,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,si,1708,17.08,43736,437.36,20092,200.92,Ladera oscura abrupta junto al cauce: candidata; el cauce blanco es deposito de huaico
+datos_laconvencion,sinpad_45721_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65533,655.33,3,0.03,Negativo
+datos_laconvencion,sinpad_47364_001,Z06_PICHARI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65311,653.11,225,2.25,Playas: confusor
+datos_laconvencion,sinpad_49249_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,si,0,0.0,65530,655.3,6,0.06,Sin cicatrices claras
+datos_laconvencion,sinpad_49823_001,Z02_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65532,655.32,4,0.04,Sin cicatrices claras
+datos_laconvencion,sinpad_50116_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,si,0,0.0,65501,655.01,35,0.35,Sin cicatrices claras
+datos_laconvencion,sinpad_50164_001,Z23_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,60360,603.6,5176,51.76,Negativo; nubes como dudoso
+datos_laconvencion,sinpad_50411_001,Z14_KUMPIRUSHIATO,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65520,655.2,16,0.16,Negativo
+datos_laconvencion,sinpad_5330_001,Z03_SANTA_TERESA,entrenamiento,ronda1,dudosa_protegida,no,no,0,0.0,62303,623.03,3233,32.33,Tipico canal de huaico: marcar solo arranques en la ladera si se ven; el cauce es dudoso
+datos_laconvencion,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,reserva,positiva_multitemporal_ladera,si,no,1088,10.88,59359,593.59,5089,50.89,Igual que 5330
+datos_laconvencion,sinpad_5559_001,Z105_QUELLOUNO,validacion,validacion,negativo_confirmado,no,si,0,0.0,65536,655.36,0,0.0,Confusor: el modelo marca los caminos como probable
+datos_laconvencion,sinpad_56208_001,Z08_QUELLOUNO,validacion,validacion,negativo_confirmado,no,si,0,0.0,65381,653.81,155,1.55,Negativo duro: pueblo mas pasto seco
+datos_laconvencion,sinpad_56447_001,Z18_HUAYOPATA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65506,655.06,30,0.3,Negativo; la sombra confunde
+datos_laconvencion,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,si,995,9.95,47324,473.24,17217,172.17,Laderas secas con posibles surcos y derrumbes; muchas son pastos
+datos_laconvencion,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,reserva,positiva_multitemporal_ladera,si,no,100,1.0,62645,626.45,2791,27.91,Igual que 5330
+datos_laconvencion,sinpad_61214_001,Z04_SANTA_ANA,validacion,validacion,negativo_confirmado,no,si,0,0.0,64134,641.34,1402,14.02,Negativo duro: ciudad mas pasto; el modelo pinta 160 ha de probable
+datos_laconvencion,sinpad_62691_001,Z05_ECHARATE,validacion,validacion,negativo_confirmado,no,si,0,0.0,65348,653.48,188,1.88,Playas de rio: confusor
+datos_laconvencion,sinpad_63415_001,Z20_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65515,655.15,21,0.21,Negativo puro
+datos_laconvencion,sinpad_65373_001,Z06_PICHARI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65325,653.25,211,2.11,Relieve suave
+datos_laconvencion,sinpad_67716_001,Z110_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,Negativo puro
+datos_laconvencion,sinpad_7448_001,Z22_QUELLOUNO,validacion,validacion,negativo_confirmado,no,si,0,0.0,65516,655.16,20,0.2,Falsos positivos del modelo (pasto seco); bruma
+datos_laconvencion,sinpad_74792_001,Z07_VILCABAMBA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,si,636,6.36,55245,552.45,9655,96.55,Coordenada de 22 eventos: la zona es activa; buscar cicatrices junto al cauce
+datos_laconvencion,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,si,1842,18.42,24899,248.99,38795,387.95,Zona de huaicos conocida; distinguir deposito del cauce (no es cicatriz de ladera) de las cicatrices en la ladera
+datos_laconvencion,sinpad_79216_001,Z112_KIMBIRI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65470,654.7,66,0.66,Negativo
+datos_laconvencion,sinpad_81221_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,si,0,0.0,65322,653.22,214,2.14,Negativo con playas
+datos_laconvencion,sinpad_84497_001,Z26_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65448,654.48,88,0.88,Negativo
+datos_laconvencion,sinpad_86528_001,Z114_ECHARATE,validacion,validacion,negativo_confirmado,no,si,0,0.0,65070,650.7,466,4.66,Confusor: pista de aterrizaje y caminos
+datos_laconvencion,sinpad_88784_001,Z19_KIMBIRI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64868,648.68,668,6.68,Marcar los huecos negros como dudoso
+datos_laconvencion,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,reserva,positiva_multitemporal_ladera,si,no,757,7.57,54558,545.58,10221,102.21,Mezcla de chacras y posibles pequenas cicatrices
+datos_laconvencion,sinpad_96_001,Z122_HUAYOPATA,validacion,validacion,negativo_confirmado,no,si,0,0.0,65492,654.92,44,0.44,Confusor de te: util como negativo
+datos_laconvencion,sinpad_9709_001,Z123_MARANURA,validacion,validacion,negativo_confirmado,no,si,0,0.0,64830,648.3,706,7.06,Mucho pasto seco: sirve para medir falsos positivos
+datos_laconvencion_2025,sinpad_13640_001,Z92_QUELLOUNO,validacion,validacion,negativo_confirmado,no,no,0,0.0,65518,655.18,18,0.18,El modelo pinta de probable todo el pasto seco: negativo duro muy valioso para medir
+datos_laconvencion_2025,sinpad_14467_001,Z13_HUAYOPATA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64612,646.12,924,9.24,Negativo con un confusor (cultivo claro)
+datos_laconvencion_2025,sinpad_14872_001,Z19_KIMBIRI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65385,653.85,151,1.51,Negativo con pueblo
+datos_laconvencion_2025,sinpad_15534_001,Z20_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65494,654.94,42,0.42,Negativo
+datos_laconvencion_2025,sinpad_20522_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65536,655.36,0,0.0,Negativo puro
+datos_laconvencion_2025,sinpad_21603_001,Z08_QUELLOUNO,validacion,ronda1,dudosa_protegida,no,no,0,0.0,23192,231.92,42344,423.44,Algunas manchas pardas alargadas ladera abajo podrian ser cicatrices; muchas son chacras
+datos_laconvencion_2025,sinpad_21604_001,Z98_OCOBAMBA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,no,3707,37.07,47456,474.56,14373,143.73,Parches pardos alargados en ladera: revisar
+datos_laconvencion_2025,sinpad_21605_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,no,0,0.0,65525,655.25,11,0.11,Negativo
+datos_laconvencion_2025,sinpad_21606_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,no,0,0.0,65198,651.98,338,3.38,Depositos de huaico en el cauce; las terrazas confunden
+datos_laconvencion_2025,sinpad_21607_001,Z03_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64631,646.31,905,9.05,Negativo
+datos_laconvencion_2025,sinpad_21608_001,Z01_SANTA_TERESA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,no,1184,11.84,56564,565.64,7788,77.88,La quebrada de la derecha tiene aspecto de derrumbes; sombras complican
+datos_laconvencion_2025,sinpad_28446_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65521,655.21,15,0.15,Mayormente negativo (campos)
+datos_laconvencion_2025,sinpad_31059_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,65517,655.17,19,0.19,Negativo; marcar la nube como dudoso
+datos_laconvencion_2025,sinpad_341_001,Z100_PICHARI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65460,654.6,76,0.76,Relieve suave; pocas laderas
+datos_laconvencion_2025,sinpad_3566_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,65466,654.66,70,0.7,Bruma: si hace falta rebajar con --anio 2019
+datos_laconvencion_2025,sinpad_36869_001,Z02_ECHARATE,validacion,validacion,negativo_confirmado,no,no,0,0.0,65329,653.29,207,2.07,Negativo con pueblo (confusor)
+datos_laconvencion_2025,sinpad_37418_001,Z04_SANTA_ANA,validacion,ronda1,positiva_multitemporal_ladera,no,no,1204,12.04,52069,520.69,12263,122.63,Los taludes anaranjados sobre la carretera parecen cortes o derrumbes de talud
+datos_laconvencion_2025,sinpad_41972_001,Z11_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65340,653.4,196,1.96,Negativo puro
+datos_laconvencion_2025,sinpad_42949_001,Z101_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65431,654.31,105,1.05,Negativo puro
+datos_laconvencion_2025,sinpad_43368_001,Z13_HUAYOPATA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,no,10,0.1,57468,574.68,8058,80.58,Buen ejemplo de confusor (te) mas posibles cicatrices arriba a la izquierda
+datos_laconvencion_2025,sinpad_43963_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65435,654.35,101,1.01,Mayormente negativo
+datos_laconvencion_2025,sinpad_44342_001,Z10_OCOBAMBA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,no,1552,15.52,45716,457.16,18268,182.68,Ladera oscura abrupta junto al cauce: candidata; el cauce blanco es deposito de huaico
+datos_laconvencion_2025,sinpad_45721_001,Z01_SANTA_TERESA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65529,655.29,7,0.07,Negativo
+datos_laconvencion_2025,sinpad_47364_001,Z06_PICHARI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65446,654.46,90,0.9,Playas: confusor
+datos_laconvencion_2025,sinpad_49249_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,no,0,0.0,65527,655.27,9,0.09,Sin cicatrices claras
+datos_laconvencion_2025,sinpad_49823_001,Z02_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,65529,655.29,7,0.07,Sin cicatrices claras
+datos_laconvencion_2025,sinpad_50116_001,Z04_SANTA_ANA,validacion,reserva,negativo_confirmado,no,no,0,0.0,65484,654.84,52,0.52,Sin cicatrices claras
+datos_laconvencion_2025,sinpad_50164_001,Z23_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,64871,648.71,665,6.65,Negativo; nubes como dudoso
+datos_laconvencion_2025,sinpad_50411_001,Z14_KUMPIRUSHIATO,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65521,655.21,15,0.15,Negativo
+datos_laconvencion_2025,sinpad_5330_001,Z03_SANTA_TERESA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,no,23,0.23,59947,599.47,5566,55.66,Tipico canal de huaico: marcar solo arranques en la ladera si se ven; el cauce es dudoso
+datos_laconvencion_2025,sinpad_5558_001,Z10_OCOBAMBA,entrenamiento,reserva,dudosa_protegida,no,no,0,0.0,61312,613.12,4224,42.24,Igual que 5330
+datos_laconvencion_2025,sinpad_5559_001,Z105_QUELLOUNO,validacion,validacion,negativo_confirmado,no,no,0,0.0,65472,654.72,64,0.64,Confusor: el modelo marca los caminos como probable
+datos_laconvencion_2025,sinpad_56208_001,Z08_QUELLOUNO,validacion,validacion,negativo_confirmado,no,no,0,0.0,65277,652.77,259,2.59,Negativo duro: pueblo mas pasto seco
+datos_laconvencion_2025,sinpad_56447_001,Z18_HUAYOPATA,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65476,654.76,60,0.6,Negativo; la sombra confunde
+datos_laconvencion_2025,sinpad_57603_001,Z10_OCOBAMBA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,no,1320,13.2,50725,507.25,13491,134.91,Laderas secas con posibles surcos y derrumbes; muchas son pastos
+datos_laconvencion_2025,sinpad_57721_001,Z03_SANTA_TERESA,entrenamiento,reserva,positiva_multitemporal_ladera,si,no,209,2.09,60696,606.96,4631,46.31,Igual que 5330
+datos_laconvencion_2025,sinpad_61214_001,Z04_SANTA_ANA,validacion,validacion,negativo_confirmado,no,no,0,0.0,64940,649.4,596,5.96,Negativo duro: ciudad mas pasto; el modelo pinta 160 ha de probable
+datos_laconvencion_2025,sinpad_62691_001,Z05_ECHARATE,validacion,validacion,negativo_confirmado,no,no,0,0.0,65285,652.85,251,2.51,Playas de rio: confusor
+datos_laconvencion_2025,sinpad_63415_001,Z20_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65410,654.1,126,1.26,Negativo puro
+datos_laconvencion_2025,sinpad_65373_001,Z06_PICHARI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65528,655.28,8,0.08,Relieve suave
+datos_laconvencion_2025,sinpad_67716_001,Z110_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65268,652.68,268,2.68,Negativo puro
+datos_laconvencion_2025,sinpad_7448_001,Z22_QUELLOUNO,validacion,validacion,negativo_confirmado,no,no,0,0.0,65522,655.22,14,0.14,Falsos positivos del modelo (pasto seco); bruma
+datos_laconvencion_2025,sinpad_75170_001,Z01_SANTA_TERESA,entrenamiento,ronda1,positiva_multitemporal_ladera,si,no,678,6.78,32163,321.63,32695,326.95,Zona de huaicos conocida; distinguir deposito del cauce (no es cicatriz de ladera) de las cicatrices en la ladera
+datos_laconvencion_2025,sinpad_79216_001,Z112_KIMBIRI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65533,655.33,3,0.03,Negativo
+datos_laconvencion_2025,sinpad_81221_001,Z05_ECHARATE,validacion,reserva,negativo_confirmado,no,no,0,0.0,65482,654.82,54,0.54,Negativo con playas
+datos_laconvencion_2025,sinpad_84497_001,Z26_ECHARATE,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65496,654.96,40,0.4,Negativo
+datos_laconvencion_2025,sinpad_88784_001,Z19_KIMBIRI,entrenamiento,reserva,negativo_confirmado,si,no,0,0.0,65341,653.41,195,1.95,Marcar los huecos negros como dudoso
+datos_laconvencion_2025,sinpad_8960_001,Z13_HUAYOPATA,entrenamiento,reserva,positiva_multitemporal_ladera,si,no,89,0.89,56480,564.8,8967,89.67,Mezcla de chacras y posibles pequenas cicatrices
+datos_laconvencion_2025,sinpad_96_001,Z122_HUAYOPATA,validacion,validacion,negativo_confirmado,no,no,0,0.0,65347,653.47,189,1.89,Confusor de te: util como negativo
+datos_laconvencion_2025,sinpad_9709_001,Z123_MARANURA,validacion,validacion,negativo_confirmado,no,no,0,0.0,65094,650.94,442,4.42,Mucho pasto seco: sirve para medir falsos positivos
