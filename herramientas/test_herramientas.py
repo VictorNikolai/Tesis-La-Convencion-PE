@@ -1,0 +1,337 @@
+"""
+Pruebas automáticas de las herramientas del conjunto local de La Convención.
+
+Comprueba sin tocar los datos reales (usa carpetas temporales para todo lo que escribe):
+  1. Partición espacial por zonas (`particion_por_zona.py`) y ausencia de fuga entre conjuntos.
+  2. Corte de parches de 128×128 y georreferencia por cuadrante (`cortar_parches_128.py`).
+  3. Generación de máscaras de nivel 1 (`mascaras_desde_marcas.py`), incluyendo:
+     - negativos confirmados (tesela con «si» y sin polígonos -> máscara en 0),
+     - regla de nube blanca (B2 > 1000) que NO pisa los polígonos de deslizamiento,
+     - polígonos «dudoso» -> 255,
+     - polígonos con nota «2025» -> 255 en imagen base y 1 en datos_laconvencion_2025.
+  4. Regla de nube blanca frente a suelo desnudo muy claro (`candidatos_para_qgis.py`,
+     `descargar_desde_puntos.py`, `cambios_para_qgis.py`).
+  5. Acuerdo entre anotadores: IoU y kappa de Cohen (`acuerdo_anotadores.py`).
+  6. Carga de parches locales, normalización L2A -> L4S, pérdida con máscara 255,
+     resumen por cicatrices y remuestreo bootstrap por zonas (`ajuste_fino.py`).
+
+Ejecución:
+  python herramientas/test_herramientas.py
+"""
+import csv
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import unittest
+
+import numpy as np
+import rasterio
+from rasterio.transform import from_origin
+
+AQUI = os.path.dirname(os.path.abspath(__file__))
+RAIZ = os.path.dirname(AQUI)
+sys.path.insert(0, AQUI)
+sys.path.insert(0, RAIZ)
+
+
+def _crear_tesela_sintetica(ruta_tif, x0=750000.0, y0=8600000.0, lado=256, b2_val=300.0, b3_val=450.0, b4_val=300.0):
+    os.makedirs(os.path.dirname(ruta_tif), exist_ok=True)
+    tr = from_origin(x0, y0, 10.0, 10.0)
+    arr = np.zeros((8, lado, lado), dtype=np.float32)
+    arr[0] = 250.0          # B1
+    arr[1] = b2_val         # B2
+    arr[2] = b3_val         # B3
+    arr[3] = b4_val         # B4
+    arr[4] = 25.0           # B13 pendiente (grados)
+    arr[5] = 1500.0         # B14 DEM (m)
+    arr[6] = 0.05           # probabilidad
+    arr[7] = 0.0            # cajas
+    with rasterio.open(
+        ruta_tif, 'w', driver='GTiff', height=lado, width=lado, count=8,
+        dtype='float32', crs='EPSG:32718', transform=tr
+    ) as ds:
+        ds.write(arr)
+    return tr
+
+
+class TestParticionPorZona(unittest.TestCase):
+    def test_particion_real_sin_fuga_espacial(self):
+        """Comprueba que particion.csv del proyecto no comparte zonas entre entrenamiento y validación."""
+        ruta = os.path.join(RAIZ, 'particion.csv')
+        self.assertTrue(os.path.exists(ruta), 'Falta particion.csv en la raíz')
+        with open(ruta, encoding='utf-8') as f_p:
+            filas = list(csv.DictReader(f_p))
+        self.assertEqual(len(filas), 242)
+        z_tr = {r['zona'] for r in filas if r['conjunto'] == 'entrenamiento'}
+        z_va = {r['zona'] for r in filas if r['conjunto'] == 'validacion'}
+        self.assertEqual(z_tr & z_va, set(), f'Fuga espacial entre conjuntos: {z_tr & z_va}')
+        # Verificar que las 3 anclas con cicatrices están en validación
+        por_tes = {r['tesela']: r for r in filas}
+        for ancla in ('ingemmet_002_001', 'sinpad_21603_001', 'sinpad_37418_001'):
+            self.assertEqual(por_tes[ancla]['conjunto'], 'validacion')
+        # Verificar que teselas a < 3560 m en x e y están en la misma zona
+        activas = [r for r in filas if r['conjunto'] in ('entrenamiento', 'validacion')]
+        for i, a in enumerate(activas):
+            xa, ya = float(a['x']), float(a['y'])
+            for b in activas[i + 1:]:
+                if a['conjunto'] != b['conjunto']:
+                    dx = abs(xa - float(b['x']))
+                    dy = abs(ya - float(b['y']))
+                    self.assertFalse(
+                        dx < 3560 and dy < 3560,
+                        f"Teselas {a['tesela']} ({a['conjunto']}) y {b['tesela']} ({b['conjunto']}) "
+                        f"están a dx={dx:.0f}m, dy={dy:.0f}m (<3560m) en conjuntos distintos"
+                    )
+
+    def test_encadenamiento_y_reglas_sinteticas(self):
+        """Tres teselas encadenadas (A-B-C a 2 km) van a una sola zona; descartar y rebajar se respetan."""
+        with tempfile.TemporaryDirectory() as tmp:
+            # A en x=750000, B en x=752000 (<3560m de A), C en x=754000 (<3560m de B pero >3560m de A)
+            # D lejos en x=770000
+            _crear_tesela_sintetica(os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_1_001', 'image.tif'), 750000, 8600000)
+            _crear_tesela_sintetica(os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_2_001', 'image.tif'), 752000, 8600000)
+            _crear_tesela_sintetica(os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_3_001', 'image.tif'), 754000, 8600000)
+            _crear_tesela_sintetica(os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_37418_001', 'image.tif'), 770000, 8600000)
+            with open(os.path.join(tmp, 'datos_laconvencion', 'revision_teselas.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['tesela', 'distrito', 'uso_propuesto'])
+                w.writeheader()
+                w.writerows([
+                    {'tesela': 'sinpad_1_001', 'distrito': 'SANTA TERESA', 'uso_propuesto': 'ronda1'},
+                    {'tesela': 'sinpad_2_001', 'distrito': 'SANTA TERESA', 'uso_propuesto': 'validacion'},
+                    {'tesela': 'sinpad_3_001', 'distrito': 'SANTA TERESA', 'uso_propuesto': 'descartar'},
+                    {'tesela': 'sinpad_37418_001', 'distrito': 'SANTA ANA', 'uso_propuesto': 'ronda1'},
+                ])
+            r = subprocess.run(
+                [sys.executable, os.path.join(AQUI, 'particion_por_zona.py'), '--raiz', tmp],
+                capture_output=True, text=True, check=True
+            )
+            with open(os.path.join(tmp, 'particion.csv'), encoding='utf-8') as f_p:
+                filas = {row['tesela']: row for row in csv.DictReader(f_p)}
+            # A, B, C comparten zona por encadenamiento
+            self.assertEqual(filas['sinpad_1_001']['zona'], filas['sinpad_2_001']['zona'])
+            self.assertEqual(filas['sinpad_2_001']['zona'], filas['sinpad_3_001']['zona'])
+            # La zona tiene ronda1 -> entrena (incluso sinpad_2_001 que era validacion en la guía), y sinpad_3_001 queda excluida
+            self.assertEqual(filas['sinpad_1_001']['conjunto'], 'entrenamiento')
+            self.assertEqual(filas['sinpad_2_001']['conjunto'], 'entrenamiento')
+            self.assertIn('era de validación', filas['sinpad_2_001']['nota'])
+            self.assertEqual(filas['sinpad_3_001']['conjunto'], 'excluida')
+            # El ancla sinpad_37418_001 va a validación aunque sea ronda1
+            self.assertEqual(filas['sinpad_37418_001']['conjunto'], 'validacion')
+
+
+class TestMascarasDesdeMarcas(unittest.TestCase):
+    def test_mascaras_nivel1_y_regla_nubes(self):
+        """Comprueba nivel 1: suelo claro dentro de cicatriz no se borra por nube, dudoso->255, negativo->0, nota 2025."""
+        from rasterio.warp import transform
+        with tempfile.TemporaryDirectory() as tmp:
+            # Tesela 1: con cicatriz cuyo centro tiene suelo muy claro (B2=1300 > 1000) y una nube fuera (B2=1500)
+            t1_path = os.path.join(tmp, 'datos_laconvencion', 'images', 'tes_pos', 'image.tif')
+            tr = _crear_tesela_sintetica(t1_path, 750000, 8600000)
+            with rasterio.open(t1_path, 'r+') as ds:
+                b2 = ds.read(2)
+                b2[20:40, 20:40] = 1300.0   # suelo brillante DENTRO del deslizamiento (filas 10..50, cols 10..50)
+                b2[200:220, 200:220] = 1500.0  # nube blanca FUERA del deslizamiento
+                ds.write(b2, 2)
+
+            # Tesela 1 en 2025 (para probar nota="2025")
+            t1_2025 = os.path.join(tmp, 'datos_laconvencion_2025', 'images', 'tes_pos', 'image.tif')
+            _crear_tesela_sintetica(t1_2025, 750000, 8600000)
+
+            # Tesela 2: negativo confirmado (revisada=si, sin polígonos)
+            t2_path = os.path.join(tmp, 'datos_laconvencion', 'images', 'tes_neg', 'image.tif')
+            _crear_tesela_sintetica(t2_path, 760000, 8600000)
+
+            # Tesela 3: no revisada (revisada=no) -> no debe generar máscara
+            t3_path = os.path.join(tmp, 'datos_laconvencion', 'images', 'tes_norev', 'image.tif')
+            _crear_tesela_sintetica(t3_path, 770000, 8600000)
+
+            with open(os.path.join(tmp, 'datos_laconvencion', 'revisadas.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['tesela', 'revisada', 'quien', 'nota'])
+                w.writeheader()
+                w.writerows([
+                    {'tesela': 'tes_pos', 'revisada': 'si', 'quien': 'VN', 'nota': ''},
+                    {'tesela': 'tes_neg', 'revisada': 'si', 'quien': 'VN', 'nota': 'negativo limpio'},
+                    {'tesela': 'tes_norev', 'revisada': '', 'quien': '', 'nota': ''},
+                ])
+
+            with open(os.path.join(tmp, 'particion.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['tesela', 'proyecto', 'zona', 'conjunto', 'uso'])
+                w.writeheader()
+                w.writerows([
+                    {'tesela': 'tes_pos', 'proyecto': 'datos_laconvencion', 'zona': 'Z01', 'conjunto': 'entrenamiento', 'uso': 'ronda1'},
+                    {'tesela': 'tes_neg', 'proyecto': 'datos_laconvencion', 'zona': 'Z02', 'conjunto': 'validacion', 'uso': 'validacion'},
+                ])
+
+            def caja_wgs84(f0, f1, c0, c1):
+                xs = [750000 + c0 * 10, 750000 + c1 * 10, 750000 + c1 * 10, 750000 + c0 * 10, 750000 + c0 * 10]
+                ys = [8600000 - f0 * 10, 8600000 - f0 * 10, 8600000 - f1 * 10, 8600000 - f1 * 10, 8600000 - f0 * 10]
+                lons, lats = transform('EPSG:32718', 'EPSG:4326', xs, ys)
+                return {'type': 'Polygon', 'coordinates': [list(zip(lons, lats))]}
+
+            gj = {
+                'type': 'FeatureCollection',
+                'features': [
+                    # Cicatriz principal en filas 10..50, cols 10..50
+                    {'type': 'Feature', 'properties': {'clase': 'deslizamiento', 'nota': ''}, 'geometry': caja_wgs84(10, 50, 10, 50)},
+                    # Zona dudosa en filas 70..90, cols 70..90
+                    {'type': 'Feature', 'properties': {'clase': 'dudoso', 'nota': ''}, 'geometry': caja_wgs84(70, 90, 70, 90)},
+                    # Cicatriz exclusiva de 2025 en filas 140..160, cols 140..160
+                    {'type': 'Feature', 'properties': {'clase': 'deslizamiento', 'nota': 'solo en 2025'}, 'geometry': caja_wgs84(140, 160, 140, 160)},
+                ]
+            }
+            ruta_marcas = os.path.join(tmp, 'datos_laconvencion', 'marcas.geojson')
+            with open(ruta_marcas, 'w', encoding='utf-8') as f_m:
+                json.dump(gj, f_m)
+
+            subprocess.run(
+                [sys.executable, os.path.join(AQUI, 'mascaras_desde_marcas.py'), '--raiz', tmp],
+                capture_output=True, text=True, check=True
+            )
+
+            # Comprobar tes_pos base
+            with rasterio.open(os.path.join(tmp, 'mascaras_nivel1', 'mascaras_256', 'datos_laconvencion', 'tes_pos.tif')) as d_pos:
+                m_pos = d_pos.read(1)
+            # El centro brillante (25, 25) con B2=1300 dentro del deslizamiento DEBE valer 1, no 255
+            self.assertEqual(m_pos[25, 25], 1, 'La regla de nubes borró el suelo desnudo brillante dentro de la cicatriz')
+            # El polígono dudoso (80, 80) DEBE valer 255
+            self.assertEqual(m_pos[80, 80], 255)
+            # La nube fuera del deslizamiento (210, 210) DEBE valer 255
+            self.assertEqual(m_pos[210, 210], 255)
+            # El polígono de 2025 (150, 150) DEBE valer 255 en la imagen base
+            self.assertEqual(m_pos[150, 150], 255)
+            # Y en la máscara de 2025 DEBE valer 1, mientras la cicatriz base vale 255
+            with rasterio.open(os.path.join(tmp, 'mascaras_nivel1', 'mascaras_256', 'datos_laconvencion_2025', 'tes_pos.tif')) as d_25:
+                m_25 = d_25.read(1)
+            self.assertEqual(m_25[150, 150], 1)
+            self.assertEqual(m_25[25, 25], 255)
+
+            # Comprobar negativo confirmado: todo 0
+            with rasterio.open(os.path.join(tmp, 'mascaras_nivel1', 'mascaras_256', 'datos_laconvencion', 'tes_neg.tif')) as d_neg:
+                m_neg = d_neg.read(1)
+            self.assertTrue((m_neg == 0).all())
+
+            # Comprobar que tes_norev NO existe
+            self.assertFalse(os.path.exists(os.path.join(tmp, 'mascaras_nivel1', 'mascaras_256', 'datos_laconvencion', 'tes_norev.tif')))
+
+            # Comprobar que los 4 cuadrantes de 128x128 se crearon
+            for q in ('q1', 'q2', 'q3', 'q4'):
+                pq = os.path.join(tmp, 'mascaras_nivel1', 'parches_128', 'datos_laconvencion', f'tes_pos_{q}.tif')
+                self.assertTrue(os.path.exists(pq))
+                with rasterio.open(pq) as dq:
+                    self.assertEqual(dq.shape, (128, 128))
+
+
+class TestReglaNubesYAnomalias(unittest.TestCase):
+    def test_es_nube_blanca_distingue_suelo_claro(self):
+        from candidatos_para_qgis import es_nube_blanca
+        # Nube blanca (B2=1400, B3=1450, B4=1400 -> B4/B2 = 1.0)
+        b2 = np.array([1400.0, 1200.0, 400.0, 2500.0], dtype=np.float32)
+        b3 = np.array([1450.0, 1600.0, 500.0, 2600.0], dtype=np.float32)
+        b4 = np.array([1400.0, 1900.0, 600.0, 3100.0], dtype=np.float32)
+        res = es_nube_blanca(b2, b3, b4)
+        # Pixel 0: nube blanca -> True
+        self.assertTrue(res[0])
+        # Pixel 1: suelo desnudo claro tipo Sillapata (B2=1200, B3=1600, B4=1900) -> False
+        self.assertFalse(res[1])
+        # Pixel 2: suelo normal (B2=400) -> False
+        self.assertFalse(res[2])
+        # Pixel 3: saturación extrema / nieve / nube gruesa (B2=2500 > 2000) -> True
+        self.assertTrue(res[3])
+
+
+class TestAjusteFinoComponentes(unittest.TestCase):
+    def test_cargar_locales_y_bootstrap_zonas(self):
+        from ajuste_fino import bootstrap_zonas, cargar_locales, regla_suelo_pendiente, resumen_local
+        from cortar_parches_128 import escribir_parches
+        from entrenar import receta_de
+        from nucleo import config
+
+        stats = {
+            'B01': {'media': 0.5, 'desv': 0.2},
+            'B02': {'media': 0.5, 'desv': 0.2},
+            'B03': {'media': 0.5, 'desv': 0.2},
+            'B04': {'media': 0.5, 'desv': 0.2},
+            'pendiente': {'media': 1.0, 'desv': 0.5},
+            'elevacion': {'media': 2.0, 'desv': 1.0},
+        }
+        receta = receta_de(['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion'], stats)
+        with tempfile.TemporaryDirectory() as tmp:
+            t_path = os.path.join(tmp, 'img.tif')
+            tr = _crear_tesela_sintetica(t_path)
+            with rasterio.open(t_path) as ds:
+                x = ds.read()[:6]
+                perfil = ds.profile
+            escribir_parches(x, perfil, os.path.join(tmp, 'parches_128', 'datos_laconvencion'), 'tes1')
+            mask = np.zeros((1, 256, 256), dtype=np.uint8)
+            mask[0, 10:30, 10:30] = 1     # cicatriz en q1
+            mask[0, 50:70, 50:70] = 255   # zona ignorada en q1
+            escribir_parches(mask, perfil, os.path.join(tmp, 'mascaras', 'datos_laconvencion'), 'tes1')
+            with open(os.path.join(tmp, 'parches_128', 'indice_parches.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['parche', 'proyecto', 'tesela', 'cuadrante', 'fecha', 'zona', 'conjunto', 'archivo'])
+                w.writeheader()
+                for q in ('q1', 'q2', 'q3', 'q4'):
+                    w.writerow({
+                        'parche': f'tes1_{q}', 'proyecto': 'datos_laconvencion', 'tesela': 'tes1',
+                        'cuadrante': q, 'fecha': 'base', 'zona': 'Z01' if q in ('q1', 'q2') else 'Z02',
+                        'conjunto': 'validacion', 'archivo': f'datos_laconvencion/tes1_{q}.tif'
+                    })
+            X, Y, V, filas = cargar_locales(
+                os.path.join(tmp, 'parches_128'), os.path.join(tmp, 'mascaras'),
+                receta, config.ESCALA_L4S, {'validacion'}
+            )
+            self.assertEqual(X.shape, (4, 6, 128, 128))
+            # En q1 (índice 0), los píxeles 10:30, 10:30 son positivos y 50:70, 50:70 tienen V=0
+            self.assertEqual(int(Y[0, 10:30, 10:30].sum()), 400)
+            self.assertEqual(int(V[0, 50:70, 50:70].sum()), 0)
+
+            # Probar resumen_local y bootstrap_zonas
+            prob_base = np.full_like(Y, 0.1)
+            prob_ajust = np.where(Y > 0, 0.8, 0.1)
+            res_b = resumen_local(prob_base, Y, V, filas, 0.45)
+            res_a = resumen_local(prob_ajust, Y, V, filas, 0.45)
+            self.assertEqual(res_b['cicatrices'], 1)
+            self.assertEqual(res_b['cicatrices_tocadas'], 0)
+            self.assertEqual(res_a['cicatrices_tocadas'], 1)
+            self.assertGreater(res_a['iou'], res_b['iou'])
+
+            bz = bootstrap_zonas(prob_base, 0.45, prob_ajust, 0.45, Y, V, filas, n=200)
+            self.assertEqual(bz['zonas'], 2)
+            self.assertGreaterEqual(bz['ic95'][1], 0.0)
+
+            # Probar comparador sin aprendizaje (GRVI <= 0, B4 >= 1.29 L4S, pendiente >= 10°)
+            pred_regla = regla_suelo_pendiente(X, receta)
+            self.assertEqual(pred_regla.shape, (4, 128, 128))
+            # Como el sintético tiene B3=450, B4=300 (vegetación verde), la regla debe dar todo 0
+            self.assertEqual(int(pred_regla.sum()), 0)
+
+    def test_iris_128_exportar_e_importar(self):
+        from PIL import Image
+        from iris_128 import exportar_128, importar_128
+        with tempfile.TemporaryDirectory() as tmp:
+            _crear_tesela_sintetica(os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_1_001', 'image.tif'))
+            with open(os.path.join(tmp, 'particion.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['tesela', 'proyecto', 'zona', 'conjunto', 'uso'])
+                w.writeheader()
+                w.writerow({'tesela': 'sinpad_1_001', 'proyecto': 'datos_laconvencion', 'zona': 'Z01', 'conjunto': 'entrenamiento', 'uso': 'ronda1'})
+            dir_iris = os.path.join(tmp, 'iris_128')
+            n_exp = exportar_128(tmp, dir_iris, limite=1)
+            self.assertEqual(n_exp, 4)
+            # Simular marcado en IRIS (1=fondo, 2=deslizamiento, 3=dudoso) en q1
+            m_iris = np.ones((128, 128), dtype=np.uint8)
+            m_iris[10:20, 10:20] = 2
+            m_iris[30:40, 30:40] = 3
+            Image.fromarray(m_iris).save(os.path.join(dir_iris, 'masks', 'datos_laconvencion__sinpad_1_001_q1.png'))
+            dir_n1 = os.path.join(tmp, 'mascaras_nivel1')
+            n_imp = importar_128(dir_iris, dir_n1)
+            self.assertEqual(n_imp, 1)
+            with rasterio.open(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', 'sinpad_1_001_q1.tif')) as dm:
+                mk = dm.read(1)
+            self.assertEqual(mk[15, 15], 1)
+            self.assertEqual(mk[35, 35], 255)
+            self.assertEqual(mk[80, 80], 0)
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

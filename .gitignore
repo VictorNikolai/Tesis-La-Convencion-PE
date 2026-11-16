@@ -1,0 +1,47 @@
+# Entornos virtuales y caché de Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Archivos pesados y paquetes comprimidos
+*.zip
+*.tar.gz
+*.7z
+*.h5
+*.pt
+*.pth
+*.onnx
+*.onnx.data
+
+# Carpetas históricas y externas pesadas
+Api-Google/
+Satelite/
+Profesor/
+
+# Rásters GeoTIFF e imágenes pesadas de las teselas y parches
+# (se versionan los CSV, GeoJSON de marcas, decisiones y proyecto QGIS)
+datos_*/images/
+datos_*/images_repetidas/
+datos_*/qgis/*.tif
+datos_*/qgis/*.tif.aux.xml
+datos_*/qgis/_revision/
+datos_*/qgis/_repetidas/
+datos_*/qgis/candidatos.geojson
+datos_*/qgis/cambios.geojson
+datos_*/qgis/cajas_modelo.geojson
+parches_128/**/*.tif
+mascaras_provisionales/**/*.tif
+mascaras_provisionales/**/*.png
+mascaras_provisionales/nivel2/propuestas_nivel2.geojson
+mascaras_nivel1/**/*.tif
+ingemmet/*.geojson
+
+# Archivos temporales de QGIS y sistema
+*.qgz~
+*.gpkg-wal
+*.gpkg-shm
+.DS_Store
+Thumbs.db
+azar/_stats.json

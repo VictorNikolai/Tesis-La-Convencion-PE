@@ -1,0 +1,65 @@
+tesela,distrito,fecha_evento,anio_imagen,antiguo,cobertura_imagen,lo_que_se_ve,aptitud,uso_propuesto,por_que
+sinpad_133797_001,HUAYOPATA,2021-01-28,2021,False,0.98,Pueblo de Huayopata; arriba a la derecha aparece en 2021 una cicatriz alargada ladera abajo que no estaba en 2020,alta,ronda2,Cicatriz nueva clara entre la imagen previa y la posterior: el mejor ejemplo del lote
+sinpad_91210_001,SANTA TERESA,2018-01-13,2018,False,0.99,Valle encajonado con laderas desnudas anaranjadas (arriba derecha y arriba izquierda),alta,ronda2,Laderas con suelo desnudo en pendiente fuerte; revisar forma de lengua
+sinpad_92622_001,SANTA TERESA,2018-03-14,2018,False,0.965,Cauce trenzado grande con abanico de depositos; laderas desnudas anaranjadas arriba a la derecha,alta,ronda2,Zona de huaicos de Santa Teresa 2018; cicatrices probables en las laderas sobre el cauce
+sinpad_11049_001,ECHARATE,2005-04-04,2019,True,0.98,Laderas secas con terrazas y caminos; cauce abajo,media,ronda2,Evento de 2005 pero el terreno sigue inestable; manchas pardas alargadas
+sinpad_119409_001,SANTA TERESA,2020-02-23,2020,False,0.905,Pueblo de Santa Teresa; cauce trenzado que en 2020 se ve mas ancho y claro que en 2019 (huaico de feb 2020),media,ronda2,El deposito del huaico de 2020 esta en el cauce (dudoso); buscar los arranques en las laderas y aguas arriba
+sinpad_134371_001,OCOBAMBA,2021-02-08,2021,False,0.973,Pueblo de Ocobamba; laderas de sol con manchas anaranjadas brillantes a la derecha,media,ronda2,Manchas anaranjadas en ladera; pueden ser derrumbes del evento de feb 2021 o pastos secos
+sinpad_3814_001,SANTA TERESA,2003-02-10,2018,True,1.0,Laderas con manchas pardas y verde amarillento; pueblo,media,reserva,Posibles cicatrices chicas; muchas chacras
+sinpad_69126_001,SANTA TERESA,2015-03-11,2018,True,1.0,Ladera alta desnuda y muy disecada por carcavas; bosque abajo,media,ronda2,Zona de erosion activa de altura: marcar solo arranques con forma de cicatriz; el resto es carcava
+sinpad_75302_001,SANTA TERESA,2016-02-25,2018,True,0.99,Valle con pueblo y cauce; laderas anaranjadas a la derecha,media,ronda2,Laderas desnudas junto al pueblo: candidatas
+sinpad_91293_001,SANTA TERESA,2018-01-19,2018,False,0.987,Valle con cauce de huaico y pueblo arriba,media,reserva,"Igual que los cauces de Santa Teresa: deposito dudoso, buscar arranques"
+sinpad_92075_001,SANTA TERESA,2018-02-24,2018,False,0.98,Cauce ancho con depositos; laderas de bosque,media,reserva,Cauce de huaico
+sinpad_92395_001,SANTA TERESA,2018-03-01,2018,False,0.99,Cauce con depositos blancos; pueblo; una zona nueva de suelo desnudo junto al cauce en 2018,media,ronda2,Cambio detectado junto al cauce: revisar
+sinpad_106123_001,VILLA VIRGEN,2019-05-06,2019,False,1.0,Bosque denso con nubes chicas (Villa Virgen),baja,reserva,Negativo; nubes como dudoso
+sinpad_132708_001,VILCABAMBA,2021-01-11,2021,False,0.994,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_134745_001,ECHARATE,2021-02-16,2021,False,0.98,Pueblo de Echarate; bosque y chacras,baja,validacion,Negativo con pueblo
+sinpad_134852_001,QUELLOUNO,2021-02-16,2021,False,0.967,Pueblo de Quellouno; laderas pardas; imagen previa con bruma,baja,validacion,Negativo duro; la imagen previa tiene bruma
+sinpad_138302_001,INKAWASI,2021-04-14,2021,False,0.999,Laderas de bosque y chacras (Inkawasi); sin cicatriz visible a 10 m,baja,reserva,El evento de abr 2021 no se distingue; quizas fue en carretera
+sinpad_145154_001,VILLA KINTIARINA,2021-11-23,2022,False,0.997,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_14574_001,HUAYOPATA,2006-02-28,2018,True,0.999,Ladera muy empinada y sombreada; cultivos de te,baja,reserva,Sombra fuerte
+sinpad_22258_001,ECHARATE,2007-03-30,2018,True,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_25956_001,HUAYOPATA,2008-02-21,2018,True,0.992,Rio con playas; laderas pardas de pasto seco a la derecha,baja,validacion,Pasto seco: negativo duro
+sinpad_27066_001,ECHARATE,2008-02-06,2019,True,0.997,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_33140_001,OCOBAMBA,2009-03-07,2018,True,0.998,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_3802_001,SANTA ANA,2003-02-07,2018,True,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_408_001,QUELLOUNO,2003-02-10,2019,True,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_5043_001,ECHARATE,2004-01-06,2019,True,0.968,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_56334_001,HUAYOPATA,2013-02-12,2018,True,0.988,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_62629_001,ECHARATE,2014-01-02,2019,True,0.974,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_63009_001,QUELLOUNO,2014-01-15,2019,True,0.997,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_63030_001,QUELLOUNO,2014-01-15,2019,True,1.0,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_63073_001,QUELLOUNO,2014-01-10,2019,True,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_63076_001,QUELLOUNO,2014-01-15,2019,True,1.0,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_63109_001,QUELLOUNO,2014-01-28,2019,True,1.0,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_66618_001,QUELLOUNO,2014-10-10,2017,True,0.994,Bosque con huecos sin dato (nubes enmascaradas),baja,reserva,Marcar huecos como dudoso
+sinpad_82283_001,SANTA ANA,2017-02-22,2018,False,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_86159_001,OCOBAMBA,2017-03-19,2018,False,0.998,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_88103_001,VILLA KINTIARINA,2017-05-15,2018,False,0.988,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_91024_001,ECHARATE,2018-01-01,2019,False,0.999,Rio encajonado; bosque,baja,reserva,Negativo puro
+sinpad_91026_001,ECHARATE,2018-01-02,2019,False,0.993,Rio con playas; chacras,baja,reserva,Negativo
+sinpad_91042_001,SANTA TERESA,2018-01-04,2018,False,1.0,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_91049_001,ECHARATE,2018-01-04,2019,False,0.996,Lomas con chacras nuevas; bruma en la imagen previa,baja,reserva,Cambios por desbosque
+sinpad_91050_001,ECHARATE,2018-01-05,2018,False,0.977,Pueblo (Kiteni?) y rio,baja,reserva,Negativo con pueblo
+sinpad_91374_001,ECHARATE,2018-01-11,2019,False,0.998,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_91376_001,ECHARATE,2018-01-12,2019,False,0.995,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_91377_001,ECHARATE,2018-01-02,2018,False,0.993,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_91680_001,SANTA TERESA,2018-02-05,2018,False,1.0,Gran ladera desnuda anaranjada y disecada (altura),baja,reserva,Erosion de altura; dificil de separar de cicatrices
+sinpad_91730_001,ECHARATE,2018-01-25,2019,False,0.997,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_91757_001,ECHARATE,2018-02-06,2019,False,0.994,Meandros del Bajo Urubamba; chacras nuevas entre 2018 y 2019,baja,validacion,"Los cambios son chacras nuevas, no deslizamientos: negativo duro para el detector de cambio"
+sinpad_91758_001,ECHARATE,2018-02-08,2018,False,0.993,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_91759_001,ECHARATE,2018-02-09,2019,False,1.0,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_92000_001,SANTA TERESA,2018-02-20,2018,False,1.0,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_92055_001,ECHARATE,2018-01-22,2019,False,0.998,Bosque de ladera con bruma,baja,reserva,Negativo
+sinpad_92056_001,ECHARATE,2018-01-16,2018,False,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_92057_001,ECHARATE,2018-01-09,2018,False,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_92060_001,ECHARATE,2018-01-03,2019,False,0.989,Rio con playas; chacras y pastos pardos; chacras nuevas,baja,reserva,Negativo con playas y desbosque
+sinpad_92061_001,ECHARATE,2018-01-18,2018,False,0.999,Laderas secas pardas con caminos,baja,reserva,Pasto seco
+sinpad_92397_001,SANTA TERESA,2018-02-12,2018,False,0.995,Cauce estrecho entre bosque,baja,reserva,Negativo
+sinpad_92597_001,SANTA ANA,2018-03-16,2018,False,0.999,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_9489_001,HUAYOPATA,2005-01-12,2018,True,0.996,Ladera con bosque y chacras; sin rasgo destacado en la revision rapida,baja,reserva,Revisar si sobra tiempo
+sinpad_134776_001,SANTA ANA,2021-02-16,2021,False,0.885,Ciudad de Quillabamba,no,descartar,Urbano (ya hay otra tesela de la ciudad en validacion)
+sinpad_137127_001,KIMBIRI,2021-03-21,2021,False,0.921,Ciudad de Kimbiri en confluencia,no,descartar,Urbano
+sinpad_145162_001,PICHARI,2021-11-22,2022,False,0.873,Ciudad de Pichari,no,descartar,Urbano
+sinpad_68867_001,SANTA TERESA,2015-02-25,2018,True,0.986,Alta montana: roca y morrenas desnudas; nieve,no,descartar,Fuera del paisaje de interes
+sinpad_97387_001,ECHARATE,2018-12-19,2019,False,0.991,Nubes sobre gran parte de la imagen,no,rebajar,Rebajar con --anio 2020
