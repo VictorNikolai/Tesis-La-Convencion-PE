@@ -15,28 +15,24 @@ __pycache__/
 *.onnx
 *.onnx.data
 
-# Carpetas históricas y externas pesadas
+# Carpetas locales de trabajo y datos brutos (no se suben al repositorio público)
 Api-Google/
 Satelite/
 Profesor/
-
-# Rásters GeoTIFF e imágenes pesadas de las teselas y parches
-# (se versionan los CSV, GeoJSON de marcas, decisiones y proyecto QGIS)
-datos_*/images/
-datos_*/images_repetidas/
-datos_*/qgis/*.tif
-datos_*/qgis/*.tif.aux.xml
-datos_*/qgis/_revision/
-datos_*/qgis/_repetidas/
-datos_*/qgis/candidatos.geojson
-datos_*/qgis/cambios.geojson
-datos_*/qgis/cajas_modelo.geojson
-parches_128/**/*.tif
-mascaras_provisionales/**/*.tif
-mascaras_provisionales/**/*.png
-mascaras_provisionales/nivel2/propuestas_nivel2.geojson
-mascaras_nivel1/**/*.tif
-ingemmet/*.geojson
+azar/
+indeci/
+ingemmet/
+datos_*/
+parches_128/
+mascaras_provisionales/
+mascaras_nivel1/
+iris_128/
+iris_ejemplo_demo/
+Deslizamiento0327.csv
+PASOS_datos_locales.md
+TEXTOS_MEMORIA_Y_HALLAZGOS.md
+particion.md
+particion.csv
 
 # Archivos temporales de QGIS, IRIS y sistema
 *.qgz~
