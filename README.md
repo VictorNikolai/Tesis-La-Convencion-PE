@@ -18,6 +18,7 @@ Tesis-La-Convencion-PE/
 │   ├── exportar_poligonos_qgis.py  # Vectorización suavizada (Chaikin) y estilo .qml
 │   ├── minar_hard_negatives.py     # Minería activa de negativos difíciles
 │   ├── nutrir_mascaras.py          # Extracción multitemporal y geológica
+│   ├── pipeline_entrenamiento.py   # Entrenamiento, ajuste fino y exportación ONNX
 │   ├── empaquetar_para_colab.py    # Empaquetado para ejecución en GPU (Colab)
 │   ├── Ajuste_Fino_LaConvencion.ipynb
 │   └── test_herramientas.py        # Suite de pruebas unitarias e integrales (9/9)
@@ -122,17 +123,18 @@ Todas las pruebas unitarias e integrales (partición espacial sin fuga, regla de
 
 ---
 
-## Entrenamiento y ajuste fino
+## Entrenamiento, ajuste fino y exportación ONNX
 
-El código completo de entrenamiento se encuentra en [`herramientas/entrenar.py`](herramientas/entrenar.py), [`herramientas/ajuste_fino.py`](herramientas/ajuste_fino.py), [`herramientas/correr_entrenamiento_tesis.py`](herramientas/correr_entrenamiento_tesis.py) y el cuaderno de Google Colab [`herramientas/Ajuste_Fino_LaConvencion.ipynb`](herramientas/Ajuste_Fino_LaConvencion.ipynb):
+El código de entrenamiento ([`herramientas/pipeline_entrenamiento.py`](herramientas/pipeline_entrenamiento.py), [`herramientas/entrenar.py`](herramientas/entrenar.py), [`herramientas/ajuste_fino.py`](herramientas/ajuste_fino.py) y [`herramientas/Ajuste_Fino_LaConvencion.ipynb`](herramientas/Ajuste_Fino_LaConvencion.ipynb)) sirve para entrenar y comparar **U-Net (ResNet-34)** y **DeepLabV3+ (ResNet-34)**, entregando automáticamente los modelos compilados en formato **ONNX** (`.onnx`) junto con sus recetas `.json` listas para producción e inferencia:
 
 ```powershell
-# 1. Entrenamiento base comparativo sobre Landslide4Sense (U-Net v4 y DeepLabV3+)
-python herramientas/correr_entrenamiento_tesis.py base --l4s /ruta/l4s --arquitectura unet
-python herramientas/correr_entrenamiento_tesis.py base --l4s /ruta/l4s --arquitectura deeplabv3plus
+# 1. Benchmark comparativo completo: entrena U-Net ResNet-34 y DeepLabV3+ ResNet-34,
+#    exporta ambos modelos a formato ONNX y verifica sus métricas oficiales
+python herramientas/pipeline_entrenamiento.py comparativo --l4s /ruta/l4s
 
 # 2. Ajuste fino en La Convención (2,580 parches estratificados + Hard Negatives + Vía 3)
-python herramientas/correr_entrenamiento_tesis.py ajuste \
+#    y exportación automática del ONNX ajustado
+python herramientas/pipeline_entrenamiento.py ajuste \
     --l4s /ruta/l4s \
     --desde /ruta/mejor_unet_b1b4b13b14.pt \
     --stats /ruta/stats_norm.json \
