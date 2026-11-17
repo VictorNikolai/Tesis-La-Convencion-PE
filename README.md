@@ -125,14 +125,41 @@ Todas las pruebas unitarias e integrales (partición espacial sin fuga, regla de
 
 ## Entrenamiento, ajuste fino y exportación ONNX
 
-El código de entrenamiento ([`herramientas/pipeline_entrenamiento.py`](herramientas/pipeline_entrenamiento.py), [`herramientas/entrenar.py`](herramientas/entrenar.py), [`herramientas/ajuste_fino.py`](herramientas/ajuste_fino.py) y [`herramientas/Ajuste_Fino_LaConvencion.ipynb`](herramientas/Ajuste_Fino_LaConvencion.ipynb)) sirve para entrenar y comparar **U-Net (ResNet-34)** y **DeepLabV3+ (ResNet-34)**, entregando automáticamente los modelos compilados en formato **ONNX** (`.onnx`) junto con sus recetas `.json` listas para producción e inferencia:
+El flujo de modelado se divide en **cuatro etapas secuenciales y reproducibles**, diseñadas para entrenar y contrastar **U-Net (ResNet-34)** y **DeepLabV3+ (ResNet-34)** hasta obtener los archivos finales **ONNX** (`.onnx`) y sus recetas `.json` para despliegue en producción.
+
+### Etapa 1. Entrenamiento base global (`herramientas/entrenar.py`)
+* **Objetivo:** Dotar al *encoder* ResNet-34 (pre-entrenado en ImageNet) de capacidad general para reconocer deslizamientos a partir de los 3,799 parches de *Landslide4Sense*.
+* **Configuración técnica:**
+  * **Función de pérdida:** Combinación de *Binary Cross-Entropy* con *Online Hard Example Mining* (`--ohem 0.25`) y *Dice Loss* (`--peso-dice 0.5`).
+  * **Índices internos (`--indices-verdor`):** Calcula `GRVI` y `ExG` dentro del propio grafo de la red, de modo que viajan compilados dentro del `.onnx`.
+  * **Estabilización:** Promedio móvil exponencial de pesos (`--ema 0.999`), calentamiento de tasa de aprendizaje (`--calentamiento 5`) y promediado de las 5 mejores épocas (`--promediar 5`).
+* **Salidas:** Checkpoint `.pt` y estadísticas de normalización `stats_norm_<firma>.json`.
+
+### Etapa 2. Ajuste fino en La Convención (`herramientas/ajuste_fino.py`)
+* **Objetivo:** Especializar el modelo base a la geomorfología y reflectancia andino-amazónica de La Convención sin olvidar lo aprendido en *Landslide4Sense*.
+* **Configuración técnica:**
+  * **Lotes mixtos (`--frac-local 0.5`):** Cada lote combina 50% de parches locales de La Convención (los **2,580 parches** balanceados con simetría $D_4$) y 50% de *Landslide4Sense* como ancla.
+  * **Pérdida estratificada por Tiers:** Aplica el peso de `resultados/catalogo_parches_tiers.csv` por parche (`1.0` Tier Oro, `0.8` *Hard Negatives*, `0.5` Tier Plata, `0.3`/`0.2` Tier Bronce) e ignora píxeles `255` (nubes/dudosos).
+  * **Tasa baja (`--lr 3e-5`):** Diez veces menor que el entrenamiento base para refinar pesos sin destruir el *encoder*; admite `--geomorfologia` para expandir la primera capa (`conv1`) e incorporar `CURVATURA` y `TPI`.
+  * **Criterio de aceptación:** Solo guarda un nuevo modelo si mejora en validación local sin caer más de `0.03` de IoU en *Landslide4Sense*.
+
+### Etapa 3. Comparación de arquitecturas (`pipeline_entrenamiento.py`)
+* **Objetivo:** Contrastar rigurosamente **U-Net ResNet-34** (precisión en bordes mediante *skip connections*) frente a **DeepLabV3+ ResNet-34** (contexto multiescala mediante *Atrous Spatial Pyramid Pooling*) y frente a la línea base física sin aprendizaje (regla espectral + pendiente).
+
+### Etapa 4. Exportación y verificación ONNX (`exportar_onnx.py` y `verificar_onnx.py`)
+* **Objetivo:** Compilar ambos modelos (`.pt` $\rightarrow$ `.onnx`) junto con su receta `.json` (orden de canales, constantes de normalización, tipo de salida y umbral óptimo), verificando que la inferencia en `onnxruntime` reproduzca exactamente las métricas de PyTorch.
+
+### Comandos de ejecución
 
 ```powershell
 # 1. Benchmark comparativo completo: entrena U-Net ResNet-34 y DeepLabV3+ ResNet-34,
 #    exporta ambos modelos a formato ONNX y verifica sus métricas oficiales
 python herramientas/pipeline_entrenamiento.py comparativo --l4s /ruta/l4s
 
-# 2. Ajuste fino en La Convención (2,580 parches estratificados + Hard Negatives + Vía 3)
+# 2. Entrenamiento base individual (unet o deeplabv3plus) + ONNX
+python herramientas/pipeline_entrenamiento.py base --l4s /ruta/l4s --arquitectura unet
+
+# 3. Ajuste fino en La Convención (2,580 parches estratificados + Hard Negatives + Vía 3)
 #    y exportación automática del ONNX ajustado
 python herramientas/pipeline_entrenamiento.py ajuste \
     --l4s /ruta/l4s \
@@ -140,4 +167,6 @@ python herramientas/pipeline_entrenamiento.py ajuste \
     --stats /ruta/stats_norm.json \
     --geomorfologia
 ```
+
+*(Para ejecución en GPU gratuita de Google Colab, utilizar el cuaderno sincronizado [`herramientas/Ajuste_Fino_LaConvencion.ipynb`](herramientas/Ajuste_Fino_LaConvencion.ipynb)).*
 
