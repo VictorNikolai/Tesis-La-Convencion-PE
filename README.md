@@ -54,7 +54,38 @@ Tesis-La-Convencion-PE/
 
 ## Etiquetado en IRIS ($128 \times 128$)
 
-Para la validación y refinamiento humano de máscaras se utiliza la interfaz IRIS configurada a $128 \times 128\text{ px}$ (guía detallada en [`docs/GUIA_IRIS_128.md`](docs/GUIA_IRIS_128.md)):
+Para la validación y refinamiento humano de máscaras se utiliza la interfaz **IRIS** (*Intelligent Remote Sensing Image Segmentation*) configurada a $128 \times 128\text{ px}$ (guía detallada en [`docs/GUIA_IRIS_128.md`](docs/GUIA_IRIS_128.md)).
+
+### Instalación y ejecución de IRIS
+
+Requiere **Python 3.10+** y **Node.js (npm)**:
+
+```powershell
+# 1. Clonar el código fuente de IRIS en iris_app/
+git clone https://github.com/gt-csse/iris.git iris_app
+
+# 2. Instalar dependencias de Python y el paquete IRIS
+pip install -e iris_app
+pip install rasterio scikit-learn matplotlib pillow scipy
+
+# 3. Compilar la interfaz web (React / Vite)
+npm --prefix iris_app install
+npm --prefix iris_app run build
+```
+
+Para exportar los parches, iniciar el servidor local e importar las máscaras validadas:
+
+```powershell
+# Exportar proyecto a iris_128/
+python herramientas/iris_128.py exportar --salida iris_128
+
+# Iniciar el servidor web local (o hacer doble clic en iniciar_iris_128.bat)
+python herramientas/iris_128.py abrir --iris iris_128
+# Abrir en el navegador: http://127.0.0.1:5000/segmentation/ (usuario: admin | clave: laconvencion)
+
+# Importar las máscaras guardadas a Nivel 1
+python herramientas/iris_128.py importar --iris iris_128 --salida mascaras_nivel1
+```
 
 ![Demostración de etiquetado en IRIS 128](docs/img/video_tutorial_iris.gif)
 
