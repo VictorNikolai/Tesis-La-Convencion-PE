@@ -119,3 +119,23 @@ python herramientas/test_herramientas.py
 ```
 
 Todas las pruebas unitarias e integrales (partición espacial sin fuga, regla de nubes, métricas de acuerdo inter-anotador, cálculo geomorfométrico de `CURVATURA`/`TPI`, pesos por Tier y suavizado cartográfico de Chaikin) pasan al 100% (`9/9 OK`).
+
+---
+
+## Entrenamiento y ajuste fino
+
+El código completo de entrenamiento se encuentra en [`herramientas/entrenar.py`](herramientas/entrenar.py), [`herramientas/ajuste_fino.py`](herramientas/ajuste_fino.py), [`herramientas/correr_entrenamiento_tesis.py`](herramientas/correr_entrenamiento_tesis.py) y el cuaderno de Google Colab [`herramientas/Ajuste_Fino_LaConvencion.ipynb`](herramientas/Ajuste_Fino_LaConvencion.ipynb):
+
+```powershell
+# 1. Entrenamiento base comparativo sobre Landslide4Sense (U-Net v4 y DeepLabV3+)
+python herramientas/correr_entrenamiento_tesis.py base --l4s /ruta/l4s --arquitectura unet
+python herramientas/correr_entrenamiento_tesis.py base --l4s /ruta/l4s --arquitectura deeplabv3plus
+
+# 2. Ajuste fino en La Convención (2,580 parches estratificados + Hard Negatives + Vía 3)
+python herramientas/correr_entrenamiento_tesis.py ajuste \
+    --l4s /ruta/l4s \
+    --desde /ruta/mejor_unet_b1b4b13b14.pt \
+    --stats /ruta/stats_norm.json \
+    --geomorfologia
+```
+
