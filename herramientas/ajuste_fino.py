@@ -157,6 +157,33 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
     return np.stack(X), np.stack(Y), np.stack(V), usadas
 
 
+def cargar_l4spe(ruta, receta, conjuntos):
+    """Parches del profesor (L4SPe) con máscara manual, de empaquetar_l4spe.py.
+    Las bandas vienen en niveles digitales y se llevan a unidades de Landslide4Sense con la escala
+    guardada en el archivo (media del entrenamiento), igual que se hace con La Convención.
+    La pendiente viene en radianes y la elevación en metros. Devuelve X, Y, V y las filas."""
+    from nucleo import config as cfg, recetas
+    d = np.load(ruta, allow_pickle=False)
+    escala = json.loads(str(d['escala_json']))
+    k_terreno = dict(cfg.ESCALA_TERRENO_L4S, **receta.get('escala_terreno', {}))
+    sel = [i for i, c in enumerate(d['conjunto']) if str(c) in conjuntos]
+    X, Y, V, filas = [], [], [], []
+    for i in sel:
+        x = d['x'][i]
+        valido = np.isfinite(x).all(axis=0)
+        x = np.nan_to_num(x, nan=0.0)
+        bandas = {b: x[k] for k, b in enumerate(BANDAS)}
+        terreno = {'pendiente': np.degrees(x[4]).astype(np.float32), 'elevacion': x[5]}
+        X.append(recetas.desde_l2a(bandas, terreno, valido, receta, escala=escala))
+        Y.append(d['y'][i].astype(np.float32)); V.append(valido.astype(np.float32))
+        filas.append({'proyecto': 'l4spe', 'parche': str(d['punto'][i]), 'tesela': str(d['punto'][i]),
+                      'zona': str(d['zona'][i]), 'conjunto': str(d['conjunto'][i])})
+    if not X:
+        z = np.zeros((0, len(receta['canales']), 128, 128), np.float32)
+        return z, np.zeros((0, 128, 128), np.float32), np.zeros((0, 128, 128), np.float32), []
+    return np.stack(X), np.stack(Y), np.stack(V), filas
+
+
 # ------------------------------------------------------------------- medición
 def barrido(prob, Y, V):
     c = Conteo(UMBRALES)
@@ -267,6 +294,12 @@ def main():
     ap.add_argument('--perdida-por-grupo', dest='perdida_grupo', action=argparse.BooleanOptionalAction, default=True,
                     help='calcula la pérdida (y el OHEM) por separado para la parte local y la de L4S, y las promedia '
                          'según la fracción del lote. Evita que los píxeles locales más difíciles dominen todo el lote')
+    ap.add_argument('--l4spe', help='l4spe_profesor.npz (empaquetar_l4spe.py): parches con máscara manual del profesor, '
+                    'de otras zonas del Perú. Entran a entrenar, a validar (elegir época y umbral) y a la prueba final')
+    ap.add_argument('--frac-l4spe', dest='frac_l4spe', type=float, default=0.3,
+                    help='parte de cada lote que sale de L4SPe (solo con --l4spe)')
+    ap.add_argument('--peso-l4spe', dest='peso_l4spe', type=float, default=1.0,
+                    help='peso en la pérdida de los píxeles de L4SPe (1,0 = como Landslide4Sense)')
     ap.add_argument('--semilla', type=int, default=42)
     ap.add_argument('--limite', type=int, help='solo para probar: parches de L4S por conjunto')
     a = ap.parse_args()
@@ -336,6 +369,16 @@ def main():
             Wl = np.concatenate([Wl, pesos_q])
             Fl = Fl + [Fd[i] for i in quedan]
             n_debiles = len(quedan)
+    Xp = Yp = Vp = Xpv = Ypv = Vpv = Xpt = Ypt = Vpt = None
+    Fp = Fpv = Fpt = []
+    if a.l4spe:
+        Xp, Yp, Vp, Fp = cargar_l4spe(a.l4spe, receta, {'entrenamiento'})
+        Xpv, Ypv, Vpv, Fpv = cargar_l4spe(a.l4spe, receta, {'validacion'})
+        Xpt, Ypt, Vpt, Fpt = cargar_l4spe(a.l4spe, receta, {'prueba'})
+        if len(Xp) < 4 or len(Xpv) < 1:
+            raise SystemExit(f'L4SPe: {len(Xp)} parches de entrenamiento y {len(Xpv)} de validación; revisa {a.l4spe}')
+        print(f'L4SPe (profesor): entrenamiento {len(Xp)} parches / {len({r["zona"] for r in Fp})} zonas, '
+              f'validación {len(Xpv)} / {len({r["zona"] for r in Fpv})}, prueba {len(Xpt)} / {len({r["zona"] for r in Fpt})}')
     zonas_tr, zonas_va = {r['zona'] for r in Fl}, {r['zona'] for r in Fv}
     if zonas_tr & zonas_va:
         raise SystemExit(f'zonas en entrenamiento y validación a la vez: {sorted(zonas_tr & zonas_va)}')
@@ -350,6 +393,11 @@ def main():
     frac = lambda Y_, V_: float((Y_ * V_).sum()) / max(float(V_.sum()), 1.0) * 100
     print(f'píxeles de deslizamiento: L4S entrenamiento {frac(Ytr, Vtr):.2f} %, local entrenamiento {frac(Yl, Vl):.2f} %'
           f'. Validación local: {origen_val}')
+    hay_pe = Xp is not None
+    cic_pe_va = len(objetos(Ypv * Vpv)) if hay_pe else 0
+    hay_pe_val = hay_pe and cic_pe_va > 0
+    if hay_pe:
+        print(f'L4SPe validación: {cic_pe_va} cicatrices. Píxeles de deslizamiento: L4SPe entrenamiento {frac(Yp, Vp):.2f} %')
     hay_val = len(Xv) > 0
     hay_pos_val = cic_va > 0
     if not hay_val:
@@ -393,13 +441,19 @@ def main():
             b_loc = barrido(pl, Yv, Vv)
             out['local_barrido'] = b_loc
             out['local'] = max(b_loc, key=lambda r: r['iou']) if hay_pos_val else min(b_loc, key=lambda r: (r['fp'], r['umbral']))
+        if hay_pe_val:
+            b_pe = barrido(predecir(m, Xpv, disp), Ypv, Vpv)
+            out['pe_barrido'] = b_pe
+            out['pe'] = max(b_pe, key=lambda r: r['iou'])
         return out
 
     def puntaje(m):
+        # promedio de los IoU de validación que existen: L4SPe (manual, otras zonas del Perú) y La Convención
+        comp = ([m['pe']['iou']] if hay_pe_val else []) + ([m['local']['iou']] if hay_val and hay_pos_val else [])
+        if comp:
+            return float(np.mean(comp))
         if not hay_val:
             return m['l4s']['iou']
-        if hay_pos_val:
-            return m['local']['iou']
         fp05 = en_umbral(m['local_barrido'], 0.5)
         return -fp05['fp'] / max(fp05['fp'] + fp05['tn'], 1)
 
@@ -407,11 +461,14 @@ def main():
     # con --solo-local el IoU de Landslide4Sense deja de ser condición para aceptar una época
     piso_l4s = float('-inf') if a.solo_local else m0['l4s']['iou'] - a.tol
     print(f"época  0 (modelo base) | IoU val L4S {m0['l4s']['iou']:.4f} (umbral {m0['l4s']['umbral']})"
-          + (f" | IoU val local {m0['local']['iou']:.4f} (umbral {m0['local']['umbral']})" if hay_val and hay_pos_val else ''))
+          + (f" | IoU val local {m0['local']['iou']:.4f} (umbral {m0['local']['umbral']})" if hay_val and hay_pos_val else '')
+          + (f" | IoU val L4SPe {m0['pe']['iou']:.4f} (umbral {m0['pe']['umbral']})" if hay_pe_val else ''))
     config = dict(cfg0, ajuste_fino={'desde': os.path.basename(a.desde), 'firma_base': ck0.get('firma'),
                                      'lr': a.lr, 'lote': a.lote, 'frac_local': 1.0 if a.solo_local else a.frac_local,
                                      'solo_local': a.solo_local, 'epocas_max': a.epocas,
-                                     'ohem': ohem, 'pasos': a.pasos, 'tiers_entrenamiento': sorted(tiers_ent) if a.debiles else None,
+                                     'ohem': ohem, 'pasos': a.pasos, 'l4spe': os.path.basename(a.l4spe) if a.l4spe else None,
+                                     'frac_l4spe': a.frac_l4spe if a.l4spe else None, 'peso_l4spe': a.peso_l4spe if a.l4spe else None,
+                                     'tiers_entrenamiento': sorted(tiers_ent) if a.debiles else None,
                                      'validacion_local': origen_val, 'perdida_por_grupo': a.perdida_grupo,
                                      'congelar_encoder': a.congelar, 'bn_libre': a.bn_libre, 'tolerancia_l4s': a.tol,
                                      'semilla': a.semilla, 'parches_locales': len(Xl), 'parches_debiles': n_debiles,
@@ -425,11 +482,16 @@ def main():
     opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=a.wd)
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda e: factor_lr(e, a.epocas, 2, 0.05))
     escalador = torch.amp.GradScaler('cuda', enabled=amp)
-    n_loc = a.lote if a.solo_local else max(1, min(a.lote - 1, int(round(a.lote * a.frac_local))))
-    n_l4s = a.lote - n_loc
+    n_pe = max(1, int(round(a.lote * a.frac_l4spe))) if hay_pe else 0
+    if a.solo_local:
+        n_loc = a.lote - n_pe
+    else:
+        n_loc = max(1, min(a.lote - n_pe - 1, int(round(a.lote * a.frac_local))))
+    n_l4s = a.lote - n_loc - n_pe
     pasos = a.pasos or max(20, math.ceil(len(Xl) / n_loc))
     historial = [{'epoca': 0, 'perdida': None, 'iou_l4s': m0['l4s']['iou'],
-                  'iou_local': m0['local']['iou'] if hay_val else None, 'puntaje': puntaje(m0), 'admisible': True}]
+                  'iou_local': m0['local']['iou'] if hay_val else None,
+                  'iou_l4spe': m0['pe']['iou'] if hay_pe_val else None, 'puntaje': puntaje(m0), 'admisible': True}]
     mejor = {'epoca': 0, 'puntaje': puntaje(m0), 'medida': m0, 'estado': None}
     cola_l4s = rng.permutation(len(Xtr)); pos = 0
     seguidas_malas, ep_hechas = 0, 0
@@ -445,14 +507,16 @@ def main():
         perdidas = []; te0 = time.time()
         for _ in range(pasos):
             jl = rng.integers(0, len(Xl), n_loc)
+            xs, ys, vs = [Xl[jl]], [Yl[jl]], [Vl[jl] * Wl[jl][:, None, None]]
+            if n_pe:
+                jp = rng.integers(0, len(Xp), n_pe)
+                xs.append(Xp[jp]); ys.append(Yp[jp]); vs.append(Vp[jp] * a.peso_l4spe)
             if n_l4s:
                 if pos + n_l4s > len(cola_l4s):
                     cola_l4s = rng.permutation(len(Xtr)); pos = 0
                 jg = cola_l4s[pos:pos + n_l4s]; pos += n_l4s
-                x = np.concatenate([Xl[jl], Xtr[jg]]); y = np.concatenate([Yl[jl], Ytr[jg]])
-                v = np.concatenate([Vl[jl] * Wl[jl][:, None, None], Vtr[jg]])
-            else:
-                x, y, v = Xl[jl], Yl[jl], Vl[jl] * Wl[jl][:, None, None]
+                xs.append(Xtr[jg]); ys.append(Ytr[jg]); vs.append(Vtr[jg])
+            x, y, v = np.concatenate(xs), np.concatenate(ys), np.concatenate(vs)
             k = int(rng.integers(0, 4)); espejo = bool(rng.integers(0, 2))
             x, y, v = (np.rot90(mm, k, axes=(-2, -1)) for mm in (x, y, v))
             if espejo:
@@ -461,12 +525,16 @@ def main():
             opt.zero_grad(set_to_none=True)
             with torch.autocast(device_type='cuda', enabled=amp):
                 logits = modelo(x)[:, 0]
-            if n_l4s and a.perdida_grupo:
+            if a.perdida_grupo and (n_pe or n_l4s):
                 # cada grupo con su propia pérdida: si no, el OHEM elige los píxeles más difíciles de TODO el lote
                 # y los locales (máscaras provisionales) acaparan el gradiente aunque el lote sea mitad L4S
                 lg = logits.float()
-                loss = (n_loc * perdida_mixta(lg[:n_loc], y[:n_loc], v[:n_loc], 0.5, ohem)
-                        + n_l4s * perdida_mixta(lg[n_loc:], y[n_loc:], v[n_loc:], 0.5, ohem)) / a.lote
+                loss, ini = 0.0, 0
+                for n_g in (n_loc, n_pe, n_l4s):
+                    if n_g:
+                        loss = loss + n_g * perdida_mixta(lg[ini:ini + n_g], y[ini:ini + n_g], v[ini:ini + n_g], 0.5, ohem)
+                        ini += n_g
+                loss = loss / a.lote
             else:
                 loss = perdida_mixta(logits.float(), y, v, 0.5, ohem)
             escalador.scale(loss).backward()
@@ -484,11 +552,13 @@ def main():
                      'estado': {kk: vv.detach().cpu().clone() for kk, vv in modelo.state_dict().items()}}
             marca = '  <- mejor'
         historial.append({'epoca': ep, 'perdida': round(float(np.mean(perdidas)), 5), 'iou_l4s': m['l4s']['iou'],
-                          'iou_local': m['local']['iou'] if hay_val else None, 'puntaje': round(float(p), 5),
+                          'iou_local': m['local']['iou'] if hay_val else None,
+                          'iou_l4spe': m['pe']['iou'] if hay_pe_val else None, 'puntaje': round(float(p), 5),
                           'admisible': admisible})
         print(f"época {ep:2d} | pérdida {np.mean(perdidas):.4f} | IoU val L4S {m['l4s']['iou']:.4f}"
               + ('' if admisible else ' (pierde demasiado)')
               + (f" | IoU val local {m['local']['iou']:.4f}" if hay_val and hay_pos_val else '')
+              + (f" | IoU val L4SPe {m['pe']['iou']:.4f}" if hay_pe_val else '')
               + f" | {time.time() - te0:.0f} s{marca}", flush=True)
         seguidas_malas = 0 if admisible else seguidas_malas + 1
         if a.paciencia and seguidas_malas >= a.paciencia:
@@ -512,13 +582,17 @@ def main():
         modelo.load_state_dict(sd, strict=True)
     mF = mejor['medida']
     usar_local = hay_val and hay_pos_val and cic_va >= a.min_cic
+    usar_pe = hay_pe_val and cic_pe_va >= a.min_cic          # máscara manual: manda sobre la provisional
 
     def umbral_de(m):
+        if usar_pe:
+            return m['pe']['umbral']
         return m['local']['umbral'] if usar_local else m['l4s']['umbral']
 
     u0, uF = umbral_de(m0), umbral_de(mF)
     res = {'firma': firma, 'arquitectura': arq, 'mejor_epoca': mejor['epoca'], 'mejoro': mejoro,
-           'umbral_operacion': uF, 'umbral_elegido_en': 'validación local' if usar_local else 'validación de Landslide4Sense',
+           'umbral_operacion': uF, 'umbral_elegido_en': ('validación de L4SPe (máscara manual del profesor)' if usar_pe else
+                                 'validación local' if usar_local else 'validación de Landslide4Sense'),
            'config': config, 'epocas_corridas': ep_hechas, 'epocas_max': a.epocas,
            'validacion_local_origen': origen_val, 'base': {'firma': ck0.get('firma'), 'umbral': u0}}
     # prueba oficial de Landslide4Sense, una vez, con el umbral elegido en SU validación
@@ -549,6 +623,17 @@ def main():
             f'solo {len(zonas_va)} zonas de validación' if len(zonas_va) < 5 else '',
             'validación hecha con máscaras de nivel 2 (propuestas sin verificar): no sirve como cifra final'
             if origen_val.startswith('nivel 2') else '') if s]
+    if hay_pe:
+        pv0, pvF = predecir(base_modelo, Xpv, disp), predecir(modelo, Xpv, disp)
+        pt0_, ptF_ = predecir(base_modelo, Xpt, disp), predecir(modelo, Xpt, disp)
+        res['l4spe'] = {
+            'nota': 'máscaras manuales del profesor, otras zonas del Perú (no La Convención); entrada de Sentinel-2 L1C',
+            'validacion': {'base': resumen_local(pv0, Ypv, Vpv, Fpv, u0), 'ajustado': resumen_local(pvF, Ypv, Vpv, Fpv, uF)},
+            'prueba': {'base': resumen_local(pt0_, Ypt, Vpt, Fpt, u0), 'ajustado': resumen_local(ptF_, Ypt, Vpt, Fpt, uF),
+                       'regla': resumen_local(regla_suelo_pendiente(Xpt, receta), Ypt, Vpt, Fpt, 0.5)},
+            'mejora_iou_prueba': bootstrap_zonas(pt0_, u0, ptF_, uF, Ypt, Vpt, Fpt)}
+        res['local_advertencias'] = res.get('local_advertencias', []) + [
+            'L4SPe es de otras zonas del Perú y de imágenes L1C: que mejore ahí no garantiza mejora en La Convención (L2A)']
     res['minutos'] = round((time.time() - t0) / 60, 1)
 
     print('\n' + '=' * 78)
@@ -560,6 +645,16 @@ def main():
                     'iou_val': mF['l4s']['iou'], 'firma': firma, 'config': config}, ruta_ckpt)
         json.dump(stats, open(os.path.join(a.salida, f'stats_norm_{firma}.json'), 'w', encoding='utf-8'), indent=1)
         print(f"mejor época {mejor['epoca']}; umbral {uF} (elegido en {res['umbral_elegido_en']})")
+    if hay_pe:
+        pr = res['l4spe']['prueba']
+        print(f"L4SPe (profesor), prueba de {len(Xpt)} parches de otras zonas del Perú:")
+        for nombre in ('regla', 'base', 'ajustado'):
+            m_ = pr[nombre]
+            print(f"  {nombre:8s}: IoU {m_['iou']:.4f}  F1 {m_['f1']:.4f}  precisión {m_['precision']:.4f}  "
+                  f"exhaustividad {m_['recall']:.4f} | cicatrices {m_['cicatrices_tocadas']}/{m_['cicatrices']}")
+        bz = res['l4spe']['mejora_iou_prueba']
+        if bz:
+            print(f"mejora de IoU en L4SPe (prueba), IC 95 % por zonas ({bz['zonas']}): [{bz['ic95'][0]:+.4f}, {bz['ic95'][1]:+.4f}]")
     f4 = lambda r: f"IoU {r['iou']:.4f}  F1 {r['f1']:.4f}  precisión {r['precision']:.4f}  exhaustividad {r['recall']:.4f}"
     print(f"Landslide4Sense, prueba oficial   regla   : {f4(res['comparador_sin_aprendizaje']['l4s_prueba'])}")
     print(f"                                  base    : {f4(res['base']['l4s_prueba'])}")

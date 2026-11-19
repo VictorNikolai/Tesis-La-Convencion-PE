@@ -465,5 +465,37 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             self.assertEqual(len(X0), 0)
 
 
+    def test_cargar_l4spe_conjuntos_unidades_y_nan(self):
+        """cargar_l4spe: filtra por conjunto, pasa pendiente de radianes a unidades L4S y marca los NaN como no válidos."""
+        import json as _json
+        from nucleo import recetas
+        import ajuste_fino
+        rng = np.random.default_rng(3)
+        x = np.zeros((3, 6, 128, 128), np.float32)
+        for k in range(4):
+            x[:, k] = rng.uniform(300, 900, (3, 128, 128))
+        x[:, 4] = 0.5                      # radianes
+        x[:, 5] = 1500.0                   # metros
+        x[1, 2, :4, :4] = np.nan
+        y = np.zeros((3, 128, 128), np.uint8); y[:, 10:20, 10:20] = 1
+        rec = {'nombre': 'base', 'onnx': 'b.onnx', 'canales': ['B01', 'B02', 'B03', 'B04', 'pendiente', 'elevacion'],
+               'lado_px': 128, 'normalizacion': {'metodo': 'ninguna'}, 'salida': 'sigmoide', 'umbral': 0.5}
+        recetas.normalizar_nombres(rec)
+        with tempfile.TemporaryDirectory() as tmp:
+            ruta = os.path.join(tmp, 'l4spe.npz')
+            np.savez_compressed(ruta, x=x, y=y, punto=np.array(['point_0001', 'point_0002', 'point_0003']),
+                                zona=np.array(['Z1', 'Z1', 'Z2']), conjunto=np.array(['entrenamiento', 'entrenamiento', 'validacion']),
+                                escala_json=np.array(_json.dumps({'B01': 600., 'B02': 600., 'B03': 600., 'B04': 600.})))
+            X, Y, V, F = ajuste_fino.cargar_l4spe(ruta, rec, {'entrenamiento'})
+            self.assertEqual((len(X), len(F)), (2, 2))
+            self.assertEqual(float(V[1, :4, :4].max()), 0.0)             # NaN -> no válido
+            self.assertEqual(float(V[0].min()), 1.0)
+            self.assertAlmostEqual(float(X[0, 4].mean()), float(np.degrees(0.5)) / 20.292, places=3)
+            Xv, *_ = ajuste_fino.cargar_l4spe(ruta, rec, {'validacion'})
+            self.assertEqual(len(Xv), 1)
+            Xn, *_ = ajuste_fino.cargar_l4spe(ruta, rec, {'prueba'})
+            self.assertEqual(len(Xn), 0)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
