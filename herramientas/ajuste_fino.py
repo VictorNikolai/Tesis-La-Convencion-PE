@@ -233,6 +233,9 @@ def main():
     ap.add_argument('--lr', type=float, default=3e-5, help='diez veces menor que en el entrenamiento original')
     ap.add_argument('--weight-decay', dest='wd', type=float, default=1e-4)
     ap.add_argument('--frac-local', dest='frac_local', type=float, default=0.5, help='parte de cada lote que es local')
+    ap.add_argument('--solo-local', dest='solo_local', action='store_true',
+                    help='entrena SOLO con parches de La Convención (lote 100 %% local) y no exige conservar el IoU en '
+                         'Landslide4Sense; L4S se sigue midiendo y se informa. Más riesgo de olvidar lo aprendido')
     ap.add_argument('--pasos', type=int, default=0, help='lotes por época (0 = según la cantidad de parches locales)')
     ap.add_argument('--ohem', type=float, default=None, help='por defecto, el del modelo base')
     ap.add_argument('--congelar-encoder', dest='congelar', action='store_true',
@@ -280,6 +283,8 @@ def main():
         raise SystemExit('no hay escala de bandas: pasa --escala escala_laconvencion.json')
     ohem = a.ohem if a.ohem is not None else float((cfg0.get('v4') or {}).get('ohem', 0.0))
     indices = bool((cfg0.get('v4') or {}).get('indices_verdor')) or any(k.startswith('base.') for k in ck0['modelo'])
+    if a.solo_local:
+        print('MODO SOLO LOCAL: lotes 100 % de La Convención, sin ancla de Landslide4Sense ni piso de IoU en L4S.')
     print(f"base: {os.path.basename(a.desde)} | {arq} | época {ck0.get('epoca')} | IoU val {ck0.get('iou_val')} | "
           f"índices de verdor {'sí' if indices else 'no'} | geomorfología {'sí' if a.geomorfologia else 'no'} | ohem {ohem} | {disp}")
 
@@ -364,11 +369,13 @@ def main():
         return -fp05['fp'] / max(fp05['fp'] + fp05['tn'], 1)
 
     m0 = medir(modelo)
-    piso_l4s = m0['l4s']['iou'] - a.tol
+    # con --solo-local el IoU de Landslide4Sense deja de ser condición para aceptar una época
+    piso_l4s = float('-inf') if a.solo_local else m0['l4s']['iou'] - a.tol
     print(f"época  0 (modelo base) | IoU val L4S {m0['l4s']['iou']:.4f} (umbral {m0['l4s']['umbral']})"
           + (f" | IoU val local {m0['local']['iou']:.4f} (umbral {m0['local']['umbral']})" if hay_val and hay_pos_val else ''))
     config = dict(cfg0, ajuste_fino={'desde': os.path.basename(a.desde), 'firma_base': ck0.get('firma'),
-                                     'lr': a.lr, 'lote': a.lote, 'frac_local': a.frac_local, 'epocas_max': a.epocas,
+                                     'lr': a.lr, 'lote': a.lote, 'frac_local': 1.0 if a.solo_local else a.frac_local,
+                                     'solo_local': a.solo_local, 'epocas_max': a.epocas,
                                      'ohem': ohem, 'congelar_encoder': a.congelar, 'bn_libre': a.bn_libre, 'tolerancia_l4s': a.tol,
                                      'semilla': a.semilla, 'parches_locales': len(Xl), 'parches_debiles': n_debiles,
                                      'peso_debil': a.peso_debil if n_debiles else None,
@@ -381,7 +388,7 @@ def main():
     opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=a.wd)
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda e: factor_lr(e, a.epocas, 2, 0.05))
     escalador = torch.amp.GradScaler('cuda', enabled=amp)
-    n_loc = max(1, min(a.lote - 1, int(round(a.lote * a.frac_local))))
+    n_loc = a.lote if a.solo_local else max(1, min(a.lote - 1, int(round(a.lote * a.frac_local))))
     n_l4s = a.lote - n_loc
     pasos = a.pasos or max(20, math.ceil(len(Xl) / n_loc))
     historial = [{'epoca': 0, 'perdida': None, 'iou_l4s': m0['l4s']['iou'],
@@ -399,11 +406,14 @@ def main():
         perdidas = []; te0 = time.time()
         for _ in range(pasos):
             jl = rng.integers(0, len(Xl), n_loc)
-            if pos + n_l4s > len(cola_l4s):
-                cola_l4s = rng.permutation(len(Xtr)); pos = 0
-            jg = cola_l4s[pos:pos + n_l4s]; pos += n_l4s
-            x = np.concatenate([Xl[jl], Xtr[jg]]); y = np.concatenate([Yl[jl], Ytr[jg]])
-            v = np.concatenate([Vl[jl] * Wl[jl][:, None, None], Vtr[jg]])
+            if n_l4s:
+                if pos + n_l4s > len(cola_l4s):
+                    cola_l4s = rng.permutation(len(Xtr)); pos = 0
+                jg = cola_l4s[pos:pos + n_l4s]; pos += n_l4s
+                x = np.concatenate([Xl[jl], Xtr[jg]]); y = np.concatenate([Yl[jl], Ytr[jg]])
+                v = np.concatenate([Vl[jl] * Wl[jl][:, None, None], Vtr[jg]])
+            else:
+                x, y, v = Xl[jl], Yl[jl], Vl[jl] * Wl[jl][:, None, None]
             k = int(rng.integers(0, 4)); espejo = bool(rng.integers(0, 2))
             x, y, v = (np.rot90(mm, k, axes=(-2, -1)) for mm in (x, y, v))
             if espejo:
@@ -489,7 +499,7 @@ def main():
 
     print('\n' + '=' * 78)
     if not mejoro:
-        print('Ninguna época superó al modelo base sin perder en Landslide4Sense: SE QUEDA EL MODELO BASE.')
+        print('Ninguna época superó al modelo base' + ('' if a.solo_local else ' sin perder en Landslide4Sense') + ': SE QUEDA EL MODELO BASE.')
         print('No se escribe un modelo nuevo. Suele querer decir que faltan teselas marcadas.')
     else:
         torch.save({'modelo': modelo.state_dict(), 'arquitectura': arq, 'epoca': mejor['epoca'],
