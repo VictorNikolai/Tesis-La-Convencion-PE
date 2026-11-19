@@ -12,7 +12,7 @@ Qué hace, en orden:
      el modelo ajustado usa la misma receta de entrada, así el servidor no cambia.
   2. Arma los parches locales con `recetas.desde_l2a` y escala_laconvencion.json, la MISMA
      función y la misma escala que usa el servidor al detectar.
-  3. Usa solo parches con máscara de nivel 1 (marcado humano). En la máscara, 255 se ignora.
+  3. Usa solo parches con máscara de nivel 1. En la máscara, 255 se ignora.
      La partición sale de la columna «conjunto» de indice_parches.csv (por zona).
      Con --debiles se suman, solo para entrenar y con peso bajo, parches con máscara de
      nivel 2 (propuestas de INGEMMET) que tengan alguna pieza aceptada.

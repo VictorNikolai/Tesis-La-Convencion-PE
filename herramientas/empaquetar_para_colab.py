@@ -2,7 +2,7 @@
 Arma datos_locales_ajuste.zip para el cuaderno Ajuste_Fino_LaConvencion (Colab).
 
 Mete solo lo que el ajuste fino usa: los parches de imagen de 128 px que tienen máscara, sus
-máscaras de nivel 1 (marcado humano) y, aparte, las de nivel 2 (propuestas multitemporales y geológicas
+máscaras de nivel 1 y, aparte, las de nivel 2 (propuestas multitemporales y geológicas
 clasificadas en Tiers Oro, Plata y Bronce) para entrenamiento débil ponderado.
 
   python herramientas/mascaras_desde_marcas.py     (opcional si hay marcas manuales)
