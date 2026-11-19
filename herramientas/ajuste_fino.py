@@ -163,7 +163,9 @@ def cargar_l4spe(ruta, receta, conjuntos):
     guardada en el archivo (media del entrenamiento), igual que se hace con La Convención.
     La pendiente viene en radianes y la elevación en metros. Devuelve X, Y, V y las filas."""
     from nucleo import config as cfg, recetas
-    d = np.load(ruta, allow_pickle=False)
+    with np.load(ruta, allow_pickle=False) as z:
+        # se lee cada arreglo UNA vez: d['x'][i] dentro del bucle descomprime el archivo entero en cada vuelta
+        d = {k: z[k] for k in ('x', 'y', 'punto', 'zona', 'conjunto', 'escala_json')}
     escala = json.loads(str(d['escala_json']))
     k_terreno = dict(cfg.ESCALA_TERRENO_L4S, **receta.get('escala_terreno', {}))
     sel = [i for i, c in enumerate(d['conjunto']) if str(c) in conjuntos]
@@ -287,7 +289,7 @@ def main():
     ap.add_argument('--val-provisional', dest='val_provisional', action='store_true',
                     help='si no hay validación de nivel 1, valida con parches de nivel 2 de zonas de validación '
                          '(--tiers-val). Es una medida provisional: las máscaras son propuestas, no verificadas')
-    ap.add_argument('--tiers-val', dest='tiers_val', default='oro,hard_negative,evaluacion_ciega',
+    ap.add_argument('--tiers-val', dest='tiers_val', default='oro,plata,bronce_negativo',
                     help='Tiers de nivel 2 usados en la validación provisional')
     ap.add_argument('--paciencia', type=int, default=0,
                     help='corta si pasan tantas épocas seguidas pegando por debajo del piso de L4S (0 = no cortar)')
