@@ -253,7 +253,7 @@ def bootstrap_zonas(prob_a, u_a, prob_b, u_b, Y, V, filas, n=2000, semilla=7):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
-    ap.add_argument('--l4s', required=True)
+    ap.add_argument('--l4s', help='carpeta de Landslide4Sense (no hace falta con --sin-l4s)')
     ap.add_argument('--desde', required=True, help='punto de control .pt del modelo base (entrenar.py)')
     ap.add_argument('--stats', required=True, help='stats_norm_<firma>.json del modelo base')
     ap.add_argument('--parches', required=True, help='carpeta parches_128 con indice_parches.csv')
@@ -311,9 +311,14 @@ def main():
                     help='al final prueba mezclas de pesos base + alfa·(ajustado − base) (WiSE-FT, Wortsman et al. 2022) '
                          'con alfa 0,25 / 0,5 / 0,75 y se queda con la mejor que respete el piso de L4S. Suele '
                          'conservar casi todo lo ganado perdiendo mucho menos en Landslide4Sense')
+    ap.add_argument('--sin-l4s', dest='sin_l4s', action='store_true',
+                    help='no usa Landslide4Sense en nada: ni en el lote, ni como piso, ni en la medición. Solo datos del '
+                         'Perú (La Convención y L4SPe). El modelo de partida sí viene de L4S (es el que ya se entrenó)')
     ap.add_argument('--semilla', type=int, default=42)
     ap.add_argument('--limite', type=int, help='solo para probar: parches de L4S por conjunto')
     a = ap.parse_args()
+    if not a.sin_l4s and not a.l4s:
+        ap.error('falta --l4s (o usa --sin-l4s)')
 
     import torch
     import segmentation_models_pytorch as smp
@@ -356,7 +361,10 @@ def main():
         tiers_ent = {'oro', 'plata', 'bronce_positivo', 'bronce_negativo', 'hard_negative'}   # todos menos evaluacion_ciega
     if tiers_ent & {'evaluacion_ciega'} and a.val_provisional and 'evaluacion_ciega' in tiers_val:
         raise SystemExit('evaluacion_ciega no puede estar a la vez en entrenamiento y en validación')
-    tr, va, te = (pares(a.l4s, s, a.limite) for s in ('train', 'validation', 'test'))
+    if a.sin_l4s:
+        tr = va = te = []
+    else:
+        tr, va, te = (pares(a.l4s, s, a.limite) for s in ('train', 'validation', 'test'))
     if a.max_l4s and len(tr) > a.max_l4s:
         tr = [tr[i] for i in sorted(np.random.default_rng(a.semilla).choice(len(tr), a.max_l4s, replace=False))]
     Xtr, Ytr, Vtr = cargar(tr, receta)
@@ -446,9 +454,10 @@ def main():
             q.requires_grad_(False)
 
     def medir(m):
-        pv = predecir(m, Xva, disp)
-        b_l4s = barrido(pv, Yva, Vva)
-        out = {'l4s': max(b_l4s, key=lambda r: r['iou']), 'l4s_barrido': b_l4s}
+        out = {'l4s': None, 'l4s_barrido': None}
+        if not a.sin_l4s:
+            b_l4s = barrido(predecir(m, Xva, disp), Yva, Vva)
+            out = {'l4s': max(b_l4s, key=lambda r: r['iou']), 'l4s_barrido': b_l4s}
         if hay_val:
             pl = predecir(m, Xv, disp)
             b_loc = barrido(pl, Yv, Vv)
@@ -466,18 +475,21 @@ def main():
         if comp:
             return float(np.mean(comp))
         if not hay_val:
+            if a.sin_l4s:
+                raise SystemExit('--sin-l4s necesita validación de L4SPe o local para elegir la época')
             return m['l4s']['iou']
         fp05 = en_umbral(m['local_barrido'], 0.5)
         return -fp05['fp'] / max(fp05['fp'] + fp05['tn'], 1)
 
     m0 = medir(modelo)
     # con --solo-local el IoU de Landslide4Sense deja de ser condición para aceptar una época
-    piso_l4s = float('-inf') if a.solo_local else m0['l4s']['iou'] - a.tol
-    print(f"época  0 (modelo base) | IoU val L4S {m0['l4s']['iou']:.4f} (umbral {m0['l4s']['umbral']})"
+    piso_l4s = float('-inf') if a.solo_local or a.sin_l4s else m0['l4s']['iou'] - a.tol
+    iou4 = lambda m: m['l4s']['iou'] if m['l4s'] else None
+    print(f"época  0 (modelo base)" + (f" | IoU val L4S {m0['l4s']['iou']:.4f} (umbral {m0['l4s']['umbral']})" if m0['l4s'] else '')
           + (f" | IoU val local {m0['local']['iou']:.4f} (umbral {m0['local']['umbral']})" if hay_val and hay_pos_val else '')
           + (f" | IoU val L4SPe {m0['pe']['iou']:.4f} (umbral {m0['pe']['umbral']})" if hay_pe_val else ''))
     config = dict(cfg0, ajuste_fino={'desde': os.path.basename(a.desde), 'firma_base': ck0.get('firma'),
-                                     'lr': a.lr, 'lote': a.lote, 'sin_local': a.sin_local, 'interpolar': a.interpolar, 'frac_local': 1.0 if a.solo_local else a.frac_local,
+                                     'lr': a.lr, 'lote': a.lote, 'sin_local': a.sin_local, 'sin_l4s': a.sin_l4s, 'interpolar': a.interpolar, 'frac_local': 1.0 if a.solo_local else a.frac_local,
                                      'solo_local': a.solo_local, 'epocas_max': a.epocas,
                                      'ohem': ohem, 'pasos': a.pasos, 'l4spe': os.path.basename(a.l4spe) if a.l4spe else None,
                                      'frac_l4spe': a.frac_l4spe if a.l4spe else None, 'peso_l4spe': a.peso_l4spe if a.l4spe else None,
@@ -496,7 +508,9 @@ def main():
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda e: factor_lr(e, a.epocas, 2, 0.05))
     escalador = torch.amp.GradScaler('cuda', enabled=amp)
     n_pe = max(1, int(round(a.lote * a.frac_l4spe))) if hay_pe else 0
-    if a.sin_local:
+    if a.sin_l4s and not a.sin_local:
+        n_loc = a.lote - n_pe
+    elif a.sin_local:
         if not hay_pe:
             raise SystemExit('--sin-local necesita --l4spe')
         n_loc = 0
@@ -504,14 +518,17 @@ def main():
         n_loc = a.lote - n_pe
     else:
         n_loc = max(1, min(a.lote - n_pe - 1, int(round(a.lote * a.frac_local))))
-    n_l4s = a.lote - n_loc - n_pe
+    n_l4s = 0 if a.sin_l4s else a.lote - n_loc - n_pe
+    if a.sin_l4s and a.sin_local:
+        n_pe = a.lote
+    print(f'lote de {a.lote}: {n_loc} de La Convención, {n_pe} de L4SPe, {n_l4s} de Landslide4Sense')
     pasos = a.pasos or max(20, math.ceil(len(Xl) / n_loc if n_loc else len(Xp) / max(n_pe, 1)))
-    historial = [{'epoca': 0, 'perdida': None, 'iou_l4s': m0['l4s']['iou'],
+    historial = [{'epoca': 0, 'perdida': None, 'iou_l4s': iou4(m0),
                   'iou_local': m0['local']['iou'] if hay_val else None,
                   'iou_l4spe': m0['pe']['iou'] if hay_pe_val else None, 'puntaje': puntaje(m0), 'admisible': True}]
     mejor = {'epoca': 0, 'puntaje': puntaje(m0), 'medida': m0, 'estado': None, 'alfa': 1.0}
     mejor_libre = {'epoca': 0, 'puntaje': puntaje(m0), 'estado': None}
-    cola_l4s = rng.permutation(len(Xtr)); pos = 0
+    cola_l4s = rng.permutation(max(len(Xtr), 1)); pos = 0
     seguidas_malas, ep_hechas = 0, 0
     for ep in range(1, a.epocas + 1):
         ep_hechas = ep
@@ -564,7 +581,7 @@ def main():
             perdidas.append(float(loss.detach()))
         sched.step()
         m = medir(modelo)
-        admisible = m['l4s']['iou'] >= piso_l4s
+        admisible = m['l4s'] is None or m['l4s']['iou'] >= piso_l4s
         p = puntaje(m)
         marca = ''
         if p > mejor_libre['puntaje'] + 1e-6:
@@ -574,11 +591,11 @@ def main():
             mejor = {'epoca': ep, 'puntaje': p, 'medida': m,
                      'estado': {kk: vv.detach().cpu().clone() for kk, vv in modelo.state_dict().items()}}
             marca = '  <- mejor'
-        historial.append({'epoca': ep, 'perdida': round(float(np.mean(perdidas)), 5), 'iou_l4s': m['l4s']['iou'],
+        historial.append({'epoca': ep, 'perdida': round(float(np.mean(perdidas)), 5), 'iou_l4s': iou4(m),
                           'iou_local': m['local']['iou'] if hay_val else None,
                           'iou_l4spe': m['pe']['iou'] if hay_pe_val else None, 'puntaje': round(float(p), 5),
                           'admisible': admisible})
-        print(f"época {ep:2d} | pérdida {np.mean(perdidas):.4f} | IoU val L4S {m['l4s']['iou']:.4f}"
+        print(f"época {ep:2d} | pérdida {np.mean(perdidas):.4f}" + (f" | IoU val L4S {m['l4s']['iou']:.4f}" if m['l4s'] else '')
               + ('' if admisible else ' (pierde demasiado)')
               + (f" | IoU val local {m['local']['iou']:.4f}" if hay_val and hay_pos_val else '')
               + (f" | IoU val L4SPe {m['pe']['iou']:.4f}" if hay_pe_val else '')
@@ -598,16 +615,16 @@ def main():
             modelo.load_state_dict(mezcla)
             m = medir(modelo)
             p = puntaje(m)
-            admisible = m['l4s']['iou'] >= piso_l4s
+            admisible = m['l4s'] is None or m['l4s']['iou'] >= piso_l4s
             marca = ''
             if admisible and p > mejor['puntaje'] + 1e-6:
                 mejor = {'epoca': mejor_libre['epoca'], 'puntaje': p, 'medida': m, 'alfa': alfa,
                          'estado': {kk: vv.detach().cpu().clone() for kk, vv in mezcla.items()}}
                 marca = '  <- mejor'
-            interpolaciones.append({'alfa': alfa, 'iou_l4s': m['l4s']['iou'], 'iou_local': m['local']['iou'] if hay_val else None,
+            interpolaciones.append({'alfa': alfa, 'iou_l4s': iou4(m), 'iou_local': m['local']['iou'] if hay_val else None,
                                     'iou_l4spe': m['pe']['iou'] if hay_pe_val else None, 'puntaje': round(float(p), 5),
                                     'admisible': admisible})
-            print(f"  alfa {alfa:.2f} | IoU val L4S {m['l4s']['iou']:.4f}" + ('' if admisible else ' (pierde demasiado)')
+            print(f"  alfa {alfa:.2f}" + (f" | IoU val L4S {m['l4s']['iou']:.4f}" if m['l4s'] else '') + ('' if admisible else ' (pierde demasiado)')
                   + (f" | IoU val local {m['local']['iou']:.4f}" if hay_val and hay_pos_val else '')
                   + (f" | IoU val L4SPe {m['pe']['iou']:.4f}" if hay_pe_val else '') + marca, flush=True)
     with open(os.path.join(a.salida, f'historial_ajuste_{firma}.csv'), 'w', newline='') as f:
@@ -632,7 +649,9 @@ def main():
     def umbral_de(m):
         if usar_pe:
             return m['pe']['umbral']
-        return m['local']['umbral'] if usar_local else m['l4s']['umbral']
+        if usar_local or m['l4s'] is None:
+            return m['local']['umbral'] if hay_val and hay_pos_val else (m['pe']['umbral'] if hay_pe_val else 0.5)
+        return m['l4s']['umbral']
 
     u0, uF = umbral_de(m0), umbral_de(mF)
     res = {'firma': firma, 'arquitectura': arq, 'mejor_epoca': mejor['epoca'], 'mejoro': mejoro,
@@ -642,17 +661,17 @@ def main():
            'config': config, 'epocas_corridas': ep_hechas, 'epocas_max': a.epocas,
            'validacion_local_origen': origen_val, 'base': {'firma': ck0.get('firma'), 'umbral': u0}}
     # prueba oficial de Landslide4Sense, una vez, con el umbral elegido en SU validación
-    pt0, ptF = predecir(base_modelo, Xte, disp), predecir(modelo, Xte, disp)
-    ptR = regla_suelo_pendiente(Xte, receta)
-    res['base']['l4s_validacion'] = m0['l4s']
-    res['base']['l4s_prueba'] = en_umbral(barrido(pt0, Yte, Vte), m0['l4s']['umbral'])
-    res['validacion'] = mF['l4s']
-    res['prueba'] = en_umbral(barrido(ptF, Yte, Vte), mF['l4s']['umbral'])
-    res['comparador_sin_aprendizaje'] = {
-        'regla': 'GRVI <= 0, B4 >= 1.29 L4S (~600 DN) y pendiente >= 10°',
-        'l4s_prueba': en_umbral(barrido(ptR, Yte, Vte), 0.5),
-    }
-    res['barrido_validacion'] = mF['l4s_barrido']
+    res['comparador_sin_aprendizaje'] = {'regla': 'GRVI <= 0, B4 >= 1.29 L4S (~600 DN) y pendiente >= 10°'}
+    res['usa_l4s'] = not a.sin_l4s
+    if not a.sin_l4s:
+        pt0, ptF = predecir(base_modelo, Xte, disp), predecir(modelo, Xte, disp)
+        ptR = regla_suelo_pendiente(Xte, receta)
+        res['base']['l4s_validacion'] = m0['l4s']
+        res['base']['l4s_prueba'] = en_umbral(barrido(pt0, Yte, Vte), m0['l4s']['umbral'])
+        res['validacion'] = mF['l4s']
+        res['prueba'] = en_umbral(barrido(ptF, Yte, Vte), mF['l4s']['umbral'])
+        res['comparador_sin_aprendizaje']['l4s_prueba'] = en_umbral(barrido(ptR, Yte, Vte), 0.5)
+        res['barrido_validacion'] = mF['l4s_barrido']
     if hay_val:
         pl0, plF = predecir(base_modelo, Xv, disp), predecir(modelo, Xv, disp)
         plR = regla_suelo_pendiente(Xv, receta)
@@ -684,11 +703,11 @@ def main():
 
     print('\n' + '=' * 78)
     if not mejoro:
-        print('Ninguna época superó al modelo base' + ('' if a.solo_local else ' sin perder en Landslide4Sense') + ': SE QUEDA EL MODELO BASE.')
+        print('Ninguna época superó al modelo base' + ('' if a.solo_local or a.sin_l4s else ' sin perder en Landslide4Sense') + ': SE QUEDA EL MODELO BASE.')
         print('No se escribe un modelo nuevo. Suele querer decir que faltan teselas marcadas.')
     else:
         torch.save({'modelo': modelo.state_dict(), 'arquitectura': arq, 'epoca': mejor['epoca'],
-                    'iou_val': mF['l4s']['iou'], 'firma': firma, 'config': config}, ruta_ckpt)
+                    'iou_val': iou4(mF) if mF['l4s'] else mejor['puntaje'], 'firma': firma, 'config': config}, ruta_ckpt)
         json.dump(stats, open(os.path.join(a.salida, f'stats_norm_{firma}.json'), 'w', encoding='utf-8'), indent=1)
         print(f"mejor época {mejor['epoca']}" + (f" mezclada con alfa {mejor['alfa']}" if mejor.get('alfa', 1.0) < 1 else '')
               + f"; umbral {uF} (elegido en {res['umbral_elegido_en']})")
@@ -703,9 +722,10 @@ def main():
         if bz:
             print(f"mejora de IoU en L4SPe (prueba), IC 95 % por zonas ({bz['zonas']}): [{bz['ic95'][0]:+.4f}, {bz['ic95'][1]:+.4f}]")
     f4 = lambda r: f"IoU {r['iou']:.4f}  F1 {r['f1']:.4f}  precisión {r['precision']:.4f}  exhaustividad {r['recall']:.4f}"
-    print(f"Landslide4Sense, prueba oficial   regla   : {f4(res['comparador_sin_aprendizaje']['l4s_prueba'])}")
-    print(f"                                  base    : {f4(res['base']['l4s_prueba'])}")
-    print(f"                                  ajustado: {f4(res['prueba'])}")
+    if not a.sin_l4s:
+        print(f"Landslide4Sense, prueba oficial   regla   : {f4(res['comparador_sin_aprendizaje']['l4s_prueba'])}")
+        print(f"                                  base    : {f4(res['base']['l4s_prueba'])}")
+        print(f"                                  ajustado: {f4(res['prueba'])}")
     if hay_val:
         rg = res['comparador_sin_aprendizaje']['local_validacion']
         b, j = res['base']['local_validacion'], res['local_validacion']
