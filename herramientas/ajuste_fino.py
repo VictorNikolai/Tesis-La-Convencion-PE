@@ -302,6 +302,9 @@ def main():
                     help='parte de cada lote que sale de L4SPe (solo con --l4spe)')
     ap.add_argument('--peso-l4spe', dest='peso_l4spe', type=float, default=1.0,
                     help='peso en la pérdida de los píxeles de L4SPe (1,0 = como Landslide4Sense)')
+    ap.add_argument('--max-l4s-entrenamiento', dest='max_l4s', type=int, default=0,
+                    help='usa solo N parches de entrenamiento de L4S como ancla, al azar (0 = todos). Ahorra memoria; '
+                         'la validación y la prueba de L4S quedan completas')
     ap.add_argument('--semilla', type=int, default=42)
     ap.add_argument('--limite', type=int, help='solo para probar: parches de L4S por conjunto')
     a = ap.parse_args()
@@ -348,6 +351,8 @@ def main():
     if tiers_ent & {'evaluacion_ciega'} and a.val_provisional and 'evaluacion_ciega' in tiers_val:
         raise SystemExit('evaluacion_ciega no puede estar a la vez en entrenamiento y en validación')
     tr, va, te = (pares(a.l4s, s, a.limite) for s in ('train', 'validation', 'test'))
+    if a.max_l4s and len(tr) > a.max_l4s:
+        tr = [tr[i] for i in sorted(np.random.default_rng(a.semilla).choice(len(tr), a.max_l4s, replace=False))]
     Xtr, Ytr, Vtr = cargar(tr, receta)
     Xva, Yva, Vva = cargar(va, receta)
     Xte, Yte, Vte = cargar(te, receta)
