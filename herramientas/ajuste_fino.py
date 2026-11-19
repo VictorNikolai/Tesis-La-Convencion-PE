@@ -371,7 +371,7 @@ def main():
         origen_val = 'nivel 2 provisional (' + ', '.join(sorted(tiers_val)) + ')' if len(Xv) else 'ninguna'
     Wl = np.ones(len(Xl), np.float32)
     n_debiles = 0
-    if a.debiles:
+    if a.debiles and not a.sin_local:
         con_n1 = {r['parche'] for r in Fl}
         Xd, Yd, Vd, Fd = cargar_locales(a.parches, a.debiles, receta, escala, {'entrenamiento'}, solo_con_positivos=True,
                                         tiers=tiers_ent)
