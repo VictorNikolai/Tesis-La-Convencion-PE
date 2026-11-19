@@ -3,7 +3,8 @@ Arma datos_locales_ajuste.zip para el cuaderno Ajuste_Fino_LaConvencion (Colab).
 
 Mete solo lo que el ajuste fino usa: los parches de imagen de 128 px que tienen máscara, sus
 máscaras de nivel 1 y, aparte, las de nivel 2 (propuestas multitemporales y geológicas
-clasificadas en Tiers Oro, Plata y Bronce) para entrenamiento débil ponderado.
+clasificadas en Tiers Oro, Plata y Bronce) para entrenamiento débil ponderado. Las de zonas de
+validación también entran: ajuste_fino.py --val-provisional las usa SOLO para medir (nunca para entrenar).
 
   python herramientas/mascaras_desde_marcas.py     (opcional si hay marcas manuales)
   python herramientas/clasificar_tiers_y_expandir.py (extrae parches centrados y clasifica tiers)
@@ -86,13 +87,13 @@ def main():
                 usa2 = (
                     (r['proyecto'], r['parche']) in parches_tiers_permitidos
                     and os.path.exists(m2)
-                    and r['conjunto'] == 'entrenamiento'
+                    and r['conjunto'] in ('entrenamiento', 'validacion')
                 )
             else:
                 usa2 = (
                     (r['proyecto'], r['tesela']) in con_n2
                     and os.path.exists(m2)
-                    and r['conjunto'] == 'entrenamiento'
+                    and r['conjunto'] in ('entrenamiento', 'validacion')
                 )
 
             if not (usa1 or usa2):

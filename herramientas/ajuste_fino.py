@@ -305,6 +305,12 @@ def main():
     ap.add_argument('--max-l4s-entrenamiento', dest='max_l4s', type=int, default=0,
                     help='usa solo N parches de entrenamiento de L4S como ancla, al azar (0 = todos). Ahorra memoria; '
                          'la validación y la prueba de L4S quedan completas')
+    ap.add_argument('--sin-local', dest='sin_local', action='store_true',
+                    help='no entrena con parches de La Convención (solo L4SPe y L4S); la validación local se sigue midiendo')
+    ap.add_argument('--interpolar', action='store_true',
+                    help='al final prueba mezclas de pesos base + alfa·(ajustado − base) (WiSE-FT, Wortsman et al. 2022) '
+                         'con alfa 0,25 / 0,5 / 0,75 y se queda con la mejor que respete el piso de L4S. Suele '
+                         'conservar casi todo lo ganado perdiendo mucho menos en Landslide4Sense')
     ap.add_argument('--semilla', type=int, default=42)
     ap.add_argument('--limite', type=int, help='solo para probar: parches de L4S por conjunto')
     a = ap.parse_args()
@@ -389,7 +395,7 @@ def main():
     zonas_tr, zonas_va = {r['zona'] for r in Fl}, {r['zona'] for r in Fv}
     if zonas_tr & zonas_va:
         raise SystemExit(f'zonas en entrenamiento y validación a la vez: {sorted(zonas_tr & zonas_va)}')
-    if len(Xl) < 4:
+    if len(Xl) < 4 and not a.sin_local:
         raise SystemExit(f'solo hay {len(Xl)} parches locales de entrenamiento con máscara: faltan teselas marcadas')
     cic_tr, cic_va = len(objetos(Yl * Vl)), len(objetos(Yv * Vv))
     print(f'L4S: entrenamiento {len(Xtr)}, validación {len(Xva)}, prueba {len(Xte)}')
@@ -471,7 +477,7 @@ def main():
           + (f" | IoU val local {m0['local']['iou']:.4f} (umbral {m0['local']['umbral']})" if hay_val and hay_pos_val else '')
           + (f" | IoU val L4SPe {m0['pe']['iou']:.4f} (umbral {m0['pe']['umbral']})" if hay_pe_val else ''))
     config = dict(cfg0, ajuste_fino={'desde': os.path.basename(a.desde), 'firma_base': ck0.get('firma'),
-                                     'lr': a.lr, 'lote': a.lote, 'frac_local': 1.0 if a.solo_local else a.frac_local,
+                                     'lr': a.lr, 'lote': a.lote, 'sin_local': a.sin_local, 'interpolar': a.interpolar, 'frac_local': 1.0 if a.solo_local else a.frac_local,
                                      'solo_local': a.solo_local, 'epocas_max': a.epocas,
                                      'ohem': ohem, 'pasos': a.pasos, 'l4spe': os.path.basename(a.l4spe) if a.l4spe else None,
                                      'frac_l4spe': a.frac_l4spe if a.l4spe else None, 'peso_l4spe': a.peso_l4spe if a.l4spe else None,
@@ -490,16 +496,21 @@ def main():
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda e: factor_lr(e, a.epocas, 2, 0.05))
     escalador = torch.amp.GradScaler('cuda', enabled=amp)
     n_pe = max(1, int(round(a.lote * a.frac_l4spe))) if hay_pe else 0
-    if a.solo_local:
+    if a.sin_local:
+        if not hay_pe:
+            raise SystemExit('--sin-local necesita --l4spe')
+        n_loc = 0
+    elif a.solo_local:
         n_loc = a.lote - n_pe
     else:
         n_loc = max(1, min(a.lote - n_pe - 1, int(round(a.lote * a.frac_local))))
     n_l4s = a.lote - n_loc - n_pe
-    pasos = a.pasos or max(20, math.ceil(len(Xl) / n_loc))
+    pasos = a.pasos or max(20, math.ceil(len(Xl) / n_loc if n_loc else len(Xp) / max(n_pe, 1)))
     historial = [{'epoca': 0, 'perdida': None, 'iou_l4s': m0['l4s']['iou'],
                   'iou_local': m0['local']['iou'] if hay_val else None,
                   'iou_l4spe': m0['pe']['iou'] if hay_pe_val else None, 'puntaje': puntaje(m0), 'admisible': True}]
-    mejor = {'epoca': 0, 'puntaje': puntaje(m0), 'medida': m0, 'estado': None}
+    mejor = {'epoca': 0, 'puntaje': puntaje(m0), 'medida': m0, 'estado': None, 'alfa': 1.0}
+    mejor_libre = {'epoca': 0, 'puntaje': puntaje(m0), 'estado': None}
     cola_l4s = rng.permutation(len(Xtr)); pos = 0
     seguidas_malas, ep_hechas = 0, 0
     for ep in range(1, a.epocas + 1):
@@ -513,8 +524,10 @@ def main():
                     capa.eval()
         perdidas = []; te0 = time.time()
         for _ in range(pasos):
-            jl = rng.integers(0, len(Xl), n_loc)
-            xs, ys, vs = [Xl[jl]], [Yl[jl]], [Vl[jl] * Wl[jl][:, None, None]]
+            xs, ys, vs = [], [], []
+            if n_loc:
+                jl = rng.integers(0, len(Xl), n_loc)
+                xs.append(Xl[jl]); ys.append(Yl[jl]); vs.append(Vl[jl] * Wl[jl][:, None, None])
             if n_pe:
                 jp = rng.integers(0, len(Xp), n_pe)
                 xs.append(Xp[jp]); ys.append(Yp[jp]); vs.append(Vp[jp] * a.peso_l4spe)
@@ -554,6 +567,9 @@ def main():
         admisible = m['l4s']['iou'] >= piso_l4s
         p = puntaje(m)
         marca = ''
+        if p > mejor_libre['puntaje'] + 1e-6:
+            mejor_libre = {'epoca': ep, 'puntaje': p,
+                           'estado': {kk: vv.detach().cpu().clone() for kk, vv in modelo.state_dict().items()}}
         if admisible and p > mejor['puntaje'] + 1e-6:
             mejor = {'epoca': ep, 'puntaje': p, 'medida': m,
                      'estado': {kk: vv.detach().cpu().clone() for kk, vv in modelo.state_dict().items()}}
@@ -572,6 +588,28 @@ def main():
             print(f'se corta: {seguidas_malas} épocas seguidas por debajo del piso de L4S ({piso_l4s:.4f}). '
                   'Baja --lr, congela el encoder o revisa las máscaras.')
             break
+    interpolaciones = []
+    if a.interpolar and mejor_libre['estado'] is not None:
+        # WiSE-FT: mezcla lineal de pesos entre el modelo base y la mejor época (sin mirar el piso de L4S)
+        print(f"interpolación de pesos con la época {mejor_libre['epoca']} (la de mejor puntaje aunque pierda en L4S):")
+        for alfa in (0.25, 0.5, 0.75):
+            mezcla = {kk: (sd[kk].float() + alfa * (vv.float() - sd[kk].float())).to(vv.dtype) if vv.is_floating_point() else vv
+                      for kk, vv in mejor_libre['estado'].items()}
+            modelo.load_state_dict(mezcla)
+            m = medir(modelo)
+            p = puntaje(m)
+            admisible = m['l4s']['iou'] >= piso_l4s
+            marca = ''
+            if admisible and p > mejor['puntaje'] + 1e-6:
+                mejor = {'epoca': mejor_libre['epoca'], 'puntaje': p, 'medida': m, 'alfa': alfa,
+                         'estado': {kk: vv.detach().cpu().clone() for kk, vv in mezcla.items()}}
+                marca = '  <- mejor'
+            interpolaciones.append({'alfa': alfa, 'iou_l4s': m['l4s']['iou'], 'iou_local': m['local']['iou'] if hay_val else None,
+                                    'iou_l4spe': m['pe']['iou'] if hay_pe_val else None, 'puntaje': round(float(p), 5),
+                                    'admisible': admisible})
+            print(f"  alfa {alfa:.2f} | IoU val L4S {m['l4s']['iou']:.4f}" + ('' if admisible else ' (pierde demasiado)')
+                  + (f" | IoU val local {m['local']['iou']:.4f}" if hay_val and hay_pos_val else '')
+                  + (f" | IoU val L4SPe {m['pe']['iou']:.4f}" if hay_pe_val else '') + marca, flush=True)
     with open(os.path.join(a.salida, f'historial_ajuste_{firma}.csv'), 'w', newline='') as f:
         w = csv.DictWriter(f, fieldnames=list(historial[0])); w.writeheader(); w.writerows(historial)
 
@@ -598,6 +636,7 @@ def main():
 
     u0, uF = umbral_de(m0), umbral_de(mF)
     res = {'firma': firma, 'arquitectura': arq, 'mejor_epoca': mejor['epoca'], 'mejoro': mejoro,
+           'alfa_interpolacion': mejor.get('alfa', 1.0), 'interpolaciones': interpolaciones,
            'umbral_operacion': uF, 'umbral_elegido_en': ('validación de L4SPe (máscara manual del profesor)' if usar_pe else
                                  'validación local' if usar_local else 'validación de Landslide4Sense'),
            'config': config, 'epocas_corridas': ep_hechas, 'epocas_max': a.epocas,
@@ -651,7 +690,8 @@ def main():
         torch.save({'modelo': modelo.state_dict(), 'arquitectura': arq, 'epoca': mejor['epoca'],
                     'iou_val': mF['l4s']['iou'], 'firma': firma, 'config': config}, ruta_ckpt)
         json.dump(stats, open(os.path.join(a.salida, f'stats_norm_{firma}.json'), 'w', encoding='utf-8'), indent=1)
-        print(f"mejor época {mejor['epoca']}; umbral {uF} (elegido en {res['umbral_elegido_en']})")
+        print(f"mejor época {mejor['epoca']}" + (f" mezclada con alfa {mejor['alfa']}" if mejor.get('alfa', 1.0) < 1 else '')
+              + f"; umbral {uF} (elegido en {res['umbral_elegido_en']})")
     if hay_pe:
         pr = res['l4spe']['prueba']
         print(f"L4SPe (profesor), prueba de {len(Xpt)} parches de otras zonas del Perú:")
