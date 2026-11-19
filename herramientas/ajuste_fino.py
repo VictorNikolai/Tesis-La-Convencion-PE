@@ -66,9 +66,11 @@ BANDAS = ['B01', 'B02', 'B03', 'B04']
 
 
 # ------------------------------------------------------------------- datos locales
-def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_permitido, solo_con_positivos=False):
+def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_permitido, solo_con_positivos=False,
+                   tiers=None):
     """Parches locales con máscara. Devuelve X, Y, V y la lista de filas del índice.
-    V = 1 donde el píxel cuenta: con dato y máscara distinta de 255."""
+    V = 1 donde el píxel cuenta: con dato y máscara distinta de 255.
+    tiers: si se da (conjunto de nombres, p. ej. {'oro', 'plata'}), con catálogo de Tiers solo pasan esos Tiers."""
     import rasterio
     from nucleo import recetas
     filas = []
@@ -80,7 +82,7 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
         filas_ind = list(csv.DictReader(f_ind))
 
     # Si existe catalogo_parches_tiers.csv, leer pesos estratificados por parche (Oro=1.0, HardNeg=0.8, Plata=0.5, Bronce=0.3/0.2)
-    pesos_tiers = None
+    pesos_tiers, nombres_tier = None, {}
     posibles_tiers = [
         os.path.join(os.path.dirname(carpeta_mascaras.rstrip('/\\')), 'catalogo_parches_tiers.csv'),
         os.path.join(carpeta_mascaras, '..', 'catalogo_parches_tiers.csv'),
@@ -88,11 +90,11 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
     for rt in posibles_tiers:
         if os.path.exists(rt):
             with open(rt, encoding='utf-8') as ft:
-                pesos_tiers = {
-                    (row['proyecto'], row['parche']): float(row['peso_perdida'])
-                    for row in csv.DictReader(ft)
-                    if float(row.get('peso_perdida') or 0) > 0
-                }
+                pesos_tiers, nombres_tier = {}, {}
+                for row in csv.DictReader(ft):
+                    if float(row.get('peso_perdida') or 0) > 0:
+                        pesos_tiers[(row['proyecto'], row['parche'])] = float(row['peso_perdida'])
+                        nombres_tier[(row['proyecto'], row['parche'])] = (row.get('tier') or '').strip().lower()
             break
 
     # Si existe mascaras_nivel2_completo.csv en el padre de carpeta_mascaras, respetar incluir_debil
@@ -126,12 +128,15 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
             if pesos_tiers is not None:
                 if (r['proyecto'], r['parche']) not in pesos_tiers:
                     continue
+                if tiers is not None and nombres_tier.get((r['proyecto'], r['parche'])) not in tiers:
+                    continue
                 peso_p = pesos_tiers[(r['proyecto'], r['parche'])]
             elif permitidos_n2 is not None:
                 if (r['proyecto'], r['tesela']) not in permitidos_n2:
                     continue
         filas.append(dict(r, _mascara=m, _imagen=os.path.join(carpeta_parches, r['archivo']),
-                          _es_raiz_n2=es_raiz_n2, _peso_tier=peso_p))
+                          _es_raiz_n2=es_raiz_n2, _peso_tier=peso_p,
+                          _tier=nombres_tier.get((r['proyecto'], r['parche']))))
     X, Y, V, usadas = [], [], [], []
     for r in filas:
         with rasterio.open(r['_mascara']) as d:
@@ -250,6 +255,18 @@ def main():
                     help='umbral de la receta del modelo base, para comparar a umbral fijo')
     ap.add_argument('--geomorfologia', action='store_true',
                     help='añade CURVATURA y TPI calculados desde el DEM como canales extra (Vía 3)')
+    ap.add_argument('--tiers', help='Tiers de nivel 2 que entran a entrenar, separados por coma (p. ej. oro,plata,hard_negative). '
+                    'Por defecto todos menos evaluacion_ciega, que se reserva para medir')
+    ap.add_argument('--val-provisional', dest='val_provisional', action='store_true',
+                    help='si no hay validación de nivel 1, valida con parches de nivel 2 de zonas de validación '
+                         '(--tiers-val). Es una medida provisional: las máscaras son propuestas, no verificadas')
+    ap.add_argument('--tiers-val', dest='tiers_val', default='oro,hard_negative,evaluacion_ciega',
+                    help='Tiers de nivel 2 usados en la validación provisional')
+    ap.add_argument('--paciencia', type=int, default=0,
+                    help='corta si pasan tantas épocas seguidas pegando por debajo del piso de L4S (0 = no cortar)')
+    ap.add_argument('--perdida-por-grupo', dest='perdida_grupo', action=argparse.BooleanOptionalAction, default=True,
+                    help='calcula la pérdida (y el OHEM) por separado para la parte local y la de L4S, y las promedia '
+                         'según la fracción del lote. Evita que los píxeles locales más difíciles dominen todo el lote')
     ap.add_argument('--semilla', type=int, default=42)
     ap.add_argument('--limite', type=int, help='solo para probar: parches de L4S por conjunto')
     a = ap.parse_args()
@@ -289,17 +306,29 @@ def main():
           f"índices de verdor {'sí' if indices else 'no'} | geomorfología {'sí' if a.geomorfologia else 'no'} | ohem {ohem} | {disp}")
 
     # ---------------------------------------------------------------- datos
+    tiers_ent = {t.strip().lower() for t in a.tiers.split(',')} if a.tiers else None
+    tiers_val = {t.strip().lower() for t in a.tiers_val.split(',')}
+    if tiers_ent is None:
+        tiers_ent = {'oro', 'plata', 'bronce_positivo', 'bronce_negativo', 'hard_negative'}   # todos menos evaluacion_ciega
+    if tiers_ent & {'evaluacion_ciega'} and a.val_provisional and 'evaluacion_ciega' in tiers_val:
+        raise SystemExit('evaluacion_ciega no puede estar a la vez en entrenamiento y en validación')
     tr, va, te = (pares(a.l4s, s, a.limite) for s in ('train', 'validation', 'test'))
     Xtr, Ytr, Vtr = cargar(tr, receta)
     Xva, Yva, Vva = cargar(va, receta)
     Xte, Yte, Vte = cargar(te, receta)
     Xl, Yl, Vl, Fl = cargar_locales(a.parches, a.mascaras, receta, escala, {'entrenamiento'})
     Xv, Yv, Vv, Fv = cargar_locales(a.parches, a.mascaras, receta, escala, {'validacion'})
+    origen_val = 'nivel 1' if len(Xv) else 'ninguna'
+    if not len(Xv) and a.debiles and a.val_provisional:
+        Xv, Yv, Vv, Fv = cargar_locales(a.parches, a.debiles, receta, escala, {'validacion'}, solo_con_positivos=True,
+                                        tiers=tiers_val)
+        origen_val = 'nivel 2 provisional (' + ', '.join(sorted(tiers_val)) + ')' if len(Xv) else 'ninguna'
     Wl = np.ones(len(Xl), np.float32)
     n_debiles = 0
     if a.debiles:
         con_n1 = {r['parche'] for r in Fl}
-        Xd, Yd, Vd, Fd = cargar_locales(a.parches, a.debiles, receta, escala, {'entrenamiento'}, solo_con_positivos=True)
+        Xd, Yd, Vd, Fd = cargar_locales(a.parches, a.debiles, receta, escala, {'entrenamiento'}, solo_con_positivos=True,
+                                        tiers=tiers_ent)
         quedan = [i for i, r in enumerate(Fd) if r['parche'] not in con_n1]
         if quedan:
             Xl = np.concatenate([Xl, Xd[quedan]]); Yl = np.concatenate([Yl, Yd[quedan]]); Vl = np.concatenate([Vl, Vd[quedan]])
@@ -314,16 +343,22 @@ def main():
         raise SystemExit(f'solo hay {len(Xl)} parches locales de entrenamiento con máscara: faltan teselas marcadas')
     cic_tr, cic_va = len(objetos(Yl * Vl)), len(objetos(Yv * Vv))
     print(f'L4S: entrenamiento {len(Xtr)}, validación {len(Xva)}, prueba {len(Xte)}')
-    print(f'local entrenamiento: {len(Xl)} parches ({n_debiles} débiles con peso {a.peso_debil}), {len(zonas_tr)} zonas, '
+    print(f'local entrenamiento: {len(Xl)} parches ({n_debiles} de nivel 2, con el peso de su Tier; {a.peso_debil} si no hay catálogo), {len(zonas_tr)} zonas, '
           f'{cic_tr} cicatrices, {float((Yl * Vl).sum()) * 0.01:.1f} ha')
     print(f'local validación  : {len(Xv)} parches, {len(zonas_va)} zonas, {cic_va} cicatrices, '
           f'{float((Yv * Vv).sum()) * 0.01:.1f} ha')
+    frac = lambda Y_, V_: float((Y_ * V_).sum()) / max(float(V_.sum()), 1.0) * 100
+    print(f'píxeles de deslizamiento: L4S entrenamiento {frac(Ytr, Vtr):.2f} %, local entrenamiento {frac(Yl, Vl):.2f} %'
+          f'. Validación local: {origen_val}')
     hay_val = len(Xv) > 0
     hay_pos_val = cic_va > 0
     if not hay_val:
         print('AVISO: no hay validación local marcada. Se entrena, pero la época se elige solo con Landslide4Sense '
               'y NO se puede afirmar ninguna mejora en La Convención.')
-    elif cic_va < a.min_cic:
+    elif origen_val.startswith('nivel 2'):
+        print('AVISO: la validación local usa máscaras de nivel 2 (propuestas sin verificar). Sirve para elegir época y '
+              'detectar si el ajuste ayuda o daña, no como cifra final de tesis.')
+    if hay_val and cic_va < a.min_cic:
         print(f'AVISO: la validación local tiene {cic_va} cicatrices (menos de {a.min_cic}): resultado exploratorio.')
 
     # ---------------------------------------------------------------- modelo
@@ -376,7 +411,9 @@ def main():
     config = dict(cfg0, ajuste_fino={'desde': os.path.basename(a.desde), 'firma_base': ck0.get('firma'),
                                      'lr': a.lr, 'lote': a.lote, 'frac_local': 1.0 if a.solo_local else a.frac_local,
                                      'solo_local': a.solo_local, 'epocas_max': a.epocas,
-                                     'ohem': ohem, 'congelar_encoder': a.congelar, 'bn_libre': a.bn_libre, 'tolerancia_l4s': a.tol,
+                                     'ohem': ohem, 'pasos': a.pasos, 'tiers_entrenamiento': sorted(tiers_ent) if a.debiles else None,
+                                     'validacion_local': origen_val, 'perdida_por_grupo': a.perdida_grupo,
+                                     'congelar_encoder': a.congelar, 'bn_libre': a.bn_libre, 'tolerancia_l4s': a.tol,
                                      'semilla': a.semilla, 'parches_locales': len(Xl), 'parches_debiles': n_debiles,
                                      'peso_debil': a.peso_debil if n_debiles else None,
                                      'zonas_entrenamiento': sorted(zonas_tr), 'zonas_validacion': sorted(zonas_va)})
@@ -395,7 +432,9 @@ def main():
                   'iou_local': m0['local']['iou'] if hay_val else None, 'puntaje': puntaje(m0), 'admisible': True}]
     mejor = {'epoca': 0, 'puntaje': puntaje(m0), 'medida': m0, 'estado': None}
     cola_l4s = rng.permutation(len(Xtr)); pos = 0
+    seguidas_malas, ep_hechas = 0, 0
     for ep in range(1, a.epocas + 1):
+        ep_hechas = ep
         modelo.train()
         if not a.bn_libre:
             # las medias y varianzas de BatchNorm se quedan como en el modelo base: con pocos
@@ -422,7 +461,14 @@ def main():
             opt.zero_grad(set_to_none=True)
             with torch.autocast(device_type='cuda', enabled=amp):
                 logits = modelo(x)[:, 0]
-            loss = perdida_mixta(logits.float(), y, v, 0.5, ohem)
+            if n_l4s and a.perdida_grupo:
+                # cada grupo con su propia pérdida: si no, el OHEM elige los píxeles más difíciles de TODO el lote
+                # y los locales (máscaras provisionales) acaparan el gradiente aunque el lote sea mitad L4S
+                lg = logits.float()
+                loss = (n_loc * perdida_mixta(lg[:n_loc], y[:n_loc], v[:n_loc], 0.5, ohem)
+                        + n_l4s * perdida_mixta(lg[n_loc:], y[n_loc:], v[n_loc:], 0.5, ohem)) / a.lote
+            else:
+                loss = perdida_mixta(logits.float(), y, v, 0.5, ohem)
             escalador.scale(loss).backward()
             escalador.unscale_(opt)
             torch.nn.utils.clip_grad_norm_(params, 1.0)
@@ -444,6 +490,11 @@ def main():
               + ('' if admisible else ' (pierde demasiado)')
               + (f" | IoU val local {m['local']['iou']:.4f}" if hay_val and hay_pos_val else '')
               + f" | {time.time() - te0:.0f} s{marca}", flush=True)
+        seguidas_malas = 0 if admisible else seguidas_malas + 1
+        if a.paciencia and seguidas_malas >= a.paciencia:
+            print(f'se corta: {seguidas_malas} épocas seguidas por debajo del piso de L4S ({piso_l4s:.4f}). '
+                  'Baja --lr, congela el encoder o revisa las máscaras.')
+            break
     with open(os.path.join(a.salida, f'historial_ajuste_{firma}.csv'), 'w', newline='') as f:
         w = csv.DictWriter(f, fieldnames=list(historial[0])); w.writeheader(); w.writerows(historial)
 
@@ -468,7 +519,8 @@ def main():
     u0, uF = umbral_de(m0), umbral_de(mF)
     res = {'firma': firma, 'arquitectura': arq, 'mejor_epoca': mejor['epoca'], 'mejoro': mejoro,
            'umbral_operacion': uF, 'umbral_elegido_en': 'validación local' if usar_local else 'validación de Landslide4Sense',
-           'config': config, 'epocas_corridas': a.epocas, 'base': {'firma': ck0.get('firma'), 'umbral': u0}}
+           'config': config, 'epocas_corridas': ep_hechas, 'epocas_max': a.epocas,
+           'validacion_local_origen': origen_val, 'base': {'firma': ck0.get('firma'), 'umbral': u0}}
     # prueba oficial de Landslide4Sense, una vez, con el umbral elegido en SU validación
     pt0, ptF = predecir(base_modelo, Xte, disp), predecir(modelo, Xte, disp)
     ptR = regla_suelo_pendiente(Xte, receta)
@@ -494,7 +546,9 @@ def main():
         res['local_advertencias'] = [s for s in (
             'la validación local se usó para elegir época y umbral: su IoU es optimista',
             f'solo {cic_va} cicatrices en validación local: resultado exploratorio' if cic_va < a.min_cic else '',
-            f'solo {len(zonas_va)} zonas de validación' if len(zonas_va) < 5 else '') if s]
+            f'solo {len(zonas_va)} zonas de validación' if len(zonas_va) < 5 else '',
+            'validación hecha con máscaras de nivel 2 (propuestas sin verificar): no sirve como cifra final'
+            if origen_val.startswith('nivel 2') else '') if s]
     res['minutos'] = round((time.time() - t0) / 60, 1)
 
     print('\n' + '=' * 78)

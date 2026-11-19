@@ -459,6 +459,10 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             X, Y, V, filas = ajuste_fino.cargar_locales(p_dir, m_dir, rec_base, escala, {'entrenamiento'}, solo_con_positivos=True)
             self.assertEqual(len(X), 1)
             self.assertAlmostEqual(filas[0]['_peso_tier'], 0.8)
+            # filtro por Tier: el catálogo de la prueba no trae columna «tier», así que ninguno es «oro»
+            X0, *_ = ajuste_fino.cargar_locales(p_dir, m_dir, rec_base, escala, {'entrenamiento'},
+                                                solo_con_positivos=True, tiers={'oro'})
+            self.assertEqual(len(X0), 0)
 
 
 if __name__ == '__main__':
