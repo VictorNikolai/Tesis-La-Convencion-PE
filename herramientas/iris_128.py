@@ -266,13 +266,63 @@ def exportar_128(raiz, salida, solo_prioritarios=True, limite=None, puerto=5000)
     return len(indice)
 
 
-def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.'):
-    """Convierte las máscaras PNG de IRIS (128×128) al formato de `mascaras_nivel1/`.
+def _cargar_propuestas_hashes(carpeta_iris):
+    ruta = os.path.join(carpeta_iris, 'propuestas_iniciales_hashes.json')
+    if not os.path.exists(ruta):
+        return None, {}
+    with open(ruta, encoding='utf-8') as f:
+        meta = json.load(f)
+    return meta.get('fecha_respaldo_unix'), meta.get('archivos', {})
+
+
+def _acciones_iris_db(carpeta_iris):
+    """Devuelve el conjunto de image_ids guardados por usuarios en iris.db (si existe)."""
+    import sqlite3
+    dbs = glob.glob(os.path.join(carpeta_iris, '**', '*.db'), recursive=True)
+    guardados = set()
+    for db in dbs:
+        try:
+            con = sqlite3.connect(db)
+            cur = con.cursor()
+            tablas = {r[0] for r in cur.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+            if 'action' in tablas:
+                cols = {r[1] for r in cur.execute("PRAGMA table_info(action)").fetchall()}
+                if 'image_id' in cols:
+                    for (img_id,) in cur.execute("SELECT DISTINCT image_id FROM action WHERE image_id IS NOT NULL").fetchall():
+                        guardados.add(str(img_id))
+            con.close()
+        except Exception:
+            pass
+    return guardados
+
+
+def _cargar_decisiones_agente(ruta_decisiones):
+    if not ruta_decisiones or not os.path.exists(ruta_decisiones):
+        return set()
+    revisados = set()
+    with open(ruta_decisiones, encoding='utf-8') as f:
+        for r in csv.DictReader(f):
+            if r.get('parche'):
+                revisados.add(r['parche'].strip())
+            if r.get('id_iris'):
+                revisados.add(r['id_iris'].strip())
+    return revisados
+
+
+def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.', decisiones=None, fecha_respaldo=None):
+    """Convierte las máscaras PNG revisadas de IRIS (128×128) al formato de `mascaras_nivel1/`.
+    Solo importa parches revisados:
+      - Si `quien == 'AGENTE'`: exige que el parche esté registrado en `informes/decisiones_agente.csv`
+        (o en `--decisiones`), y respeta las máscaras humanas previas sin sobrescribirlas.
+      - Si `quien != 'AGENTE'` y existe `propuestas_iniciales_hashes.json` (o `fecha_respaldo`):
+        solo importa PNGs guardados después de `fecha_respaldo` y distintos de las propuestas automáticas
+        sin editar (o registrados como acción de usuario en `iris.db`). Nunca importa un PNG sin revisar.
     Codificación de IRIS:
       - 0-based estándar de IRIS (`mask_encoding: integer`): 0 -> 0 (fondo), 1 -> 1 (deslizamiento), 2 -> 255 (dudoso).
       - 1-based alternativo (cuando contiene clase 3): 1 -> 0 (fondo), 2 -> 1 (deslizamiento), 3 -> 255 (dudoso).
     Respeta la regla física de nube blanca: B2 > 1000 se marca como 255 salvo donde es suelo desnudo claro
-    (B2 <= 2000, B4 > B3, B4 > 1.2*B2) o donde la persona marcó deslizamiento (1)."""
+    (B2 <= 2000, B4 > B3, B4 > 1.2*B2) o donde se marcó deslizamiento (1)."""
+    import hashlib
     from PIL import Image
     import rasterio
     from rasterio.features import shapes
@@ -286,15 +336,55 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.'):
     with open(ruta_ind, encoding='utf-8') as f:
         indice = list(csv.DictReader(f))
 
+    es_agente = str(quien).strip().upper() == 'AGENTE'
+    origen_tif = 'agente en IRIS 128x128' if es_agente else 'marcado humano en IRIS 128x128'
+    origen_gj = 'IRIS_128_AGENTE' if es_agente else 'IRIS_128'
+
+    ruta_decisiones = decisiones or os.path.join(raiz, 'informes', 'decisiones_agente.csv')
+    decisiones_agente = _cargar_decisiones_agente(ruta_decisiones) if es_agente else set()
+    fecha_resp_auto, hashes_propuestas = _cargar_propuestas_hashes(carpeta_iris)
+    corte_fecha = fecha_respaldo if fecha_respaldo is not None else fecha_resp_auto
+    acciones_db = _acciones_iris_db(carpeta_iris) if (corte_fecha is not None and not es_agente) else set()
+
+    ruta_csv = os.path.join(salida_nivel1, 'mascaras_nivel1.csv')
+    existentes = {}
+    if os.path.exists(ruta_csv):
+        with open(ruta_csv, encoding='utf-8') as f_ex:
+            for rex in csv.DictReader(f_ex):
+                existentes[(rex['proyecto'], rex['tesela'])] = rex
+
     por_tesela = collections.defaultdict(dict)
     n_parches = 0
+    omitidos_sin_revision = 0
+    omitidos_humano_protegido = 0
     feats_geojson = []
 
     for r in indice:
         pid = r['id_iris']
+        proy, tes, q, parche = r['proyecto'], r['tesela'], r['cuadrante'], r['parche']
         ruta_png = os.path.join(carpeta_iris, 'masks', f'{pid}.png')
         if not os.path.exists(ruta_png):
             continue
+
+        if es_agente:
+            if parche not in decisiones_agente and pid not in decisiones_agente:
+                omitidos_sin_revision += 1
+                continue
+            prev = existentes.get((proy, tes))
+            if prev and prev.get('quien', '').strip() not in ('', 'AGENTE'):
+                omitidos_humano_protegido += 1
+                continue
+        elif corte_fecha is not None or hashes_propuestas:
+            mtime_png = os.path.getmtime(ruta_png)
+            with open(ruta_png, 'rb') as fp:
+                sha_actual = hashlib.sha256(fp.read()).hexdigest()
+            info_prop = hashes_propuestas.get(f'{pid}.png')
+            es_propuesta_intacta = info_prop is not None and sha_actual == info_prop.get('sha256')
+            en_db = pid in acciones_db
+            if (corte_fecha is not None and mtime_png <= corte_fecha) or (es_propuesta_intacta and not en_db):
+                omitidos_sin_revision += 1
+                continue
+
         raw = np.asarray(Image.open(ruta_png))
         if raw.ndim == 3:
             raw = raw[:, :, 0]
@@ -319,7 +409,6 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.'):
         mask[des] = 1
         mask[dud | sin_dato] = 255
 
-        proy, tes, q, parche = r['proyecto'], r['tesela'], r['cuadrante'], r['parche']
         dest_dir = os.path.join(salida_nivel1, 'parches_128', proy)
         os.makedirs(dest_dir, exist_ok=True)
         p8 = dict(driver='GTiff', height=forma[0], width=forma[1], count=1, dtype='uint8',
@@ -327,7 +416,7 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.'):
         with MemoryFile() as mem:
             with mem.open(**p8) as d:
                 d.write(mask, 1)
-                d.update_tags(nivel='1', valores='0 fondo, 1 deslizamiento, 255 ignorar', origen='marcado humano en IRIS 128x128')
+                d.update_tags(nivel='1', valores='0 fondo, 1 deslizamiento, 255 ignorar', origen=origen_tif, quien=quien)
             with open(os.path.join(dest_dir, f'{parche}.tif'), 'wb') as fo:
                 fo.write(mem.read())
 
@@ -338,15 +427,23 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.'):
                     g4326 = transform_geom(crs, 'EPSG:4326', geom)
                     feats_geojson.append({
                         'type': 'Feature',
-                        'properties': {'clase': nom_c, 'proyecto': proy, 'tesela': tes, 'parche': parche, 'origen': 'IRIS_128'},
+                        'properties': {'clase': nom_c, 'proyecto': proy, 'tesela': tes, 'parche': parche, 'origen': origen_gj, 'quien': quien},
                         'geometry': g4326,
                     })
 
         por_tesela[(proy, tes, r['zona'], r['conjunto'])][q] = (mask, crs, tr)
         n_parches += 1
 
+    if omitidos_sin_revision:
+        print(f'Aviso: se omitieron {omitidos_sin_revision} PNG(s) sin revisión confirmada.')
+    if omitidos_humano_protegido:
+        print(f'Aviso: se protegieron {omitidos_humano_protegido} parche(s) con máscara humana previa.')
+
     if not n_parches:
-        raise SystemExit(f'No hay máscaras PNG en {os.path.join(carpeta_iris, "masks")}')
+        raise SystemExit(
+            f'No hay máscaras PNG revisadas para importar en {os.path.join(carpeta_iris, "masks")} '
+            f'(omitidas sin revisión: {omitidos_sin_revision})'
+        )
 
     # Reconstruir máscaras 256×256 por tesela y actualizar tabla resumen
     filas_nuevas = {}
@@ -371,7 +468,7 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.'):
         with MemoryFile() as mem:
             with mem.open(**p256) as d:
                 d.write(m256, 1)
-                d.update_tags(nivel='1', valores='0 fondo, 1 deslizamiento, 255 ignorar', origen='marcado humano en IRIS 128x128')
+                d.update_tags(nivel='1', valores='0 fondo, 1 deslizamiento, 255 ignorar', origen=origen_tif, quien=quien)
             with open(os.path.join(dir_256, f'{tes}.tif'), 'wb') as fo:
                 fo.write(mem.read())
 
@@ -386,12 +483,6 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.'):
         }
 
     os.makedirs(salida_nivel1, exist_ok=True)
-    ruta_csv = os.path.join(salida_nivel1, 'mascaras_nivel1.csv')
-    existentes = {}
-    if os.path.exists(ruta_csv):
-        with open(ruta_csv, encoding='utf-8') as f_ex:
-            for r in csv.DictReader(f_ex):
-                existentes[(r['proyecto'], r['tesela'])] = r
     existentes.update(filas_nuevas)
     filas = [existentes[k] for k in sorted(existentes.keys())]
 
@@ -568,11 +659,13 @@ def main():
     p_exp.add_argument('--limite', type=int, help='máximo de teselas a exportar (para probar)')
     p_exp.add_argument('--puerto', type=int, default=5000)
 
-    p_imp = sub.add_parser('importar', help='convierte las máscaras PNG de IRIS a mascaras_nivel1/')
+    p_imp = sub.add_parser('importar', help='convierte las máscaras PNG revisadas de IRIS a mascaras_nivel1/')
     p_imp.add_argument('--iris', default='iris_128')
     p_imp.add_argument('--salida', default='mascaras_nivel1')
     p_imp.add_argument('--quien', default='IRIS')
     p_imp.add_argument('--raiz', default='.')
+    p_imp.add_argument('--decisiones', default=None, help='ruta a decisiones_agente.csv (cuando --quien AGENTE)')
+    p_imp.add_argument('--fecha-respaldo', type=float, default=None, help='timestamp unix de corte para exigir PNGs guardados después')
 
     p_abr = sub.add_parser('abrir', help='inicia el servidor web local de IRIS en http://127.0.0.1:5000')
     p_abr.add_argument('--iris', default='iris_128')
@@ -588,7 +681,7 @@ def main():
     if a.cmd == 'exportar':
         exportar_128(a.raiz, a.salida, solo_prioritarios=not a.todas, limite=a.limite, puerto=a.puerto)
     elif a.cmd == 'importar':
-        importar_128(a.iris, a.salida, quien=a.quien, raiz=a.raiz)
+        importar_128(a.iris, a.salida, quien=a.quien, raiz=a.raiz, decisiones=a.decisiones, fecha_respaldo=a.fecha_respaldo)
     elif a.cmd == 'abrir':
         abrir_servidor(a.iris, usuario=a.usuario, clave=a.clave, debug=a.debug)
     elif a.cmd == 'ejemplo':

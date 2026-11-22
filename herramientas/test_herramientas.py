@@ -58,21 +58,29 @@ def _crear_tesela_sintetica(ruta_tif, x0=750000.0, y0=8600000.0, lado=256, b2_va
 
 class TestParticionPorZona(unittest.TestCase):
     def test_particion_real_sin_fuga_espacial(self):
-        """Comprueba que particion.csv del proyecto no comparte zonas entre entrenamiento y validación."""
+        """Comprueba que particion.csv y particion_nuevas_zonas.csv no comparten zonas ni tienen fuga (<3560m) entre entrenamiento, validación y prueba."""
         ruta = os.path.join(RAIZ, 'particion.csv')
         self.assertTrue(os.path.exists(ruta), 'Falta particion.csv en la raíz')
         with open(ruta, encoding='utf-8') as f_p:
             filas = list(csv.DictReader(f_p))
-        self.assertEqual(len(filas), 242)
-        z_tr = {r['zona'] for r in filas if r['conjunto'] == 'entrenamiento'}
-        z_va = {r['zona'] for r in filas if r['conjunto'] == 'validacion'}
-        self.assertEqual(z_tr & z_va, set(), f'Fuga espacial entre conjuntos: {z_tr & z_va}')
+        self.assertGreaterEqual(len(filas), 242)
+        conj_activos = ('entrenamiento', 'validacion', 'prueba')
+        z_por_c = {c: {r['zona'] for r in filas if r['conjunto'] == c} for c in conj_activos}
+        self.assertEqual(z_por_c['entrenamiento'] & z_por_c['validacion'], set())
+        self.assertEqual(z_por_c['entrenamiento'] & z_por_c['prueba'], set())
+        self.assertEqual(z_por_c['validacion'] & z_por_c['prueba'], set())
         # Verificar que las 3 anclas con cicatrices están en validación
         por_tes = {r['tesela']: r for r in filas}
         for ancla in ('ingemmet_002_001', 'sinpad_21603_001', 'sinpad_37418_001'):
             self.assertEqual(por_tes[ancla]['conjunto'], 'validacion')
-        # Verificar que teselas a < 3560 m en x e y están en la misma zona
-        activas = [r for r in filas if r['conjunto'] in ('entrenamiento', 'validacion')]
+        # Verificar que teselas y puntos nuevos en conjuntos distintos están a >= 3560 m en x o y
+        activas = [r for r in filas if r['conjunto'] in conj_activos]
+        ruta_nz = os.path.join(RAIZ, 'particion_nuevas_zonas.csv')
+        if os.path.exists(ruta_nz):
+            with open(ruta_nz, encoding='utf-8') as f_nz:
+                for r in csv.DictReader(f_nz):
+                    if r['conjunto'] in conj_activos:
+                        activas.append({'tesela': r['id_origen'], 'zona': r['zona'], 'conjunto': r['conjunto'], 'x': r['x'], 'y': r['y']})
         for i, a in enumerate(activas):
             xa, ya = float(a['x']), float(a['y'])
             for b in activas[i + 1:]:
@@ -81,7 +89,7 @@ class TestParticionPorZona(unittest.TestCase):
                     dy = abs(ya - float(b['y']))
                     self.assertFalse(
                         dx < 3560 and dy < 3560,
-                        f"Teselas {a['tesela']} ({a['conjunto']}) y {b['tesela']} ({b['conjunto']}) "
+                        f"Elementos {a['tesela']} ({a['conjunto']}) y {b['tesela']} ({b['conjunto']}) "
                         f"están a dx={dx:.0f}m, dy={dy:.0f}m (<3560m) en conjuntos distintos"
                     )
 
@@ -348,6 +356,65 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             self.assertEqual(m256[15, 128 + 15], 1)  # q2 pintado
             self.assertEqual(m256[200, 200], 255)  # q4 sin pintar -> 255 (ignorar)
 
+    def test_iris_128_solo_importa_revisados_y_origen_por_quien(self):
+        import hashlib, json as _json, time
+        from PIL import Image
+        from iris_128 import exportar_128, importar_128
+        with tempfile.TemporaryDirectory() as tmp:
+            _crear_tesela_sintetica(os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_1_001', 'image.tif'))
+            with open(os.path.join(tmp, 'particion.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['tesela', 'proyecto', 'zona', 'conjunto', 'uso'])
+                w.writeheader()
+                w.writerow({'tesela': 'sinpad_1_001', 'proyecto': 'datos_laconvencion', 'zona': 'Z01', 'conjunto': 'entrenamiento', 'uso': 'ronda1'})
+            dir_iris = os.path.join(tmp, 'iris_128')
+            exportar_128(tmp, dir_iris, limite=1)
+
+            # q1 y q2 en masks/: solo q1 está en decisiones_agente.csv, q2 NO fue revisado
+            m_q1 = np.zeros((128, 128), dtype=np.uint8)
+            m_q1[10:20, 10:20] = 1
+            p_q1 = os.path.join(dir_iris, 'masks', 'datos_laconvencion__sinpad_1_001_q1.png')
+            Image.fromarray(m_q1).save(p_q1)
+
+            m_q2 = np.zeros((128, 128), dtype=np.uint8)
+            m_q2[20:30, 20:30] = 1
+            p_q2 = os.path.join(dir_iris, 'masks', 'datos_laconvencion__sinpad_1_001_q2.png')
+            Image.fromarray(m_q2).save(p_q2)
+
+            # Simular propuestas_iniciales_hashes.json con fecha corte en el futuro para q2
+            t_corte = time.time() - 10.0
+            os.utime(p_q2, (t_corte - 50.0, t_corte - 50.0))
+            with open(p_q2, 'rb') as fq2:
+                sha_q2 = hashlib.sha256(fq2.read()).hexdigest()
+            with open(os.path.join(dir_iris, 'propuestas_iniciales_hashes.json'), 'w', encoding='utf-8') as fh:
+                _json.dump({'fecha_respaldo_unix': t_corte, 'archivos': {'datos_laconvencion__sinpad_1_001_q2.png': {'sha256': sha_q2}}}, fh)
+
+            os.makedirs(os.path.join(tmp, 'informes'), exist_ok=True)
+            with open(os.path.join(tmp, 'informes', 'decisiones_agente.csv'), 'w', newline='', encoding='utf-8') as fd:
+                w = csv.DictWriter(fd, fieldnames=['parche', 'decision'])
+                w.writeheader()
+                w.writerow({'parche': 'sinpad_1_001_q1', 'decision': 'positivo'})
+
+            dir_n1 = os.path.join(tmp, 'mascaras_nivel1')
+            # 1) Importar como AGENTE: solo debe entrar q1, NO q2 (no está en decisiones_agente.csv)
+            n_ag = importar_128(dir_iris, dir_n1, quien='AGENTE', raiz=tmp)
+            self.assertEqual(n_ag, 1)
+            self.assertTrue(os.path.exists(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', 'sinpad_1_001_q1.tif')))
+            self.assertFalse(os.path.exists(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', 'sinpad_1_001_q2.tif')))
+            with rasterio.open(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', 'sinpad_1_001_q1.tif')) as dm:
+                self.assertEqual(dm.tags().get('origen'), 'agente en IRIS 128x128')
+
+            # 2) Importar como humano VN: q2 tiene mtime <= t_corte y hash de propuesta -> se rechaza.
+            #    q1 tiene mtime > t_corte y hash distinto -> se importa con origen humano.
+            n_hum = importar_128(dir_iris, dir_n1, quien='VN', raiz=tmp)
+            self.assertEqual(n_hum, 1)
+            self.assertFalse(os.path.exists(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', 'sinpad_1_001_q2.tif')))
+            with rasterio.open(os.path.join(dir_n1, 'parches_128', 'datos_laconvencion', 'sinpad_1_001_q1.tif')) as dm:
+                self.assertEqual(dm.tags().get('origen'), 'marcado humano en IRIS 128x128')
+
+            # 3) Ahora que sinpad_1_001 es de VN en mascaras_nivel1.csv, AGENTE no debe sobrescribirla
+            with self.assertRaises(SystemExit):
+                importar_128(dir_iris, dir_n1, quien='AGENTE', raiz=tmp)
+
     def test_acuerdo_anotadores_geojson_e_iris(self):
         from PIL import Image
         with tempfile.TemporaryDirectory() as tmp:
@@ -495,6 +562,38 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             self.assertEqual(len(Xv), 1)
             Xn, *_ = ajuste_fino.cargar_l4spe(ruta, rec, {'prueba'})
             self.assertEqual(len(Xn), 0)
+
+
+    def test_revisar_mascaras_criterios(self):
+        """Verifica que revisar_mascaras.py detecta los errores geométricos, físicos y de consistencia."""
+        from revisar_mascaras import revisar
+        with tempfile.TemporaryDirectory() as tmp:
+            p_dir = os.path.join(tmp, 'parches_128', 'datos_laconvencion')
+            m_dir = os.path.join(tmp, 'mascaras_nivel1', 'parches_128', 'datos_laconvencion')
+            os.makedirs(p_dir, exist_ok=True)
+            os.makedirs(m_dir, exist_ok=True)
+            tr = from_origin(750000.0, 8600000.0, 10.0, 10.0)
+            arr = np.zeros((6, 128, 128), dtype=np.float32)
+            arr[1] = 300.0; arr[2] = 350.0; arr[3] = 500.0; arr[4] = 25.0; arr[5] = 1500.0
+            arr[4, 20:40, 20:40] = 3.0       # pendiente < 8°
+            arr[1, 50:60, 50:60] = 1500.0    # nube blanca (B2>1000, B4=500)
+            with rasterio.open(os.path.join(p_dir, 't1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=6, dtype='float32', crs='EPSG:32718', transform=tr) as ds:
+                ds.write(arr)
+            mk = np.zeros((128, 128), dtype=np.uint8)
+            mk[5, 5] = 1                     # mancha < 3 px
+            mk[25:35, 25:35] = 1             # sobre pendiente < 8°
+            mk[52:58, 52:58] = 1             # sobre nube
+            mk[0, 80:100] = 1                # línea recta tocando borde
+            with rasterio.open(os.path.join(m_dir, 't1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=1, dtype='uint8', crs='EPSG:32718', transform=tr) as dm:
+                dm.write(mk, 1)
+            hall = revisar(tmp)
+            tipos = {h['tipo'] for h in hall}
+            self.assertIn('mancha_menor_3px', tipos)
+            self.assertIn('pendiente_menor_8', tipos)
+            self.assertIn('positivo_sobre_nube', tipos)
+            self.assertIn('borde_linea_recta', tipos)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,96 @@
+zona,conjunto,id_origen,fuente,distrito,lat,lon,x,y,nom_peligro,sector,anio
+ZN01_OCOBAMBA,prueba,ingemmet_pel_4332,ingemmet_peligros_puntos,OCOBAMBA,-12.65643,-72.38228,784345,8599434,1000|1100|1103,,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_pel_14837,ingemmet_peligros_puntos,OCOBAMBA,-12.65866,-72.35324,787499,8599155,1000|1500|1504,Sector Puente Tirijuay,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_pel_28270,ingemmet_peligros_puntos,QUELLOUNO,-12.62652,-72.41098,781258,8602776,1000|1100|1103,carretera Quesqquento-Ocobamba,1368680400000
+ZN01_OCOBAMBA,prueba,ingemmet_pel_28274,ingemmet_peligros_puntos,OCOBAMBA,-12.67158,-72.38159,784403,8597756,1000|1100|1103,,1368680400000
+ZN01_OCOBAMBA,prueba,ingemmet_pel_4707,ingemmet_peligros_puntos,OCOBAMBA,-12.67294,-72.33561,789399,8597555,1000|1300|1302,Cerro Cielopunco,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_pel_35130,ingemmet_peligros_puntos,OCOBAMBA,-12.676,-72.39153,783318,8597278,1000|1500|1504,San Lorenzo,REPORTE PRELIMINAR Nº 125 - 12/1/2021 / COEN - INDECI / 15:40 HORAS
+ZN01_OCOBAMBA,prueba,ingemmet_pel_12088,ingemmet_peligros_puntos,QUELLOUNO,-12.61511,-72.42589,779650,8604054,1000|1300|1302,Sector Santiago-Cerro Chirumpia,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_pel_4706,ingemmet_peligros_puntos,QUELLOUNO,-12.63174,-72.38982,783552,8602175,1000|1300|1302,Cerro Piquimayo,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_pel_33088,ingemmet_peligros_puntos,OCOBAMBA,-12.67597,-72.38912,783579,8597279,1000|1500|1504,qda. Huayrapata,1368680400000
+ZN01_OCOBAMBA,prueba,ingemmet_pel_33089,ingemmet_peligros_puntos,YANATILE,-12.64584,-72.35884,786904,8600581,1000|1500|1504,,1368680400000
+ZN01_OCOBAMBA,prueba,ingemmet_pel_28269,ingemmet_peligros_puntos,QUELLOUNO,-12.61822,-72.40769,781625,8603691,1000|1100|1103,qda.Quesquento,1368680400000
+ZN01_OCOBAMBA,prueba,ingemmet_pel_28273,ingemmet_peligros_puntos,OCOBAMBA,-12.68611,-72.38377,784150,8596150,1000|1300|1301,torrentera s/n,1368680400000
+ZN01_OCOBAMBA,prueba,ingemmet_otr_28271,ingemmet_otros_peligros_puntos,OCOBAMBA,-12.6821,-72.38887,783600,8596600,3000|3100|3101,margen izquierdo del rio Ocobamba,1368662400000
+ZN01_OCOBAMBA,prueba,ingemmet_otr_6078,ingemmet_otros_peligros_puntos,OCOBAMBA,-12.68726,-72.36153,786565,8595999,,Cerro Cielopunco,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_otr_6080,ingemmet_otros_peligros_puntos,QUELLOUNO,-12.64547,-72.38966,783555,8600655,,Cerro Piquimayo,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_otr_6079,ingemmet_otros_peligros_puntos,YANATILE,-12.64865,-72.34556,788345,8600255,,Cerro Combapata,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_otr_14943,ingemmet_otros_peligros_puntos,OCOBAMBA,-12.68277,-72.37506,785100,8596510,,Sector Toledo,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_otr_14708,ingemmet_otros_peligros_puntos,QUELLOUNO,-12.63391,-72.37178,785511,8601915,3000|3100|3101,,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_otr_5970,ingemmet_otros_peligros_puntos,QUELLOUNO,-12.61604,-72.42877,779335,8603955,3000|3200|3201,Poblado de Santiago,Estudio de Riesgo Geológico de la Franja N° 3
+ZN01_OCOBAMBA,prueba,ingemmet_zon_898,ingemmet_zonas_criticas,OCOBAMBA,-12.68021,-72.388,783697,8596808,,,
+ZN02_OCOBAMBA,prueba,ingemmet_pel_4516,ingemmet_peligros_puntos,OCOBAMBA,-13.08367,-72.26875,796182,8552013,1000|1100|1103,Sector Yanamayo,Estudio De Riesgo Geológico en la Franja N° 3
+ZN02_OCOBAMBA,prueba,ingemmet_pel_28372,ingemmet_peligros_puntos,OCOBAMBA,-13.01702,-72.31999,790700,8559450,1000|1500|1504,,1369198800000
+ZN02_OCOBAMBA,prueba,ingemmet_pel_28376,ingemmet_peligros_puntos,OCOBAMBA,-13.04628,-72.29087,793826,8556177,1000|1100|1103,km. 67+100,1369198800000
+ZN02_OCOBAMBA,prueba,ingemmet_pel_28380,ingemmet_peligros_puntos,OCOBAMBA,-13.07236,-72.27912,795071,8553277,1000|1100|1103,,1369198800000
+ZN02_OCOBAMBA,prueba,ingemmet_pel_28377,ingemmet_peligros_puntos,OCOBAMBA,-13.05109,-72.29521,793350,8555650,1000|1300|1302,Margen izquierdo de la qda. Yanamayo,1369198800000
+ZN02_OCOBAMBA,prueba,ingemmet_pel_4515,ingemmet_peligros_puntos,OCOBAMBA,-13.07084,-72.28328,794621,8553450,1000|1100|1103,Km-55 (Ollantaytambo-Ocobamba),Estudio De Riesgo Geológico en la Franja N° 3
+ZN02_OCOBAMBA,prueba,ingemmet_pel_28379,ingemmet_peligros_puntos,OCOBAMBA,-13.06605,-72.28449,794495,8553981,1000|1100|1103,,1369198800000
+ZN02_OCOBAMBA,prueba,ingemmet_pel_28378,ingemmet_peligros_puntos,OCOBAMBA,-13.05577,-72.29133,793765,8555127,1000|1100|1103,,1369198800000
+ZN02_OCOBAMBA,prueba,ingemmet_pel_28373,ingemmet_peligros_puntos,OCOBAMBA,-13.02517,-72.32175,790500,8558550,1000|1100|1103,,1369198800000
+ZN02_OCOBAMBA,prueba,ingemmet_otr_6087,ingemmet_otros_peligros_puntos,OCOBAMBA,-13.10272,-72.24281,798974,8549873,,,Estudio De Riesgo Geológico en la Franja N° 3
+ZN03_AYNA,prueba,ingemmet_pel_4431,ingemmet_peligros_puntos,KIMBIRI,-12.6125,-73.74736,636056,8605391,1000|1100|1103,,Estudio de Riesgo Geológico de la Franja N° 3
+ZN03_AYNA,prueba,ingemmet_pel_14548,ingemmet_peligros_puntos,KIMBIRI,-12.60899,-73.74625,636178,8605779,1000|1300|1301,,Estudio de Riesgo Geológico de la Franja N° 3
+ZN03_AYNA,prueba,ingemmet_pel_5462,ingemmet_peligros_puntos,KIMBIRI,-12.61133,-73.77021,633574,8605532,1000|1500|1504,Carr. Ayacucho-pampa-quinua-san francisco km. 132,1049173200000
+ZN03_AYNA,prueba,ingemmet_zon_821,ingemmet_zonas_criticas,AYNA,-12.62489,-73.78679,631766,8604041,,,
+ZN03_AYNA,prueba,indeci_L127,indeci_lugares,KIMBIRI,-12.6187,-73.7891,631518,8604727,INDECI(14),L127,2021-03-21
+ZN03_AYNA,prueba,indeci_L025,indeci_lugares,KIMBIRI,-12.621,-73.7869,631756,8604471,INDECI(4),L025,2012-02-20
+ZN04_VILCABAMBA,prueba,ingemmet_pel_28263,ingemmet_peligros_puntos,VILCABAMBA,-13.04566,-72.87494,730450,8556850,1000|1300|1302,qda.Tarqui,1336798800000
+ZN04_VILCABAMBA,prueba,ingemmet_pel_28261,ingemmet_peligros_puntos,VILCABAMBA,-13.04301,-72.85165,732979,8557122,1000|1500|1504,qda.Quinuayarca km. 29+620,1368421200000
+ZN04_VILCABAMBA,prueba,ingemmet_pel_14828,ingemmet_peligros_puntos,VILCABAMBA,-13.03504,-72.82908,735435,8557983,1000|1500|1504,Sector Oyara,Estudio De Riesgo Geológico en la franja N° 3
+ZN04_VILCABAMBA,prueba,ingemmet_pel_28262,ingemmet_peligros_puntos,VILCABAMBA,-13.04279,-72.86928,731067,8557162,1000|1500|1504,qda. Tarqui km 32+109,1368334800000
+ZN04_VILCABAMBA,prueba,ingemmet_pel_33084,ingemmet_peligros_puntos,VILCABAMBA,-13.03726,-72.82127,736281,8557730,1000|1500|1504,qda.Sijitay km. 26+500,1368334800000
+ZN05_ECHARATE,entrenamiento,ingemmet_pel_14546,ingemmet_peligros_puntos,ECHARATE,-12.6931,-72.55877,765125,8595561,1000|1300|1301,Sector Quebrada Lucmayoc,Estudio de Riesgo Geológico de la Franja N° 3
+ZN05_ECHARATE,entrenamiento,ingemmet_pel_16781,ingemmet_peligros_puntos,ECHARATE,-12.67014,-72.50538,770951,8598047,1000|1300|1301,Sector Huertapata,Estudio de Riesgo Geológico de la Franja N° 3
+ZN05_ECHARATE,entrenamiento,ingemmet_pel_28327,ingemmet_peligros_puntos,ECHARATE,-12.6701,-72.52676,768627,8598074,1000|1100|1103,,1368421200000
+ZN05_ECHARATE,entrenamiento,ingemmet_pel_4843,ingemmet_peligros_puntos,ECHARATE,-12.69305,-72.58218,762581,8595590,1000|1300|1301,Sector Cerro Chayñapuerto,Estudio de Riesgo Geológico de la Franja N° 3
+ZN06_ECHARATE,prueba,ingemmet_pel_28320,ingemmet_peligros_puntos,ECHARATE,-12.63775,-72.64908,755367,8601777,1000|1300|1302,km. 228+500,1368421200000
+ZN06_ECHARATE,prueba,ingemmet_pel_28321,ingemmet_peligros_puntos,ECHARATE,-12.63991,-72.64867,755409,8601537,1000|1300|1302,,1368421200000
+ZN06_ECHARATE,prueba,ingemmet_pel_28322,ingemmet_peligros_puntos,ECHARATE,-12.65172,-72.64052,756283,8600223,1000|1500|1504,Quellomayo,1368421200000
+ZN07_QUELLOUNO,prueba,ingemmet_pel_4705,ingemmet_peligros_puntos,QUELLOUNO,-12.65427,-72.25707,797957,8599534,1000|1300|1302,Cerro Pantorrilla,Estudio de Riesgo Geológico de la Franja N° 3
+ZN07_QUELLOUNO,prueba,ingemmet_pel_4820,ingemmet_peligros_puntos,QUELLOUNO,-12.65548,-72.25365,798327,8599396,1000|1300|1301,Cerro Pantorrilla,Estudio de Riesgo Geológico de la Franja N° 3
+ZN07_QUELLOUNO,prueba,ingemmet_pel_14538,ingemmet_peligros_puntos,QUELLOUNO,-12.65523,-72.24672,799081,8599415,1000|1300|1301,Cerro Pantorrilla,Estudio de Riesgo Geológico de la Franja N° 3
+ZN08_SANTA_ANA,prueba,ingemmet_pel_34841,ingemmet_peligros_puntos,SANTA ANA,-12.85297,-72.72292,747133,8578031,1000|1500|1504,Chaupimayo B y parea urbana de Quillabamba,REPORTE COMPLEMENTARIO Nº 878 - 16/2/2021 / COEN - INDECI / 16:00 HORAS (Reporte N° 1) 
+ZN08_SANTA_ANA,prueba,ingemmet_pel_35920,ingemmet_peligros_puntos,SANTA ANA,-12.85,-72.73334,746005,8578369,1000|1500|1504,Quebrada Chaupimayo,IT A7143: Evaluación de peligros geológicos por flujo de detritos en la quebrada Chaupimayo
+ZN08_SANTA_ANA,prueba,ingemmet_zon_924,ingemmet_zonas_criticas,SANTA ANA,-12.85346,-72.73337,745998,8577987,,,
+ZN09_ECHARATE,entrenamiento,ingemmet_pel_4379,ingemmet_peligros_puntos,ECHARATE,-12.63538,-72.99213,718090,8602350,1000|1100|1103,,Estudio de Riesgo Geológico de la Franja N° 3
+ZN09_ECHARATE,entrenamiento,ingemmet_pel_5745,ingemmet_peligros_puntos,ECHARATE,-12.62927,-72.97626,719820,8603012,1000|1500|1504,Sector Progreso,Estudio de Riesgo Geológico de la Franja N° 3
+Z111_ECHARATE,prueba,indeci_L021,indeci_lugares,ECHARATE,-12.7489,-72.8685,731421,8589682,INDECI(2),L021,2016-02-29
+Z111_ECHARATE,prueba,sinpad_75271_001,pendiente_particion,ECHARATE,-12.74874,-72.8687,731400,8589700,pendiente,Z111_ECHARATE,
+ZN11_HUAYOPATA,prueba,ingemmet_pel_28342,ingemmet_peligros_puntos,HUAYOPATA,-13.13234,-72.31058,791586,8546674,1000|1300|1302,abra Malaga,1369112400000
+ZN11_HUAYOPATA,prueba,ingemmet_zon_890,ingemmet_zonas_criticas,HUAYOPATA,-13.12162,-72.32616,789908,8547878,,,
+ZN12_MARANURA,entrenamiento,ingemmet_zon_901,ingemmet_zonas_criticas,MARANURA,-12.92836,-72.66283,753582,8569629,,,
+ZN12_MARANURA,entrenamiento,ingemmet_zon_900,ingemmet_zonas_criticas,SANTA ANA,-12.92397,-72.66992,752817,8570122,,,
+ZN13_PICHARI,entrenamiento,indeci_L070,indeci_lugares,PICHARI,-12.262,-73.9607,613032,8644257,INDECI(1),L070,2013-09-15
+ZN13_PICHARI,entrenamiento,indeci_L089,indeci_lugares,PICHARI,-12.2488,-73.9613,612973,8645717,INDECI(1),L089,2014-10-03
+ZN14_SANTA_TERESA,entrenamiento,ingemmet_pel_2727,ingemmet_peligros_puntos,SANTA TERESA,-13.31667,-72.55833,764510,8526546,1000|1100|1101,Nevado Salcantay,Inspeccion riesgo geologico del valle del rio aobamba.
+ZN14_SANTA_TERESA,entrenamiento,ingemmet_pel_34390,ingemmet_peligros_puntos,SANTA TERESA,-13.34213,-72.56897,763330,8523739,1000|1500|1502,Laguna Salkantay,IT A7027: Inspección Geológica y Geodinámica en la laguna Salkantaycocha
+Z85_?,prueba,azar_058_001,pendiente_particion,?,-11.72586,-73.16608,699870,8703110,pendiente,Z85_?,
+Z51_?,prueba,azar_024_001,pendiente_particion,?,-12.56385,-72.96362,721250,8610240,pendiente,Z51_?,
+Z54_?,prueba,azar_027_001,pendiente_particion,?,-12.74763,-72.70401,749290,8589670,pendiente,Z54_?,
+ZN18_ECHARATE,prueba,ingemmet_pel_4637,ingemmet_peligros_puntos,ECHARATE,-12.73838,-73.38441,675400,8591250,1000|1300|1301,Margen derecha del río Cumpirusiato o Pachikari.,Estudio de Riesgo Geológico de la Franja N° 3. Carta Geológica Nacional Bol. N° 89 Cuadrángulos de Chuanquiri y Pacaypata.
+ZN19_ECHARATE,entrenamiento,ingemmet_pel_14479,ingemmet_peligros_puntos,ECHARATE,-12.57686,-73.21564,693850,8609000,1000|1300|1302,1.5 Km al oeste del poblado de Kepashiato,Estudio de Riesgo Geológico de la Franja N° 3. Carta Geológica Nacional Bol. N° 89 Cuadrángulos de Chuanquiri y Pacaypata.
+ZN20_ECHARATE,entrenamiento,ingemmet_pel_5558,ingemmet_peligros_puntos,ECHARATE,-12.7336,-73.1274,703315,8591592,1000|1500|1504,,Estudio de Riesgo Geológico de la Franja N° 3
+ZN21_ECHARATE,entrenamiento,indeci_L058,indeci_lugares,ECHARATE,-11.2327,-72.9955,718847,8757545,INDECI(1),L058,2012-01-16
+ZN22_ECHARATE,prueba,ingemmet_otr_6085,ingemmet_otros_peligros_puntos,ECHARATE,-12.43361,-72.90348,727900,8624600,,Sector Pachiri,"Estudio de Riesgo Geológico de la Franja N° 4. Carta Geológica Nacional, Bol. 121 Cuadrángulos de Timpia Calangato y Río Providencia."
+ZN23_ECHARATE,entrenamiento,ingemmet_pel_14838,ingemmet_peligros_puntos,ECHARATE,-12.64317,-72.8884,729355,8601399,1000|1500|1504,Quebrada Materiato,Estudio de Riesgo Geológico de la Franja N° 3
+ZN24_ECHARATE,prueba,ingemmet_pel_4709,ingemmet_peligros_puntos,ECHARATE,-12.54684,-72.71261,748550,8611899,1000|1300|1302,,Estudio de Riesgo Geológico de la Franja N° 3
+ZN25_ECHARATE,entrenamiento,ingemmet_pel_804,ingemmet_peligros_puntos,ECHARATE,-12.68992,-72.6726,752759,8596026,1000|1100|1103,Sector Yauricho,Estudio De Riesgo Geológico en la Franja N° 3
+ZN26_ECHARATE,entrenamiento,ingemmet_pel_4844,ingemmet_peligros_puntos,ECHARATE,-12.88602,-72.6031,760110,8574255,1000|1300|1301,Sector Cerro Yuracmayo,Estudio de Riesgo Geológico de la Franja N° 3
+ZN27_HUAYOPATA,entrenamiento,ingemmet_pel_4338,ingemmet_peligros_puntos,HUAYOPATA,-13.06698,-72.55427,765220,8554177,1000|1100|1103,Sector Incarpay-Km 15+900 de la via Ferrea Cusco-Machupichu,Estudio De Riesgo Geológico en la franja N° 3
+ZN28_KIMBIRI,prueba,ingemmet_pel_4851,ingemmet_peligros_puntos,KIMBIRI,-12.66885,-73.6955,641658,8599131,1000|1300|1301,Samaniato,Estudio de Riesgo Geológico de la Franja N° 3
+ZN29_OCOBAMBA,prueba,ingemmet_pel_12086,ingemmet_peligros_puntos,OCOBAMBA,-12.83294,-72.46438,775230,8579985,1000|1300|1301,Sector Ocopampa-Cerro la Florida,Estudio de Riesgo Geológico de la Franja N° 3
+ZN30_OCOBAMBA,entrenamiento,ingemmet_otr_5893,ingemmet_otros_peligros_puntos,OCOBAMBA,-13.05804,-72.22648,800800,8554800,3000|3200|3201,Quelcanca,1049155200000
+ZN31_PICHARI,entrenamiento,indeci_L067,indeci_lugares,PICHARI,-12.3267,-73.941,615147,8637093,INDECI(1),L067,2013-03-15
+ZN32_PICHARI,entrenamiento,ingemmet_otr_5986,ingemmet_otros_peligros_puntos,PICHARI,-12.36886,-73.91988,617425,8632421,3000|3200|3201,Sector Quinquiviri,Estudio de Riesgo Geológico de la Franja N° 3
+ZN33_PICHARI,entrenamiento,indeci_L136,indeci_lugares,PICHARI,-12.5186,-73.8278,627364,8615817,INDECI(1),L136,2021-11-22
+ZN34_QUELLOUNO,prueba,ingemmet_pel_4563,ingemmet_peligros_puntos,QUELLOUNO,-12.55778,-72.67583,752538,8610653,1000|1300|1302,"Antabamba, puca puca, quebrada honda",Desliz. Tierras tramos quelloccacca y qda. Honda carr. Abancay-cuzco
+ZN35_QUELLOUNO,prueba,ingemmet_pel_14502,ingemmet_peligros_puntos,QUELLOUNO,-12.51974,-72.53204,768210,8614721,1000|1300|1302,Sector Yavero Chico,Estudio de Riesgo Geológico de la Franja N° 3
+ZN36_SANTA_ANA,entrenamiento,ingemmet_pel_28303,ingemmet_peligros_puntos,SANTA ANA,-12.77555,-72.65375,754722,8586531,1000|1100|1103,caretra Quil-Echarati km. 11+750 al 12+200,1368248400000
+ZN37_SANTA_TERESA,entrenamiento,indeci_L049,indeci_lugares,SANTA TERESA,-13.3221,-72.8465,733273,8526234,INDECI(2),L049,2018-01-03
+ZN38_SANTA_TERESA,entrenamiento,indeci_L028,indeci_lugares,SANTA TERESA,-13.3251,-72.8124,736966,8525869,INDECI(1),L028,2006-04-04
+ZN39_SANTA_TERESA,entrenamiento,indeci_L054,indeci_lugares,SANTA TERESA,-13.1114,-72.7353,745535,8549444,INDECI(1),L054,2011-04-20
+ZN40_VILCABAMBA,prueba,ingemmet_otr_6075,ingemmet_otros_peligros_puntos,VILCABAMBA,-13.2258,-73.34343,679500,8537300,,Margen derecha del río Apurímac,Estudio de Riesgo Geológico de la franja N° 3
+ZN41_VILCABAMBA,prueba,ingemmet_pel_4698,ingemmet_peligros_puntos,VILCABAMBA,-13.3546,-73.27424,686900,8523000,1000|1300|1302,Margen derecha del río Yauyacu,Estudio de Riesgo Geológico de la franja N° 3
+ZN42_VILCABAMBA,prueba,ingemmet_pel_4852,ingemmet_peligros_puntos,VILCABAMBA,-13.01244,-73.20197,695000,8560800,1000|1300|1301,Cº Campanayoc (Quebrada Huaracone Huayjo),Estudio de Riesgo Geológico de la Franja N° 3
+ZN43_VILCABAMBA,entrenamiento,ingemmet_pel_4697,ingemmet_peligros_puntos,VILCABAMBA,-13.39405,-73.16502,698700,8518550,1000|1300|1302,A 1.5 km al este de poblado de San Fernando.,Estudio de Riesgo Geológico de la franja N° 3
