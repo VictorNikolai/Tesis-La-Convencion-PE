@@ -74,7 +74,7 @@ def prioridad_tesela(proy, tes, info):
     return (5, 0, proy, tes)
 
 
-def configuracion_iris_128(nombre='deslizamientos-laconvencion-128', lado=128, puerto=5000):
+def configuracion_iris_128(nombre='deslizamientos-laconvencion-128', lado=128, puerto=5000, ciego=False):
     return {
         'name': nombre,
         'host': '127.0.0.1',
@@ -128,20 +128,21 @@ def configuracion_iris_128(nombre='deslizamientos-laconvencion-128', lado=128, p
             },
         ],
         'views': {
-            'Color natural con cajas': {
-                'description': 'Cajas amarillas del modelo como guía visual. Pinta la forma real con «Deslizamiento» (2).',
-                'type': 'image', 'vmin': 0, 'vmax': 1500,
-                'data': ['$S2.B4*(1-$S2.B8)+5000*$S2.B8', '$S2.B3*(1-$S2.B8)+5000*$S2.B8', '$S2.B2*(1-$S2.B8)'],
-            },
-            'Color natural': {
-                'description': 'B4 (rojo), B3 (verde) y B2 (azul) de Sentinel-2 L2A.',
-                'type': 'image', 'vmin': 0, 'vmax': 1500,
-                'data': ['$S2.B4', '$S2.B3', '$S2.B2'],
-            },
-            'Probabilidad del modelo': {
-                'description': 'Mapa de calor U-Net v4 (solo de guía: lo que vale es lo que se ve en la imagen).',
-                'type': 'image', 'data': '$S2.B7', 'cmap': 'magma', 'vmin': 0, 'vmax': 1,
-            },
+            k: v for k, v in {
+                'Color natural con cajas': {
+                    'description': 'Cajas amarillas del modelo como guía visual. Pinta la forma real con «Deslizamiento» (2).',
+                    'type': 'image', 'vmin': 0, 'vmax': 1500,
+                    'data': ['$S2.B4*(1-$S2.B8)+5000*$S2.B8', '$S2.B3*(1-$S2.B8)+5000*$S2.B8', '$S2.B2*(1-$S2.B8)'],
+                },
+                'Color natural': {
+                    'description': 'B4 (rojo), B3 (verde) y B2 (azul) de Sentinel-2 L2A.',
+                    'type': 'image', 'vmin': 0, 'vmax': 1500,
+                    'data': ['$S2.B4', '$S2.B3', '$S2.B2'],
+                },
+                'Probabilidad del modelo': {
+                    'description': 'Mapa de calor U-Net v4 (solo de guía: lo que vale es lo que se ve en la imagen).',
+                    'type': 'image', 'data': '$S2.B7', 'cmap': 'magma', 'vmin': 0, 'vmax': 1,
+                },
             'Pendiente': {
                 'description': 'B13 pendiente del terreno en grados (las cicatrices arrancan en ladera >= 10-15°).',
                 'type': 'image', 'data': '$S2.B5', 'cmap': 'viridis', 'vmin': 0, 'vmax': 60,
@@ -162,18 +163,25 @@ def configuracion_iris_128(nombre='deslizamientos-laconvencion-128', lado=128, p
                 'description': 'Mapa aéreo Bing de referencia contextual.',
                 'type': 'bingmap',
             },
+            }.items() if not (ciego and k in ('Color natural con cajas', 'Probabilidad del modelo'))
         },
-        'view_groups': {
-            'default': ['Color natural con cajas', 'Color natural', 'Pendiente'],
-            'probabilidad': ['Color natural', 'Probabilidad del modelo', 'Pendiente'],
-            'espectral': ['Color natural', 'Suelo vs Vegetacion', 'Pendiente'],
-            'relieve': ['Color natural', 'Relieve', 'Bordes'],
-            'mapa': ['Color natural', 'Mapa'],
-        },
+        'view_groups': (
+            {
+                'default': ['Color natural', 'Suelo vs Vegetacion', 'Pendiente'],
+                'relieve': ['Color natural', 'Relieve', 'Bordes'],
+                'mapa': ['Color natural', 'Mapa'],
+            } if ciego else {
+                'default': ['Color natural con cajas', 'Color natural', 'Pendiente'],
+                'probabilidad': ['Color natural', 'Probabilidad del modelo', 'Pendiente'],
+                'espectral': ['Color natural', 'Suelo vs Vegetacion', 'Pendiente'],
+                'relieve': ['Color natural', 'Relieve', 'Bordes'],
+                'mapa': ['Color natural', 'Mapa'],
+            }
+        ),
     }
 
 
-def exportar_128(raiz, salida, solo_prioritarios=True, limite=None, puerto=5000):
+def exportar_128(raiz, salida, solo_prioritarios=True, limite=None, puerto=5000, conjuntos=None, ciego=False, bases=None, excluir_acuerdo=False):
     import rasterio
     from rasterio.io import MemoryFile
     from rasterio.warp import transform as tr_coords
@@ -186,21 +194,29 @@ def exportar_128(raiz, salida, solo_prioritarios=True, limite=None, puerto=5000)
         with open(ruta_part, encoding='utf-8') as f:
             part = {(r['proyecto'], r['tesela']): r for r in csv.DictReader(f)}
 
+    conjs_ok = set(conjuntos) if conjuntos else None
+    lista_bases = list(bases) if bases else BASES
     candidatas = []
-    for proy in BASES:
+    for proy in lista_bases:
         for ruta in sorted(glob.glob(os.path.join(raiz, proy, 'images', '*', 'image.tif'))):
             tes = os.path.basename(os.path.dirname(ruta))
             info = part.get((proy, tes), {'zona': '', 'conjunto': 'entrenamiento', 'uso': 'reserva'})
-            if info['conjunto'] in ('excluida', 'pendiente'):
+            if excluir_acuerdo and tes in TESELAS_ACUERDO:
                 continue
-            if solo_prioritarios and not (
-                info['uso'].startswith('ronda')
-                or info['uso'] == 'validacion'
-                or info['conjunto'] == 'validacion'
-                or tes in TESELAS_ACUERDO
-                or tes in TESELAS_CICATRICES_CLARAS
-            ):
-                continue
+            if conjs_ok is not None:
+                if info['conjunto'] not in conjs_ok:
+                    continue
+            else:
+                if info['conjunto'] in ('excluida', 'pendiente'):
+                    continue
+                if solo_prioritarios and not (
+                    info['uso'].startswith('ronda')
+                    or info['uso'] == 'validacion'
+                    or info['conjunto'] == 'validacion'
+                    or tes in TESELAS_ACUERDO
+                    or tes in TESELAS_CICATRICES_CLARAS
+                ):
+                    continue
             candidatas.append((prioridad_tesela(proy, tes, info), proy, tes, ruta, info))
 
     candidatas.sort(key=lambda t: t[0])
@@ -215,6 +231,8 @@ def exportar_128(raiz, salida, solo_prioritarios=True, limite=None, puerto=5000)
         with rasterio.open(ruta) as ds:
             x = ds.read().astype('float32')
             perfil = ds.profile
+        if ciego and x.shape[0] >= 7:
+            x[6:] = 0.0
         meta_orig = {}
         ruta_meta = os.path.join(os.path.dirname(ruta), 'metadata.json')
         if os.path.exists(ruta_meta):
@@ -259,10 +277,10 @@ def exportar_128(raiz, salida, solo_prioritarios=True, limite=None, puerto=5000)
             w = csv.DictWriter(f, fieldnames=list(indice[0].keys()))
             w.writeheader()
             w.writerows(indice)
-    cfg = configuracion_iris_128(lado=LADO, puerto=puerto)
+    cfg = configuracion_iris_128(lado=LADO, puerto=puerto, ciego=ciego)
     with open(os.path.join(salida, 'deslizamientos_128.json'), 'w', encoding='utf-8') as f:
         json.dump(cfg, f, indent=1, ensure_ascii=False)
-    print(f'{len(indice)} parches de 128×128 ({n_tes} teselas) en {os.path.abspath(salida)}')
+    print(f'{len(indice)} parches de 128×128 ({n_tes} teselas) en {os.path.abspath(salida)}' + (' [MODO CIEGO]' if ciego else ''))
     return len(indice)
 
 
@@ -658,6 +676,10 @@ def main():
     p_exp.add_argument('--todas', action='store_true', help='incluir también las teselas de reserva')
     p_exp.add_argument('--limite', type=int, help='máximo de teselas a exportar (para probar)')
     p_exp.add_argument('--puerto', type=int, default=5000)
+    p_exp.add_argument('--conjuntos', nargs='+', default=None, help='filtrar conjuntos de particion.csv (ej. prueba validacion)')
+    p_exp.add_argument('--ciego', action='store_true', help='omite vistas con cajas y probabilidad del modelo y pone a 0 bandas 7-8')
+    p_exp.add_argument('--bases', nargs='+', default=None, help='carpetas de proyectos a incluir')
+    p_exp.add_argument('--excluir-acuerdo', action='store_true', help='excluye las 3 teselas del Bloque 0')
 
     p_imp = sub.add_parser('importar', help='convierte las máscaras PNG revisadas de IRIS a mascaras_nivel1/')
     p_imp.add_argument('--iris', default='iris_128')
@@ -679,7 +701,8 @@ def main():
 
     a = ap.parse_args()
     if a.cmd == 'exportar':
-        exportar_128(a.raiz, a.salida, solo_prioritarios=not a.todas, limite=a.limite, puerto=a.puerto)
+        exportar_128(a.raiz, a.salida, solo_prioritarios=not a.todas, limite=a.limite, puerto=a.puerto,
+                     conjuntos=a.conjuntos, ciego=a.ciego, bases=a.bases, excluir_acuerdo=a.excluir_acuerdo)
     elif a.cmd == 'importar':
         importar_128(a.iris, a.salida, quien=a.quien, raiz=a.raiz, decisiones=a.decisiones, fecha_respaldo=a.fecha_respaldo)
     elif a.cmd == 'abrir':

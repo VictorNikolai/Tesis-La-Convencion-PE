@@ -415,6 +415,26 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 importar_128(dir_iris, dir_n1, quien='AGENTE', raiz=tmp)
 
+    def test_iris_128_modo_ciego_sin_vistas_modelo(self):
+        """Comprueba que --ciego omite 'Color natural con cajas' y 'Probabilidad del modelo' y pone a 0 bandas 7-8."""
+        from iris_128 import exportar_128
+        with tempfile.TemporaryDirectory() as tmp:
+            _crear_tesela_sintetica(os.path.join(tmp, 'datos_laconvencion', 'images', 'sinpad_9_001', 'image.tif'))
+            with open(os.path.join(tmp, 'particion.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=['tesela', 'proyecto', 'zona', 'conjunto', 'uso'])
+                w.writeheader()
+                w.writerow({'tesela': 'sinpad_9_001', 'proyecto': 'datos_laconvencion', 'zona': 'Z09', 'conjunto': 'prueba', 'uso': 'prueba'})
+            dir_ciego = os.path.join(tmp, 'iris_ciego')
+            n = exportar_128(tmp, dir_ciego, conjuntos=['prueba'], ciego=True)
+            self.assertEqual(n, 4)
+            cfg = json.load(open(os.path.join(dir_ciego, 'deslizamientos_128.json'), encoding='utf-8'))
+            self.assertNotIn('Color natural con cajas', cfg['views'])
+            self.assertNotIn('Probabilidad del modelo', cfg['views'])
+            self.assertNotIn('probabilidad', cfg['view_groups'])
+            with rasterio.open(os.path.join(dir_ciego, 'images', 'datos_laconvencion__sinpad_9_001_q1', 'image.tif')) as ds:
+                self.assertEqual(float(ds.read(7).max()), 0.0)
+                self.assertEqual(float(ds.read(8).max()), 0.0)
+
     def test_acuerdo_anotadores_geojson_e_iris(self):
         from PIL import Image
         with tempfile.TemporaryDirectory() as tmp:

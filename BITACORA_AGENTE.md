@@ -58,3 +58,24 @@ Registro cronológico de diagnóstico, respaldo, etiquetado Nivel 1 en IRIS y ex
 - Creada `herramientas/revisar_mascaras.py` con los 8 criterios de control (máscaras vacías positivas, georreferencia distinta, manchas $< 3$ px, pendiente $< 8^\circ$, positivos sobre agua/nube, bordes en línea recta, zonas en dos conjuntos y máscaras contradictorias).
 - Ampliada la suite `herramientas/test_herramientas.py` con `test_particion_real_sin_fuga_espacial` (3 conjuntos) y `test_revisar_mascaras_criterios`.
 - **Pendiente tras Parada (a):** esperar aprobación de la partición por parte del usuario mientras se avanza en la generación de candidatos (`candidatos/candidatos.csv`) y descarga/fichas de Fase C.
+
+---
+
+## [2026-11-22 01:38 - 01:56] Fase C — Descarga de Zonas Nuevas, Blindado Ciego y Candidatos
+
+### 1. Ajustes aplicados tras la revisión de Fase B
+- **Distritos completados (`?` $\rightarrow$ nombre oficial):** Descargado límite distrital (`herramientas/distritos_laconvencion.geojson`) y asignado distrito a las **60 zonas** `Z28_?`..`Z87_?` en `particion.csv` (incluyendo `Z51_ECHARATE`, `Z54_ECHARATE`, `Z85_ECHARATE`).
+- **Representatividad en `prueba`:** Se promovieron zonas de Pichari (selva), Kumpirushiato e Inkawasi/Vilcabamba al conjunto `prueba`, asegurando **4 años de imagen distintos** (`2018`/`2019`, `2021`, `2022`, `2024`).
+- **Regla de marcado ciego en `prueba` y `validacion` (para la tesis):**
+  - Tanto **`prueba` como `validacion` se exportan y marcan SIN ver ninguna salida de modelo** (ni cajas de guía ni probabilidad del ensamble). Se añadió `--ciego` a `herramientas/iris_128.py`, que elimina `'Color natural con cajas'` y `'Probabilidad del modelo'` de las vistas de IRIS y pone en cero las bandas 7–8.
+  - Generados `iris_128_validacion/` (`336` parches ciegos, `84` teselas, excluyendo Bloque 0) e `iris_128_prueba/` (`204` parches ciegos, `51` teselas), junto con sus fichas visuales PNG en `_fichas/validacion/` y `_fichas/prueba/`.
+  - La predicción del ensamble (`unet_peru.onnx` + `deeplabv3plus_peru.onnx`) se ejecutó **exclusivamente sobre `entrenamiento`**.
+
+### 2. Descarga multitemporal STAC y verificación de fugas con contorno real
+- Creado `herramientas/exportar_para_iris.py` (Sentinel-2 L2A mediana seca sin offset +1000 ni nubes SCL + NASADEM pendiente/elevación en UTM 18S a 10 m) y `herramientas/generar_fichas.py`.
+- Descargadas **40 zonas nuevas** (con sus pares multitemporales `--antes`) en `datos_prueba/`, `datos_prueba_antes/`, `datos_nuevos_ent/` y `datos_nuevos_ent_antes/`.
+- Ejecutada comprobación estricta borde-a-borde sobre los polígonos reales (`box` EPSG:32718) de todas las teselas:
+  - Recortadas/excluidas teselas de borde demasiado cercanas a `validacion` (`ZN05`, `ZN06`, `ZN08`, `ZN31_009`, `ZN32`, `ZN34`, `ZN38_009`, `ZN42`, `ZN43`, etc.) y reubicadas a `entrenamiento` 4 teselas cercanas a `entrenamiento` (`ZN19_001`, `ZN22_001`, `ZN24_001`, `ZN29_001`).
+  - Excluidas `ZN30_OCOBAMBA_001` y `ZN36_SANTA_ANA_001` por quedar a $2{,}810\text{ m}$ y $2{,}928\text{ m}$ de `prueba`.
+  - **Resultado final de fugas:** **0 fugas** (distancia mínima borde-a-borde `prueba` $\leftrightarrow$ `entrenamiento`/`validacion` = **$3{,}020{,}0\text{ m} \ge 3{,}000\text{ m}$**; `entrenamiento` $\leftrightarrow$ `validacion` = **$1{,}060{,}0\text{ m} \ge 1{,}000\text{ m}$**).
+- Actualizado `informes/particion_faseB.md`. Listo para iniciar **Fase D** (marcado minucioso en IRIS/fichas y **Parada (b)** tras las primeras 50 máscaras).
