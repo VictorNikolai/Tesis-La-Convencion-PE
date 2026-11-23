@@ -36,7 +36,7 @@ RAIZ_PROY = os.path.dirname(AQUI)
 sys.path.insert(0, AQUI)
 from cortar_parches_128 import LADO, cuadrantes  # noqa: E402
 
-BASES = ['datos_laconvencion', 'datos_indeci', 'datos_ingemmet', 'datos_azar']
+BASES = ['datos_laconvencion', 'datos_indeci', 'datos_ingemmet', 'datos_azar', 'datos_prueba', 'datos_val_dgrvi', 'datos_nuevos_ent']
 NOMBRES_8 = [
     'B1', 'B2', 'B3', 'B4', 'B13 pendiente (grados)', 'B14 DEM (m)',
     'probabilidad del modelo', 'cajas del modelo (contorno)'
@@ -316,15 +316,21 @@ def _acciones_iris_db(carpeta_iris):
 
 def _cargar_decisiones_agente(ruta_decisiones):
     if not ruta_decisiones or not os.path.exists(ruta_decisiones):
-        return set()
+        return set(), {}
     revisados = set()
+    metodos = {}
     with open(ruta_decisiones, encoding='utf-8') as f:
         for r in csv.DictReader(f):
+            m = (r.get('metodo') or '').strip() or ('clasificador_v5' if 'Protocolo v5 (L2A' in (r.get('justificacion') or '') else 'manual_v4')
             if r.get('parche'):
-                revisados.add(r['parche'].strip())
+                p_k = r['parche'].strip()
+                revisados.add(p_k)
+                metodos[p_k] = m
             if r.get('id_iris'):
-                revisados.add(r['id_iris'].strip())
-    return revisados
+                i_k = r['id_iris'].strip()
+                revisados.add(i_k)
+                metodos[i_k] = m
+    return revisados, metodos
 
 
 def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.', decisiones=None, fecha_respaldo=None):
@@ -359,7 +365,7 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.', decisiones
     origen_gj = 'IRIS_128_AGENTE' if es_agente else 'IRIS_128'
 
     ruta_decisiones = decisiones or os.path.join(raiz, 'informes', 'decisiones_agente.csv')
-    decisiones_agente = _cargar_decisiones_agente(ruta_decisiones) if es_agente else set()
+    decisiones_agente, metodos_agente = _cargar_decisiones_agente(ruta_decisiones) if es_agente else (set(), {})
     fecha_resp_auto, hashes_propuestas = _cargar_propuestas_hashes(carpeta_iris)
     corte_fecha = fecha_respaldo if fecha_respaldo is not None else fecha_resp_auto
     acciones_db = _acciones_iris_db(carpeta_iris) if (corte_fecha is not None and not es_agente) else set()
@@ -493,8 +499,13 @@ def importar_128(carpeta_iris, salida_nivel1, quien='IRIS', raiz='.', decisiones
         cics = int(ndimage.label(m256 == 1)[1])
         ha_des = round(float((m256 == 1).sum()) * 0.01, 2)
         ha_ign = round(float((m256 == 255).sum()) * 0.01, 2)
+        met_tes = 'manual_v4'
+        if es_agente:
+            mets_q = {metodos_agente.get(f'{proy}__{tes}_{q}') or metodos_agente.get(f'{tes}_{q}') for q in q_dict}
+            if 'clasificador_v5' in mets_q:
+                met_tes = 'clasificador_v5'
         filas_nuevas[(proy, tes)] = {
-            'proyecto': proy, 'tesela': tes, 'quien': quien,
+            'proyecto': proy, 'tesela': tes, 'quien': quien, 'metodo': met_tes,
             'poligonos_deslizamiento': cics, 'poligonos_dudoso': 0,
             'cicatrices': cics, 'ha_deslizamiento': ha_des, 'ha_ignorar': ha_ign,
             'zona': zona, 'conjunto': conj, 'nota': f'{len(ms)}/4 parches importados de IRIS 128'

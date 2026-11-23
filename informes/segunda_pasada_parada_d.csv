@@ -1,0 +1,21 @@
+id_iris,conjunto,decision_p1,decision_p2,acuerdo,px_p1,px_p2,iou_mascara,iou_borde_2px,herramienta_p2
+datos_azar__azar_004_001_q1,validacion,positivo,positivo,1,54,75,0.418,0.224,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN52_KIMBIRI_001_q2,prueba,positivo,positivo,1,30,29,0.595,0.537,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN57_VILCABAMBA_001_q4,prueba,positivo,positivo,1,151,139,0.620,0.291,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN64_QUELLOUNO_001_q3,prueba,positivo,positivo,1,429,357,0.394,0.152,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN65_INKAWASI_001_q4,prueba,positivo,positivo,1,152,191,0.294,0.303,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN67_KUMPIRUSHIATO_001_q4,prueba,positivo,positivo,1,99,135,0.570,0.326,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN80_VILCABAMBA_001_q2,prueba,positivo,positivo,1,275,293,0.246,0.197,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN85_QUELLOUNO_001_q2,prueba,positivo,positivo,1,88,145,0.253,0.202,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN87_QUELLOUNO_001_q1,prueba,positivo,positivo,1,992,719,0.573,0.189,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN95_QUELLOUNO_001_q1,prueba,positivo,positivo,1,33,40,0.141,0.111,"Poligono manual puro (grilla 10px, sin mascara previa ni relleno auto)"
+datos_prueba__ZN55_SANTA_TERESA_001_q1,prueba,dudoso,dudoso,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN65_INKAWASI_001_q3,prueba,dudoso,dudoso,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN86_KUMPIRUSHIATO_001_q1,prueba,dudoso,dudoso,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN95_QUELLOUNO_001_q3,prueba,dudoso,dudoso,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN52_KIMBIRI_001_q4,prueba,negativo_confirmado,negativo_confirmado,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN76_QUELLOUNO_001_q1,prueba,negativo_confirmado,negativo_confirmado,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN88_PICHARI_001_q3,prueba,negativo_confirmado,negativo_confirmado,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN91_ECHARATE_001_q2,prueba,negativo_confirmado,negativo_confirmado,1,0,0,,,Re-evaluacion visual ciega
+datos_prueba__ZN97_VILCABAMBA_001_q1,prueba,negativo_confirmado,negativo_confirmado,1,0,0,,,Re-evaluacion visual ciega
+datos_indeci__sinpad_3802_001_q1,validacion,negativo_confirmado,negativo_confirmado,1,0,0,,,Re-evaluacion visual ciega

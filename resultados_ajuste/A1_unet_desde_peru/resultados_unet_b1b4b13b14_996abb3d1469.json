@@ -1,0 +1,800 @@
+{
+ "firma": "996abb3d1469",
+ "arquitectura": "unet",
+ "mejor_epoca": 2,
+ "mejoro": true,
+ "alfa_interpolacion": 1.0,
+ "interpolaciones": [
+  {
+   "alfa": 0.25,
+   "iou_l4s": null,
+   "iou_local": 0.078,
+   "iou_l4spe": 0.3556,
+   "puntaje": 0.27232,
+   "admisible": true
+  },
+  {
+   "alfa": 0.5,
+   "iou_l4s": null,
+   "iou_local": 0.0932,
+   "iou_l4spe": 0.3572,
+   "puntaje": 0.278,
+   "admisible": true
+  },
+  {
+   "alfa": 0.75,
+   "iou_l4s": null,
+   "iou_local": 0.1067,
+   "iou_l4spe": 0.3576,
+   "puntaje": 0.28233,
+   "admisible": true
+  }
+ ],
+ "umbral_operacion": 0.35,
+ "umbral_elegido_en": "promedio ponderado 0.7 L4SPe + 0.3 La Convención",
+ "config": {
+  "canales": [
+   "B01",
+   "B02",
+   "B03",
+   "B04",
+   "pendiente",
+   "elevacion"
+  ],
+  "encoder": "resnet34",
+  "v4": {
+   "indices_verdor": true,
+   "ohem": 0.25
+  },
+  "reconstruido_desde_onnx": "unet_peru.onnx",
+  "paridad_max_logit": 5.7220458984375e-06,
+  "ajuste_fino": {
+   "desde": "mejor_unet_b1b4b13b14_809315dc820e.pt",
+   "firma_base": "809315dc820e",
+   "lr": 1.5e-05,
+   "lote": 16,
+   "sin_local": false,
+   "sin_l4s": true,
+   "interpolar": true,
+   "frac_local": 0.5,
+   "solo_local": false,
+   "epocas_max": 15,
+   "ohem": 0.25,
+   "pasos": 60,
+   "l4spe": "l4spe_profesor.npz",
+   "frac_l4spe": 0.5,
+   "peso_l4spe": 1.0,
+   "tiers_entrenamiento": [
+    "hard_negative",
+    "oro",
+    "plata"
+   ],
+   "validacion_local": "nivel 1",
+   "perdida_por_grupo": true,
+   "congelar_encoder": false,
+   "bn_libre": false,
+   "tolerancia_l4s": 0.03,
+   "semilla": 42,
+   "parches_locales": 1708,
+   "parches_debiles": 1148,
+   "peso_debil": 0.3,
+   "zonas_entrenamiento": [
+    "Z01_SANTA_TERESA",
+    "Z03_SANTA_TERESA",
+    "Z06_PICHARI",
+    "Z07_VILCABAMBA",
+    "Z100_PICHARI",
+    "Z101_ECHARATE",
+    "Z107_QUELLOUNO",
+    "Z108_QUELLOUNO",
+    "Z10_OCOBAMBA",
+    "Z110_ECHARATE",
+    "Z112_KIMBIRI",
+    "Z113_OCOBAMBA",
+    "Z115_ECHARATE",
+    "Z117_ECHARATE",
+    "Z118_ECHARATE",
+    "Z119_ECHARATE",
+    "Z11_ECHARATE",
+    "Z120_ECHARATE",
+    "Z121_ECHARATE",
+    "Z12_VILLA_VIRGEN",
+    "Z13_HUAYOPATA",
+    "Z14_KUMPIRUSHIATO",
+    "Z16_HUAYOPATA",
+    "Z18_HUAYOPATA",
+    "Z19_KIMBIRI",
+    "Z20_ECHARATE",
+    "Z21_ECHARATE",
+    "Z23_ECHARATE",
+    "Z25_QUELLOUNO",
+    "Z26_ECHARATE",
+    "Z28_VILCABAMBA",
+    "Z30_ECHARATE",
+    "Z32_VILCABAMBA",
+    "Z33_QUELLOUNO",
+    "Z34_ECHARATE",
+    "Z35_ECHARATE",
+    "Z36_ECHARATE",
+    "Z37_VILCABAMBA",
+    "Z38_ECHARATE",
+    "Z40_ECHARATE",
+    "Z41_ECHARATE",
+    "Z42_ECHARATE",
+    "Z45_VILCABAMBA",
+    "Z46_ECHARATE",
+    "Z47_QUELLOUNO",
+    "Z48_ECHARATE",
+    "Z52_SANTA_TERESA",
+    "Z53_ECHARATE",
+    "Z55_KIMBIRI",
+    "Z56_ECHARATE",
+    "Z58_ECHARATE",
+    "Z64_KIMBIRI",
+    "Z70_ECHARATE",
+    "Z71_ECHARATE",
+    "Z72_ECHARATE",
+    "Z73_ECHARATE",
+    "Z75_ECHARATE",
+    "Z79_ECHARATE",
+    "Z80_ECHARATE",
+    "Z83_ECHARATE",
+    "Z84_ECHARATE",
+    "Z86_ECHARATE",
+    "Z87_ECHARATE",
+    "Z88_INKAWASI",
+    "Z91_VILLA_VIRGEN",
+    "Z93_INKAWASI",
+    "Z94_VILLA_KINTIARINA",
+    "Z97_QUELLOUNO",
+    "Z98_OCOBAMBA",
+    "ZN14_SANTA_TERESA",
+    "ZN19_ECHARATE",
+    "ZN20_ECHARATE",
+    "ZN21_ECHARATE",
+    "ZN22_ECHARATE",
+    "ZN23_ECHARATE",
+    "ZN25_ECHARATE",
+    "ZN26_ECHARATE",
+    "ZN27_HUAYOPATA",
+    "ZN33_PICHARI",
+    "ZN37_SANTA_TERESA",
+    "ZN38_SANTA_TERESA",
+    "ZN39_SANTA_TERESA",
+    "ZNE_IND18_91024",
+    "ZNE_IND18_91376",
+    "ZNE_IND18_92057",
+    "ZNE_INGC6_1951",
+    "ZNE_INGC6_4053",
+    "ZNE_INGC6_5138"
+   ],
+   "zonas_validacion": [
+    "Z02_ECHARATE",
+    "Z04_SANTA_ANA",
+    "Z05_ECHARATE",
+    "Z08_QUELLOUNO",
+    "Z09_INKAWASI",
+    "Z105_QUELLOUNO",
+    "Z109_QUELLOUNO",
+    "Z114_ECHARATE",
+    "Z116_ECHARATE",
+    "Z122_HUAYOPATA",
+    "Z123_MARANURA",
+    "Z15_NUEVO_ASHANINKA",
+    "Z22_QUELLOUNO",
+    "Z27_ECHARATE",
+    "Z29_ECHARATE",
+    "Z31_VILCABAMBA",
+    "Z39_ECHARATE",
+    "Z43_MARANURA",
+    "Z44_SANTA_TERESA",
+    "Z49_ECHARATE",
+    "Z50_ECHARATE",
+    "Z57_VILCABAMBA",
+    "Z59_VILCABAMBA",
+    "Z60_ECHARATE",
+    "Z61_PICHARI",
+    "Z62_VILCABAMBA",
+    "Z63_OCOBAMBA",
+    "Z65_SANTA_ANA",
+    "Z66_PICHARI",
+    "Z67_ECHARATE",
+    "Z68_ECHARATE",
+    "Z69_ECHARATE",
+    "Z74_ECHARATE",
+    "Z76_ECHARATE",
+    "Z77_ECHARATE",
+    "Z78_ECHARATE",
+    "Z81_ECHARATE",
+    "Z82_ECHARATE",
+    "Z90_PICHARI",
+    "Z92_QUELLOUNO",
+    "Z99_OCOBAMBA",
+    "ZN06_ECHARATE",
+    "ZN08_SANTA_ANA",
+    "ZN09_ECHARATE",
+    "ZN12_MARANURA",
+    "ZN34_QUELLOUNO",
+    "ZN43_VILCABAMBA",
+    "ZNV_INGC6_11573",
+    "ZNV_INGC6_2146",
+    "ZNV_INGC6_2315",
+    "ZNV_INGC6_5883"
+   ]
+  }
+ },
+ "epocas_corridas": 15,
+ "epocas_max": 15,
+ "parches_n1_manual_v4": 152,
+ "parches_n1_clasificador_v5": 408,
+ "peso_clasificador_v5": 0.5,
+ "peso_val_l4spe": 0.7,
+ "validacion_local_origen": "nivel 1",
+ "base": {
+  "firma": "809315dc820e",
+  "umbral": 0.4,
+  "local_validacion": {
+   "umbral": 0.4,
+   "iou": 0.0408,
+   "f1": 0.0784,
+   "precision": 0.1323,
+   "recall": 0.0557,
+   "tp": 659,
+   "fp": 4323,
+   "fn": 11169,
+   "tn": 4769725,
+   "iou_tol1px_4c": 0.0473,
+   "iou_tol1px_8c": 0.049,
+   "cicatrices": 63,
+   "cicatrices_tocadas": 5,
+   "deteccion_cicatriz_30pct": {
+    "10-50": {
+     "detectadas": 0,
+     "total": 17,
+     "pct": 0.0
+    },
+    "50-200": {
+     "detectadas": 1,
+     "total": 26,
+     "pct": 3.8
+    },
+    ">200": {
+     "detectadas": 2,
+     "total": 16,
+     "pct": 12.5
+    },
+    "total_ge10": {
+     "detectadas": 3,
+     "total": 59,
+     "pct": 5.1
+    }
+   },
+   "teselas": 76,
+   "teselas_negativas": 55,
+   "falsas_alarmas_ha_por_km2_en_negativos": 0.089
+  },
+  "local_prueba": {
+   "umbral": 0.4,
+   "iou": 0.0391,
+   "f1": 0.0753,
+   "precision": 0.0459,
+   "recall": 0.2087,
+   "tp": 1814,
+   "fp": 37665,
+   "fn": 6878,
+   "tn": 5596409,
+   "iou_tol1px_4c": 0.0435,
+   "iou_tol1px_8c": 0.0447,
+   "cicatrices": 84,
+   "cicatrices_tocadas": 13,
+   "deteccion_cicatriz_30pct": {
+    "10-50": {
+     "detectadas": 0,
+     "total": 54,
+     "pct": 0.0
+    },
+    "50-200": {
+     "detectadas": 2,
+     "total": 15,
+     "pct": 13.3
+    },
+    ">200": {
+     "detectadas": 6,
+     "total": 11,
+     "pct": 54.5
+    },
+    "total_ge10": {
+     "detectadas": 8,
+     "total": 80,
+     "pct": 10.0
+    }
+   },
+   "teselas": 90,
+   "teselas_negativas": 66,
+   "falsas_alarmas_ha_por_km2_en_negativos": 0.849
+  }
+ },
+ "comparador_sin_aprendizaje": {
+  "regla": "GRVI <= 0, B4 >= 1.29 L4S (~600 DN) y pendiente >= 10°",
+  "local_validacion": {
+   "umbral": 0.5,
+   "iou": 0.0175,
+   "f1": 0.0343,
+   "precision": 0.0176,
+   "recall": 0.7024,
+   "tp": 8308,
+   "fp": 463921,
+   "fn": 3520,
+   "tn": 4310127,
+   "iou_tol1px_4c": 0.0205,
+   "iou_tol1px_8c": 0.0212,
+   "cicatrices": 63,
+   "cicatrices_tocadas": 63,
+   "deteccion_cicatriz_30pct": {
+    "10-50": {
+     "detectadas": 14,
+     "total": 17,
+     "pct": 82.4
+    },
+    "50-200": {
+     "detectadas": 24,
+     "total": 26,
+     "pct": 92.3
+    },
+    ">200": {
+     "detectadas": 15,
+     "total": 16,
+     "pct": 93.8
+    },
+    "total_ge10": {
+     "detectadas": 53,
+     "total": 59,
+     "pct": 89.8
+    }
+   },
+   "teselas": 76,
+   "teselas_negativas": 55,
+   "falsas_alarmas_ha_por_km2_en_negativos": 10.313
+  },
+  "local_prueba": {
+   "umbral": 0.5,
+   "iou": 0.0091,
+   "f1": 0.018,
+   "precision": 0.0091,
+   "recall": 0.7702,
+   "tp": 6695,
+   "fp": 728426,
+   "fn": 1997,
+   "tn": 4905648,
+   "iou_tol1px_4c": 0.0103,
+   "iou_tol1px_8c": 0.0105,
+   "cicatrices": 84,
+   "cicatrices_tocadas": 84,
+   "deteccion_cicatriz_30pct": {
+    "10-50": {
+     "detectadas": 52,
+     "total": 54,
+     "pct": 96.3
+    },
+    "50-200": {
+     "detectadas": 15,
+     "total": 15,
+     "pct": 100.0
+    },
+    ">200": {
+     "detectadas": 10,
+     "total": 11,
+     "pct": 90.9
+    },
+    "total_ge10": {
+     "detectadas": 77,
+     "total": 80,
+     "pct": 96.2
+    }
+   },
+   "teselas": 90,
+   "teselas_negativas": 66,
+   "falsas_alarmas_ha_por_km2_en_negativos": 15.163
+  }
+ },
+ "usa_l4s": false,
+ "local_validacion": {
+  "umbral": 0.35,
+  "iou": 0.0963,
+  "f1": 0.1756,
+  "precision": 0.42,
+  "recall": 0.111,
+  "tp": 1313,
+  "fp": 1813,
+  "fn": 10515,
+  "tn": 4772235,
+  "iou_tol1px_4c": 0.1087,
+  "iou_tol1px_8c": 0.113,
+  "cicatrices": 63,
+  "cicatrices_tocadas": 6,
+  "deteccion_cicatriz_30pct": {
+   "10-50": {
+    "detectadas": 0,
+    "total": 17,
+    "pct": 0.0
+   },
+   "50-200": {
+    "detectadas": 1,
+    "total": 26,
+    "pct": 3.8
+   },
+   ">200": {
+    "detectadas": 2,
+    "total": 16,
+    "pct": 12.5
+   },
+   "total_ge10": {
+    "detectadas": 3,
+    "total": 59,
+    "pct": 5.1
+   }
+  },
+  "teselas": 76,
+  "teselas_negativas": 55,
+  "falsas_alarmas_ha_por_km2_en_negativos": 0.04
+ },
+ "local_validacion_umbral_receta_base": {
+  "umbral": 0.45,
+  "base": {
+   "umbral": 0.45,
+   "iou": 0.0395,
+   "f1": 0.0761,
+   "precision": 0.1335,
+   "recall": 0.0532,
+   "tp": 629,
+   "fp": 4082,
+   "fn": 11199,
+   "tn": 4769966,
+   "iou_tol1px_4c": 0.0459,
+   "iou_tol1px_8c": 0.0476,
+   "cicatrices": 63,
+   "cicatrices_tocadas": 5,
+   "deteccion_cicatriz_30pct": {
+    "10-50": {
+     "detectadas": 0,
+     "total": 17,
+     "pct": 0.0
+    },
+    "50-200": {
+     "detectadas": 1,
+     "total": 26,
+     "pct": 3.8
+    },
+    ">200": {
+     "detectadas": 2,
+     "total": 16,
+     "pct": 12.5
+    },
+    "total_ge10": {
+     "detectadas": 3,
+     "total": 59,
+     "pct": 5.1
+    }
+   },
+   "teselas": 76,
+   "teselas_negativas": 55,
+   "falsas_alarmas_ha_por_km2_en_negativos": 0.085
+  },
+  "ajustado": {
+   "umbral": 0.45,
+   "iou": 0.0926,
+   "f1": 0.1694,
+   "precision": 0.4416,
+   "recall": 0.1048,
+   "tp": 1240,
+   "fp": 1568,
+   "fn": 10588,
+   "tn": 4772480,
+   "iou_tol1px_4c": 0.1049,
+   "iou_tol1px_8c": 0.1089,
+   "cicatrices": 63,
+   "cicatrices_tocadas": 6,
+   "deteccion_cicatriz_30pct": {
+    "10-50": {
+     "detectadas": 0,
+     "total": 17,
+     "pct": 0.0
+    },
+    "50-200": {
+     "detectadas": 0,
+     "total": 26,
+     "pct": 0.0
+    },
+    ">200": {
+     "detectadas": 2,
+     "total": 16,
+     "pct": 12.5
+    },
+    "total_ge10": {
+     "detectadas": 2,
+     "total": 59,
+     "pct": 3.4
+    }
+   },
+   "teselas": 76,
+   "teselas_negativas": 55,
+   "falsas_alarmas_ha_por_km2_en_negativos": 0.035
+  }
+ },
+ "local_mejora_iou": {
+  "zonas": 51,
+  "ic95": [
+   0.003,
+   0.1115
+  ],
+  "gana_pct": 98.7
+ },
+ "local_prueba": {
+  "umbral": 0.35,
+  "iou": 0.1033,
+  "f1": 0.1873,
+  "precision": 0.1508,
+  "recall": 0.247,
+  "tp": 2147,
+  "fp": 12088,
+  "fn": 6545,
+  "tn": 5621986,
+  "iou_tol1px_4c": 0.117,
+  "iou_tol1px_8c": 0.1205,
+  "cicatrices": 84,
+  "cicatrices_tocadas": 15,
+  "deteccion_cicatriz_30pct": {
+   "10-50": {
+    "detectadas": 1,
+    "total": 54,
+    "pct": 1.9
+   },
+   "50-200": {
+    "detectadas": 4,
+    "total": 15,
+    "pct": 26.7
+   },
+   ">200": {
+    "detectadas": 6,
+    "total": 11,
+    "pct": 54.5
+   },
+   "total_ge10": {
+    "detectadas": 11,
+    "total": 80,
+    "pct": 13.8
+   }
+  },
+  "teselas": 90,
+  "teselas_negativas": 66,
+  "falsas_alarmas_ha_por_km2_en_negativos": 0.233
+ },
+ "local_mejora_iou_prueba": {
+  "zonas": 62,
+  "ic95": [
+   0.002,
+   0.101
+  ],
+  "gana_pct": 97.9
+ },
+ "local_advertencias": [
+  "la validación local se usó para elegir época y umbral: su IoU es optimista",
+  "L4SPe es de otras zonas del Perú y de imágenes L1C: que mejore ahí no garantiza mejora en La Convención (L2A)"
+ ],
+ "l4spe": {
+  "nota": "máscaras manuales del profesor, otras zonas del Perú (no La Convención); entrada de Sentinel-2 L1C",
+  "validacion": {
+   "base": {
+    "umbral": 0.4,
+    "iou": 0.3533,
+    "f1": 0.5221,
+    "precision": 0.5067,
+    "recall": 0.5386,
+    "tp": 25073,
+    "fp": 24411,
+    "fn": 21482,
+    "tn": 2009802,
+    "iou_tol1px_4c": 0.449,
+    "iou_tol1px_8c": 0.4764,
+    "cicatrices": 539,
+    "cicatrices_tocadas": 322,
+    "deteccion_cicatriz_30pct": {
+     "10-50": {
+      "detectadas": 91,
+      "total": 234,
+      "pct": 38.9
+     },
+     "50-200": {
+      "detectadas": 148,
+      "total": 224,
+      "pct": 66.1
+     },
+     ">200": {
+      "detectadas": 37,
+      "total": 48,
+      "pct": 77.1
+     },
+     "total_ge10": {
+      "detectadas": 276,
+      "total": 506,
+      "pct": 54.5
+     }
+    },
+    "teselas": 127,
+    "teselas_negativas": 3,
+    "falsas_alarmas_ha_por_km2_en_negativos": 0.279
+   },
+   "ajustado": {
+    "umbral": 0.35,
+    "iou": 0.3569,
+    "f1": 0.526,
+    "precision": 0.4984,
+    "recall": 0.5569,
+    "tp": 25925,
+    "fp": 26087,
+    "fn": 20630,
+    "tn": 2008126,
+    "iou_tol1px_4c": 0.4519,
+    "iou_tol1px_8c": 0.4787,
+    "cicatrices": 539,
+    "cicatrices_tocadas": 323,
+    "deteccion_cicatriz_30pct": {
+     "10-50": {
+      "detectadas": 88,
+      "total": 234,
+      "pct": 37.6
+     },
+     "50-200": {
+      "detectadas": 149,
+      "total": 224,
+      "pct": 66.5
+     },
+     ">200": {
+      "detectadas": 37,
+      "total": 48,
+      "pct": 77.1
+     },
+     "total_ge10": {
+      "detectadas": 274,
+      "total": 506,
+      "pct": 54.2
+     }
+    },
+    "teselas": 127,
+    "teselas_negativas": 3,
+    "falsas_alarmas_ha_por_km2_en_negativos": 0.344
+   }
+  },
+  "prueba": {
+   "base": {
+    "umbral": 0.4,
+    "iou": 0.4021,
+    "f1": 0.5736,
+    "precision": 0.6109,
+    "recall": 0.5406,
+    "tp": 31251,
+    "fp": 19905,
+    "fn": 26557,
+    "tn": 1922543,
+    "iou_tol1px_4c": 0.4891,
+    "iou_tol1px_8c": 0.5124,
+    "cicatrices": 417,
+    "cicatrices_tocadas": 252,
+    "deteccion_cicatriz_30pct": {
+     "10-50": {
+      "detectadas": 58,
+      "total": 150,
+      "pct": 38.7
+     },
+     "50-200": {
+      "detectadas": 102,
+      "total": 183,
+      "pct": 55.7
+     },
+     ">200": {
+      "detectadas": 57,
+      "total": 73,
+      "pct": 78.1
+     },
+     "total_ge10": {
+      "detectadas": 217,
+      "total": 406,
+      "pct": 53.4
+     }
+    },
+    "teselas": 124,
+    "teselas_negativas": 3,
+    "falsas_alarmas_ha_por_km2_en_negativos": 0.731
+   },
+   "ajustado": {
+    "umbral": 0.35,
+    "iou": 0.4136,
+    "f1": 0.5852,
+    "precision": 0.616,
+    "recall": 0.5573,
+    "tp": 32219,
+    "fp": 20084,
+    "fn": 25589,
+    "tn": 1922364,
+    "iou_tol1px_4c": 0.502,
+    "iou_tol1px_8c": 0.5262,
+    "cicatrices": 417,
+    "cicatrices_tocadas": 253,
+    "deteccion_cicatriz_30pct": {
+     "10-50": {
+      "detectadas": 55,
+      "total": 150,
+      "pct": 36.7
+     },
+     "50-200": {
+      "detectadas": 102,
+      "total": 183,
+      "pct": 55.7
+     },
+     ">200": {
+      "detectadas": 59,
+      "total": 73,
+      "pct": 80.8
+     },
+     "total_ge10": {
+      "detectadas": 216,
+      "total": 406,
+      "pct": 53.2
+     }
+    },
+    "teselas": 124,
+    "teselas_negativas": 3,
+    "falsas_alarmas_ha_por_km2_en_negativos": 0.712
+   },
+   "regla": {
+    "umbral": 0.5,
+    "iou": 0.1178,
+    "f1": 0.2108,
+    "precision": 0.1256,
+    "recall": 0.6545,
+    "tp": 37837,
+    "fp": 263298,
+    "fn": 19971,
+    "tn": 1679150,
+    "iou_tol1px_4c": 0.1455,
+    "iou_tol1px_8c": 0.1534,
+    "cicatrices": 417,
+    "cicatrices_tocadas": 400,
+    "deteccion_cicatriz_30pct": {
+     "10-50": {
+      "detectadas": 120,
+      "total": 150,
+      "pct": 80.0
+     },
+     "50-200": {
+      "detectadas": 127,
+      "total": 183,
+      "pct": 69.4
+     },
+     ">200": {
+      "detectadas": 66,
+      "total": 73,
+      "pct": 90.4
+     },
+     "total_ge10": {
+      "detectadas": 313,
+      "total": 406,
+      "pct": 77.1
+     }
+    },
+    "teselas": 124,
+    "teselas_negativas": 3,
+    "falsas_alarmas_ha_por_km2_en_negativos": 0.481
+   }
+  },
+  "mejora_iou_prueba": {
+   "zonas": 68,
+   "ic95": [
+    -0.0047,
+    0.0305
+   ],
+   "gana_pct": 92.3
+  }
+ },
+ "minutos": 33.6
+}

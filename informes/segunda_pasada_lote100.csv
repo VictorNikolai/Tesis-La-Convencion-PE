@@ -1,0 +1,21 @@
+id_iris,conjunto,decision_p1,decision_p2,acuerdo,iou_mascara,iou_borde_2px,nota
+datos_laconvencion__sinpad_37418_001_q2,validacion,positivo,positivo,1,0.734,0.238,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=1249 px, m2=1223 px"
+datos_laconvencion__sinpad_21605_001_q3,validacion,positivo,positivo,1,0.520,0.175,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=1261 px, m2=1161 px"
+datos_ingemmet__ingemmet_040_001_q2,entrenamiento,positivo,positivo,1,0.645,0.163,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=2602 px, m2=3084 px"
+datos_ingemmet__ingemmet_040_001_q3,entrenamiento,positivo,positivo,1,0.796,0.147,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=4738 px, m2=4576 px"
+datos_ingemmet__ingemmet_005_001_q2,entrenamiento,positivo,positivo,1,0.748,0.130,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=3293 px, m2=3356 px"
+datos_ingemmet__ingemmet_009_001_q3,entrenamiento,positivo,positivo,1,0.824,0.189,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=2903 px, m2=2794 px"
+datos_azar__azar_003_001_q2,entrenamiento,positivo,positivo,1,0.639,0.264,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=311 px, m2=461 px"
+datos_indeci__sinpad_22258_001_q1,validacion,positivo,positivo,1,0.741,0.247,"Re-dibujo manual puro desde cero (grilla 10px, sin relleno auto): m1=1140 px, m2=1164 px"
+datos_prueba__ZN01_OCOBAMBA_003_q1,prueba,dudoso,dudoso,1,,,Re-evaluacion visual ciega desde cero
+datos_prueba__ZN40_VILCABAMBA_001_q3,prueba,dudoso,dudoso,1,,,Re-evaluacion visual ciega desde cero
+datos_ingemmet__ingemmet_009_001_q2,entrenamiento,dudoso,dudoso,1,,,Re-evaluacion visual ciega desde cero
+datos_azar__azar_023_001_q4,validacion,dudoso,dudoso,1,,,Re-evaluacion visual ciega desde cero
+datos_prueba__ZN50_ECHARATE_001_q4,prueba,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero
+datos_prueba__ZN04_VILCABAMBA_003_q1,prueba,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero
+datos_ingemmet__ingemmet_013_001_q3,validacion,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero
+datos_prueba__ZN41_VILCABAMBA_001_q3,prueba,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero
+datos_ingemmet__ingemmet_005_001_q4,entrenamiento,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero
+datos_prueba__ZN02_OCOBAMBA_002_q4,prueba,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero
+datos_laconvencion__sinpad_21603_001_q2,validacion,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero
+datos_prueba__ZN49_QUELLOUNO_001_q1,prueba,negativo_confirmado,negativo_confirmado,1,,,Re-evaluacion visual ciega desde cero

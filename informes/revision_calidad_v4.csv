@@ -1,0 +1,22 @@
+tipo,proyecto,parche,tesela,quien,detalle
+bordes_geometricos,datos_azar,azar_024_001_q2,azar_024_001,AGENTE,dudoso comp 119: 71% del perimetro interior (34 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_azar,azar_027_001_q3,azar_027_001,AGENTE,dudoso comp 92: 66% del perimetro interior (39 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_azar,azar_038_001_q3,azar_038_001,AGENTE,dudoso comp 1: 59% del perimetro interior (39 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_indeci,sinpad_133797_001_q2,sinpad_133797_001,AGENTE,dudoso comp 15: 72% del perimetro interior (40 px) son tramos rectos >= 8.5 px
+borde_linea_recta,datos_ingemmet,ingemmet_009_001_q3,ingemmet_009_001,AGENTE,componente 3 toca el borde formando línea recta >= 15 px
+bordes_geometricos,datos_ingemmet,ingemmet_010_001_q2,ingemmet_010_001,AGENTE,positivo comp 3: 62% del perimetro interior (33 px) son tramos rectos >= 8.5 px
+borde_linea_recta,datos_ingemmet,ingemmet_036_001_q3,ingemmet_036_001,AGENTE,componente 1 toca el borde formando línea recta >= 15 px
+borde_linea_recta,datos_ingemmet,ingemmet_040_001_q3,ingemmet_040_001,AGENTE,componente 1 toca el borde formando línea recta >= 15 px
+borde_linea_recta,datos_ingemmet,ingemmet_040_001_q3,ingemmet_040_001,AGENTE,componente 2 toca el borde formando línea recta >= 15 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q2,sinpad_37418_001,AGENTE,dudoso comp 9: 78% del perimetro interior (48 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q2,sinpad_37418_001,AGENTE,dudoso comp 11: 78% del perimetro interior (71 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q3,sinpad_37418_001,AGENTE,dudoso comp 15: 67% del perimetro interior (54 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_74792_001_q3,sinpad_74792_001,AGENTE,positivo comp 3: 59% del perimetro interior (55 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_nuevos_ent,ZN33_PICHARI_006_q1,ZN33_PICHARI_006,AGENTE,positivo comp 2: 58% del perimetro interior (58 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,Z111_ECHARATE_007_q2,Z111_ECHARATE_007,AGENTE,dudoso comp 19: 72% del perimetro interior (30 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,Z111_ECHARATE_009_q2,Z111_ECHARATE_009,AGENTE,dudoso comp 29: 67% del perimetro interior (30 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,ZN63_QUELLOUNO_001_q1,ZN63_QUELLOUNO_001,AGENTE,positivo comp 4: 60% del perimetro interior (55 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,ZN81_VILCABAMBA_001_q1,ZN81_VILCABAMBA_001,AGENTE,positivo comp 2: 71% del perimetro interior (47 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,ZN86_KUMPIRUSHIATO_001_q4,ZN86_KUMPIRUSHIATO_001,AGENTE,dudoso comp 2: 57% del perimetro interior (67 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,ZN88_PICHARI_001_q4,ZN88_PICHARI_001,AGENTE,dudoso comp 1: 61% del perimetro interior (76 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,ZN88_PICHARI_001_q4,ZN88_PICHARI_001,AGENTE,dudoso comp 4: 72% del perimetro interior (131 px) son tramos rectos >= 8.5 px

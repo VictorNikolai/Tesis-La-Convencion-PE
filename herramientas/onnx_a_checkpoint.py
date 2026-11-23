@@ -54,12 +54,16 @@ def main():
     ini = {i.name: numpy_helper.to_array(i) for i in m.graph.initializer}
     convs = [n for n in m.graph.node if n.op_type == 'Conv']
 
+    tiene_ind = all(k in ini for k in ('media', 'desv', 'media_ind', 'desv_ind'))
     clase = {'unet': smp.Unet, 'deeplabv3plus': smp.DeepLabV3Plus}[arq]
     base = clase(encoder_name=ent.get('codificador', 'resnet34'), encoder_weights=None,
-                 in_channels=len(canales) + 2, classes=1)
-    modelo = modelo_con_indices(base, canales)
-    for k in ('media', 'desv', 'media_ind', 'desv_ind'):
-        getattr(modelo, k).copy_(torch.from_numpy(ini[k].astype(np.float32)).view_as(getattr(modelo, k)))
+                 in_channels=len(canales) + (2 if tiene_ind else 0), classes=1)
+    if tiene_ind:
+        modelo = modelo_con_indices(base, canales)
+        for k in ('media', 'desv', 'media_ind', 'desv_ind'):
+            getattr(modelo, k).copy_(torch.from_numpy(ini[k].astype(np.float32)).view_as(getattr(modelo, k)))
+    else:
+        modelo = base
 
     # orden de ejecución, en PyTorch, de TODAS las Conv2d y BatchNorm2d (en un solo gancho, para poder
     # saber qué módulo se ejecuta justo después de cada Conv2d)
@@ -80,8 +84,12 @@ def main():
     siguiente = {mod: orden_todo[i + 1] for i, mod in enumerate(orden_todo[:-1])}
 
     def bn_de(mod):
-        bn = siguiente.get(mod)
-        return bn if isinstance(bn, torch.nn.BatchNorm2d) else None
+        idx = orden_todo.index(mod)
+        if idx + 1 < len(orden_todo) and isinstance(orden_todo[idx + 1], torch.nn.BatchNorm2d):
+            return orden_todo[idx + 1]
+        if idx + 2 < len(orden_todo) and isinstance(orden_todo[idx + 2], torch.nn.BatchNorm2d):
+            return orden_todo[idx + 2]
+        return None
 
     with torch.no_grad():
         for mod, nodo in zip(orden_conv, convs):
@@ -94,8 +102,10 @@ def main():
                 mod.bias.copy_(torch.from_numpy(B))
                 continue
             bn = bn_de(mod)
-            if bn is None:
-                raise SystemExit(f'{nombres[mod]} no tiene sesgo ni BatchNorm a continuación en el orden de ejecución')
+            if bn is None or bn.num_features != B.shape[0]:
+                if float(np.abs(B).max()) <= 1e-6:
+                    continue
+                raise SystemExit(f'{nombres[mod]} no tiene sesgo ni BatchNorm compatible a continuación en el orden de ejecución')
             bn.weight.fill_(1.0); bn.running_mean.zero_()
             bn.running_var.fill_(1.0 - bn.eps); bn.bias.copy_(torch.from_numpy(B))
 
@@ -105,16 +115,20 @@ def main():
     s = ort.InferenceSession(a.onnx, providers=['CPUExecutionProvider'])
     y_onnx = s.run(None, {s.get_inputs()[0].name: x})[0]
     with torch.no_grad():
-        y_pt = modelo(torch.from_numpy(x)).numpy()
-    dif = float(np.abs(y_onnx - y_pt).max())
-    print(f'paridad PyTorch vs ONNX: diferencia máxima de logit {dif:.2e}')
+        y_pt_logits = modelo(torch.from_numpy(x)).numpy()
+    if rec.get('salida') == 'sigmoide' and float(y_onnx.min()) >= 0.0 and float(y_onnx.max()) <= 1.0:
+        y_pt_cmp = 1.0 / (1.0 + np.exp(-np.clip(y_pt_logits, -60, 60)))
+    else:
+        y_pt_cmp = y_pt_logits
+    dif = float(np.abs(y_onnx - y_pt_cmp).max())
+    print(f'paridad PyTorch vs ONNX: diferencia máxima {dif:.2e} (indices_verdor={tiene_ind})')
     if dif > 1e-3:
         raise SystemExit('la reconstrucción no reproduce el ONNX')
 
     os.makedirs(a.salida, exist_ok=True)
     por_canal = rec['normalizacion']['por_canal']
     config = {'canales': canales, 'encoder': ent.get('codificador', 'resnet34'),
-              'v4': {'indices_verdor': True, 'ohem': a.ohem},
+              'v4': {'indices_verdor': tiene_ind, 'ohem': a.ohem},
               'reconstruido_desde_onnx': os.path.basename(a.onnx), 'paridad_max_logit': dif}
     ruta = os.path.join(a.salida, f'mejor_{arq}_b1b4b13b14_{firma}.pt')
     torch.save({'modelo': modelo.state_dict(), 'arquitectura': arq, 'epoca': ent.get('epoca'),

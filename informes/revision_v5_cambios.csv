@@ -1,0 +1,33 @@
+id_iris,conjunto,grupo_revisado,decision_antes,decision_despues,px_pos_antes,px_pos_despues,px_dud_antes,px_dud_despues,motivo_v5
+datos_prueba__ZN02_OCOBAMBA_001_q4,prueba,positivo,positivo,positivo,833,887,3,3,Expansion/regularizacion de halo de transicion (+54 px) y cierre de huecos internos (Protocolo v5).
+datos_laconvencion__sinpad_13640_001_q3,validacion,positivo,positivo,positivo,2452,2590,0,0,Expansion/regularizacion de halo de transicion (+138 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN02_OCOBAMBA_004_q1,prueba,positivo,positivo,positivo,168,204,0,0,Expansion/regularizacion de halo de transicion (+36 px) y cierre de huecos internos (Protocolo v5).
+datos_azar__azar_023_001_q3,validacion,positivo,positivo,positivo,537,540,104,104,Expansion/regularizacion de halo de transicion (+3 px) y cierre de huecos internos (Protocolo v5).
+datos_laconvencion__sinpad_37418_001_q2,validacion,positivo,positivo,positivo,1249,1302,0,0,Expansion/regularizacion de halo de transicion (+53 px) y cierre de huecos internos (Protocolo v5).
+datos_ingemmet__ingemmet_040_001_q2,entrenamiento,positivo,positivo,positivo,2584,2590,18,18,Expansion/regularizacion de halo de transicion (+6 px) y cierre de huecos internos (Protocolo v5).
+datos_ingemmet__ingemmet_040_001_q3,entrenamiento,positivo,positivo,positivo,4726,4850,12,12,Expansion/regularizacion de halo de transicion (+124 px) y cierre de huecos internos (Protocolo v5).
+datos_azar__azar_003_001_q2,entrenamiento,positivo,positivo,positivo,308,310,711,711,Expansion/regularizacion de halo de transicion (+2 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN51_INKAWASI_001_q2,prueba,positivo,positivo,positivo,211,233,11,11,Expansion/regularizacion de halo de transicion (+22 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN59_INKAWASI_001_q1,prueba,positivo,positivo,positivo,315,317,0,0,Expansion/regularizacion de halo de transicion (+2 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN60_QUELLOUNO_001_q2,prueba,positivo,positivo,positivo,23,24,44,44,Expansion/regularizacion de halo de transicion (+1 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN63_QUELLOUNO_001_q1,prueba,positivo,positivo,positivo,2351,2450,9,9,Expansion/regularizacion de halo de transicion (+99 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN64_QUELLOUNO_001_q2,prueba,positivo,positivo,positivo,157,160,92,92,Expansion/regularizacion de halo de transicion (+3 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN64_QUELLOUNO_001_q4,prueba,positivo,positivo,positivo,101,106,263,263,Expansion/regularizacion de halo de transicion (+5 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN65_INKAWASI_001_q4,prueba,positivo,positivo,positivo,126,128,26,26,Expansion/regularizacion de halo de transicion (+2 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN67_KUMPIRUSHIATO_001_q3,prueba,positivo,positivo,positivo,90,91,99,99,Expansion/regularizacion de halo de transicion (+1 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN69_KUMPIRUSHIATO_001_q1,prueba,positivo,positivo,positivo,188,198,272,272,Expansion/regularizacion de halo de transicion (+10 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN80_VILCABAMBA_001_q1,prueba,positivo,positivo,positivo,99,100,14,14,Expansion/regularizacion de halo de transicion (+1 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN80_VILCABAMBA_001_q2,prueba,positivo,positivo,positivo,266,269,9,9,Expansion/regularizacion de halo de transicion (+3 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN81_VILCABAMBA_001_q1,prueba,positivo,positivo,positivo,194,206,17,17,Expansion/regularizacion de halo de transicion (+12 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN81_VILCABAMBA_001_q2,prueba,positivo,positivo,positivo,93,97,0,0,Expansion/regularizacion de halo de transicion (+4 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN81_VILCABAMBA_001_q3,prueba,positivo,positivo,positivo,421,433,12,12,Expansion/regularizacion de halo de transicion (+12 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN85_QUELLOUNO_001_q2,prueba,positivo,positivo,positivo,81,86,1920,1920,Expansion/regularizacion de halo de transicion (+5 px) y cierre de huecos internos (Protocolo v5).
+datos_prueba__ZN87_QUELLOUNO_001_q1,prueba,positivo,positivo,positivo,992,997,0,0,Expansion/regularizacion de halo de transicion (+5 px) y cierre de huecos internos (Protocolo v5).
+datos_indeci__sinpad_132708_001_q3,entrenamiento,positivo,positivo,positivo,1064,1082,3,3,Expansion/regularizacion de halo de transicion (+18 px) y cierre de huecos internos (Protocolo v5).
+datos_ingemmet__ingemmet_041_001_q1,entrenamiento,positivo,positivo,positivo,5394,5419,4,4,Expansion/regularizacion de halo de transicion (+25 px) y cierre de huecos internos (Protocolo v5).
+datos_nuevos_ent__ZN33_PICHARI_006_q1,entrenamiento,positivo,positivo,positivo,257,259,0,0,Expansion/regularizacion de halo de transicion (+2 px) y cierre de huecos internos (Protocolo v5).
+datos_indeci__sinpad_22258_001_q3,validacion,dudoso,dudoso,dudoso,0,0,35,24,Depuracion v5 de fragmentos dudosos <4 px sin nube (35 -> 24 px).
+datos_indeci__sinpad_408_001_q3,validacion,dudoso,dudoso,dudoso,0,0,130,128,Depuracion v5 de fragmentos dudosos <4 px sin nube (130 -> 128 px).
+datos_prueba__ZN65_INKAWASI_001_q3,prueba,dudoso,dudoso,dudoso,0,0,122,117,Depuracion v5 de fragmentos dudosos <4 px sin nube (122 -> 117 px).
+datos_prueba__ZN78_VILCABAMBA_001_q2,prueba,dudoso,dudoso,dudoso,0,0,321,317,Depuracion v5 de fragmentos dudosos <4 px sin nube (321 -> 317 px).
+datos_prueba__ZN78_VILCABAMBA_001_q4,prueba,dudoso,dudoso,dudoso,0,0,1279,1272,Depuracion v5 de fragmentos dudosos <4 px sin nube (1279 -> 1272 px).

@@ -1,0 +1,117 @@
+{
+ "nombre": "deeplabv3plus_b2_v5",
+ "etiqueta": "DeepLabV3+ · resnet34",
+ "autor": "Mejía López, L. C.; Huarcaya Pumacayo, V. N.",
+ "onnx": "deeplabv3plus_b2_v5.onnx",
+ "canales": [
+  "B01",
+  "B02",
+  "B03",
+  "B04",
+  "pendiente",
+  "elevacion"
+ ],
+ "lado_px": 128,
+ "normalizacion": {
+  "metodo": "media_desv",
+  "percentiles": [
+   2,
+   98
+  ],
+  "canales": [
+   "B01",
+   "B02",
+   "B03",
+   "B04",
+   "pendiente",
+   "elevacion"
+  ],
+  "por_canal": {
+   "B01": {
+    "media": 0.925704,
+    "desv": 0.140988
+   },
+   "B02": {
+    "media": 0.922701,
+    "desv": 0.220698
+   },
+   "B03": {
+    "media": 0.954109,
+    "desv": 0.318425
+   },
+   "B04": {
+    "media": 0.959639,
+    "desv": 0.572375
+   },
+   "pendiente": {
+    "media": 1.251108,
+    "desv": 0.678369
+   },
+   "elevacion": {
+    "media": 1.649543,
+    "desv": 1.072711
+   }
+  },
+  "nota": "constantes en unidades de Landslide4Sense; los índices NDVI y NDWI se calculan sobre esas unidades y no se normalizan"
+ },
+ "salida": "sigmoide",
+ "umbral": 0.4,
+ "entrenamiento": {
+  "firma": "3539764d8289",
+  "arquitectura": "deeplabv3plus",
+  "codificador": "resnet34",
+  "dataset": "Landslide4Sense (ibm-nasa-geospatial/Landslide4sense, conjuntos oficiales)",
+  "epoca": 18,
+  "iou_validacion": null,
+  "prueba": {
+   "iou": null,
+   "f1": null,
+   "precision": null,
+   "recall": null
+  },
+  "particion": "oficial: entrenamiento, validación (época y umbral), prueba (una vez)"
+ },
+ "rango_entrenamiento": {
+  "B01": {
+   "min": 0.678172,
+   "max": 1.800664
+  },
+  "B02": {
+   "min": 0.602693,
+   "max": 2.523551
+  },
+  "B03": {
+   "min": 0.450697,
+   "max": 3.12172
+  },
+  "B04": {
+   "min": 0.354918,
+   "max": 4.937407
+  },
+  "pendiente": {
+   "min": 0.0,
+   "max": 3.301748
+  },
+  "elevacion": {
+   "min": 0.029761,
+   "max": 4.737126
+  }
+ },
+ "escala_terreno": {
+  "pendiente": 20.292,
+  "elevacion": 772.82
+ },
+ "terreno_entrenamiento": "ALOS PALSAR (ASF) en Landslide4Sense: B13 pendiente, B14 DEM",
+ "exportacion": {
+  "opset": 17,
+  "paridad_max_logit": 7.62939453125e-06,
+  "pesos": {
+   "capas_conv": 51,
+   "capas_en_inicializacion": 0,
+   "fraccion": 0.0,
+   "cabeza_sin_entrenar": false,
+   "sin_entrenar": false
+  },
+  "sha256_onnx": "09f6a89cd8728bbf1cefeef1ca888b77a4e1f733fa7fa55a967c5877a1724397"
+ }
+}

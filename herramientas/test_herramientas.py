@@ -92,6 +92,28 @@ class TestParticionPorZona(unittest.TestCase):
                         f"Elementos {a['tesela']} ({a['conjunto']}) y {b['tesela']} ({b['conjunto']}) "
                         f"están a dx={dx:.0f}m, dy={dy:.0f}m (<3560m) en conjuntos distintos"
                     )
+        import particion_por_zona as ppz
+        errs_prov = ppz.comprobar_teselas_en_provincia(filas, raiz=RAIZ)
+        self.assertEqual(errs_prov, [], 'Teselas fuera de La Convención (<50%): ' + '; '.join(errs_prov))
+
+    def test_comprobar_teselas_en_provincia_sintetico(self):
+        import particion_por_zona as ppz
+        from shapely.geometry import box
+        from shapely.ops import transform as shp_transform
+        from pyproj import Transformer
+        lim_gj = json.load(open(os.path.join(RAIZ, 'herramientas', 'limite_laconvencion.geojson'), encoding='utf-8'))
+        # Centro aproximado dentro de La Convencion (Quillabamba: -12.86, -72.69) y punto externo (-13.16, -72.54)
+        tr_utm = Transformer.from_crs('EPSG:4326', 'EPSG:32718', always_xy=True).transform
+        pt_in = shp_transform(tr_utm, box(-72.70, -12.87, -72.68, -12.85)).centroid
+        pt_out = shp_transform(tr_utm, box(-72.20, -13.40, -72.18, -13.38)).centroid
+        filas = [
+            {'tesela': 'IN_001', 'zona': 'Z1', 'conjunto': 'prueba', 'x': pt_in.x, 'y': pt_in.y},
+            {'tesela': 'OUT_001', 'zona': 'Z2', 'conjunto': 'prueba', 'x': pt_out.x, 'y': pt_out.y},
+            {'tesela': 'EXT_001', 'zona': 'Z3', 'conjunto': 'prueba_externa', 'x': pt_out.x, 'y': pt_out.y},
+        ]
+        errs = ppz.comprobar_teselas_en_provincia(filas, raiz=RAIZ)
+        self.assertEqual(len(errs), 1)
+        self.assertIn('OUT_001', errs[0])
 
     def test_encadenamiento_y_reglas_sinteticas(self):
         """Tres teselas encadenadas (A-B-C a 2 km) van a una sola zona; descartar y rebajar se respetan."""
@@ -614,6 +636,174 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             self.assertIn('pendiente_menor_8', tipos)
             self.assertIn('positivo_sobre_nube', tipos)
             self.assertIn('borde_linea_recta', tipos)
+
+    def test_revisar_mascaras_ingemmet_bordes_y_grvi(self):
+        """Verifica IoU>0.80 contra poligono INGEMMET, bordes geometricos rectos y GRVI>0.05."""
+        from revisar_mascaras import revisar
+        from pyproj import Transformer
+        from shapely.geometry import box as shp_box
+        from shapely.ops import transform as shp_transform
+
+        with tempfile.TemporaryDirectory() as tmp:
+            p_dir = os.path.join(tmp, 'parches_128', 'datos_ingemmet')
+            m_dir = os.path.join(tmp, 'mascaras_nivel1', 'parches_128', 'datos_ingemmet')
+            os.makedirs(p_dir, exist_ok=True)
+            os.makedirs(m_dir, exist_ok=True)
+            tr = from_origin(750000.0, 8600000.0, 10.0, 10.0)
+            arr = np.zeros((6, 128, 128), dtype=np.float32)
+            # B3 (verde)=700, B4 (rojo)=500 -> GRVI = +0.167 (> 0.05) en todo el parche
+            arr[1] = 300.0; arr[2] = 700.0; arr[3] = 500.0; arr[4] = 28.0; arr[5] = 1500.0
+            with rasterio.open(os.path.join(p_dir, 'ing_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=6, dtype='float32', crs='EPSG:32718', transform=tr) as ds:
+                ds.write(arr)
+            mk = np.zeros((128, 128), dtype=np.uint8)
+            # Rectangulo de bordes rectos largos (30x30 px) que coincide exactamente con el poligono INGEMMET
+            mk[30:60, 40:70] = 1
+            with rasterio.open(os.path.join(m_dir, 'ing_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=1, dtype='uint8', crs='EPSG:32718', transform=tr) as dm:
+                dm.write(mk, 1)
+
+            tr_ll = Transformer.from_crs('EPSG:32718', 'EPSG:4326', always_xy=True).transform
+            x0, y1 = tr * (40, 30)
+            x1, y0 = tr * (70, 60)
+            pol_ll = shp_transform(tr_ll, shp_box(x0 + 1, y0 + 1, x1 - 1, y1 - 1))
+            ruta_ing = os.path.join(tmp, 'ing_pols.geojson')
+            with open(ruta_ing, 'w', encoding='utf-8') as f:
+                json.dump({'type': 'FeatureCollection', 'features': [
+                    {'type': 'Feature', 'properties': {}, 'geometry': pol_ll.__geo_interface__}
+                ]}, f)
+
+            hall = revisar(tmp, ingemmet_geojson=ruta_ing)
+            tipos = {h['tipo'] for h in hall}
+            self.assertIn('iou_ingemmet_alto', tipos)
+            self.assertIn('bordes_geometricos', tipos)
+            self.assertIn('grvi_verde_positivo', tipos)
+
+    def test_revisar_mascaras_cauce_nube_y_carretera(self):
+        """Verifica controles v3: positivo_en_cauce, blanco_saturado_cerca_nube y positivo_paralelo_carretera."""
+        from revisar_mascaras import revisar
+        from pyproj import Transformer
+        from shapely.geometry import LineString
+        from shapely.ops import transform as shp_transform
+
+        with tempfile.TemporaryDirectory() as tmp:
+            p_dir = os.path.join(tmp, 'parches_128', 'datos_prueba')
+            m_dir = os.path.join(tmp, 'mascaras_nivel1', 'parches_128', 'datos_prueba')
+            os.makedirs(p_dir, exist_ok=True)
+            os.makedirs(m_dir, exist_ok=True)
+            tr = from_origin(750000.0, 8600000.0, 10.0, 10.0)
+
+            # 1) Parche cauce: valle encajonado horizontal en fila 40..46
+            arr1 = np.zeros((6, 128, 128), dtype=np.float32)
+            arr1[1] = 350.0; arr1[2] = 450.0; arr1[3] = 550.0; arr1[4] = 22.0; arr1[5] = 1600.0
+            yy, _ = np.mgrid[0:128, 0:128]
+            arr1[5] = 1600.0 + 4.0 * np.abs(yy - 43.0)
+            arr1[4][40:47, :] = 10.0
+            with rasterio.open(os.path.join(p_dir, 'cauce_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=6, dtype='float32', crs='EPSG:32718', transform=tr) as ds:
+                ds.write(arr1)
+            mk1 = np.zeros((128, 128), dtype=np.uint8)
+            mk1[41:46, 20:90] = 1
+            with rasterio.open(os.path.join(m_dir, 'cauce_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=1, dtype='uint8', crs='EPSG:32718', transform=tr) as dm:
+                dm.write(mk1, 1)
+
+            # 2) Parche nube + blanco saturado cercano
+            arr2 = np.zeros((6, 128, 128), dtype=np.float32)
+            arr2[1] = 300.0; arr2[2] = 450.0; arr2[3] = 600.0; arr2[4] = 32.0; arr2[5] = 1800.0
+            arr2[1, 60:72, 20:32] = 1200.0; arr2[2, 60:72, 20:32] = 1250.0; arr2[3, 60:72, 20:32] = 1260.0  # nube
+            arr2[1, 55:65, 42:52] = 1100.0; arr2[2, 55:65, 42:52] = 1250.0; arr2[3, 55:65, 42:52] = 1400.0  # blanco sat
+            with rasterio.open(os.path.join(p_dir, 'nube_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=6, dtype='float32', crs='EPSG:32718', transform=tr) as ds:
+                ds.write(arr2)
+            mk2 = np.zeros((128, 128), dtype=np.uint8)
+            mk2[55:65, 42:52] = 1
+            with rasterio.open(os.path.join(m_dir, 'nube_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=1, dtype='uint8', crs='EPSG:32718', transform=tr) as dm:
+                dm.write(mk2, 1)
+
+            # 3) Parche carretera paralela a < 3 px
+            arr3 = np.zeros((6, 128, 128), dtype=np.float32)
+            arr3[1] = 400.0; arr3[2] = 500.0; arr3[3] = 750.0; arr3[4] = 34.0; arr3[5] = 2000.0
+            with rasterio.open(os.path.join(p_dir, 'via_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=6, dtype='float32', crs='EPSG:32718', transform=tr) as ds:
+                ds.write(arr3)
+            mk3 = np.zeros((128, 128), dtype=np.uint8)
+            mk3[20:24, 30:85] = 1
+            with rasterio.open(os.path.join(m_dir, 'via_1_q1.tif'), 'w', driver='GTiff',
+                               height=128, width=128, count=1, dtype='uint8', crs='EPSG:32718', transform=tr) as dm:
+                dm.write(mk3, 1)
+
+            tr_ll = Transformer.from_crs('EPSG:32718', 'EPSG:4326', always_xy=True).transform
+            x_a, y_a = tr * (25.0, 22.0)
+            x_b, y_b = tr * (90.0, 22.0)
+            via_ll = shp_transform(tr_ll, LineString([(x_a, y_a), (x_b, y_b)]))
+            ruta_vias = os.path.join(tmp, 'vias.geojson')
+            with open(ruta_vias, 'w', encoding='utf-8') as f:
+                json.dump({'type': 'FeatureCollection', 'features': [
+                    {'type': 'Feature', 'properties': {}, 'geometry': via_ll.__geo_interface__}
+                ]}, f)
+
+            hall = revisar(tmp, carreteras_geojson=ruta_vias)
+            tipos = {h['tipo'] for h in hall}
+            self.assertIn('positivo_en_cauce', tipos)
+            self.assertIn('blanco_saturado_cerca_nube', tipos)
+            self.assertIn('positivo_paralelo_carretera', tipos)
+
+    def test_indice_parches_nivel1_560_304_360_y_nivel2_sin_fuga(self):
+        """A.4 y B: Verifica que indice_parches_ampliado.csv cargue exactamente 560 / 304 / 360 en Nivel 1,
+        que verificar_conteos_nivel1 aborte con SystemExit si falta algún parche, que 'excluida'/'pendiente'/'sin_zona'
+        jamás se carguen, y que ninguna tesela de Nivel 2 en entrenamiento esté fuera de entrenamiento o a < 3 km
+        de validacion, prueba o prueba_externa."""
+        import ajuste_fino as af
+        from shapely.geometry import box as shp_box
+        from shapely.ops import unary_union
+
+        part = {(r['proyecto'], r['tesela']): r for r in csv.DictReader(open('particion.csv', encoding='utf-8'))}
+        part_tes = {r['tesela']: r for r in part.values()}
+
+        # 1) Verificar que indice_parches_ampliado.csv coincida por tesela con particion.csv y sume 560/304/360 en Nivel 1
+        filas_amp = list(csv.DictReader(open('parches_128/indice_parches_ampliado.csv', encoding='utf-8')))
+        n1_por_c = {'entrenamiento': [], 'validacion': [], 'prueba': []}
+        for r in filas_amp:
+            if r['tesela'] in part_tes:
+                self.assertEqual(r['conjunto'], part_tes[r['tesela']]['conjunto'],
+                                 f"Desajuste de conjunto en {r['parche']}: {r['conjunto']} vs {part_tes[r['tesela']]['conjunto']}")
+            m1 = os.path.join('mascaras_nivel1', 'parches_128', r['proyecto'], r['parche'] + '.tif')
+            if os.path.exists(m1) and r['conjunto'] in n1_por_c:
+                n1_por_c[r['conjunto']].append(r)
+
+        metodos_n1 = {}
+        for r_d in csv.DictReader(open('informes/decisiones_agente.csv', encoding='utf-8')):
+            metodos_n1[r_d['parche']] = r_d['metodo']
+            metodos_n1[r_d['id_iris']] = r_d['metodo']
+
+        self.assertTrue(af.verificar_conteos_nivel1(
+            n1_por_c['entrenamiento'], n1_por_c['validacion'], n1_por_c['prueba'], metodos_n1
+        ))
+        with self.assertRaises(SystemExit):
+            af.verificar_conteos_nivel1(
+                n1_por_c['entrenamiento'][:-1], n1_por_c['validacion'], n1_por_c['prueba'], metodos_n1
+            )
+
+        # 2) Verificar que Nivel 2 en entrenamiento esté 100% en entrenamiento en particion.csv y a >= 3000m de eval
+        geoms_eval = []
+        for (proy, tes), r in part.items():
+            if r['conjunto'] in ('validacion', 'prueba', 'prueba_externa'):
+                cx, cy = float(r['x']), float(r['y'])
+                geoms_eval.append(shp_box(cx - 1280.0, cy - 1280.0, cx + 1280.0, cy + 1280.0))
+        u_eval = unary_union(geoms_eval)
+
+        for r_t in csv.DictReader(open('mascaras_provisionales/nivel2/catalogo_parches_tiers.csv', encoding='utf-8')):
+            if r_t['conjunto'] == 'entrenamiento' and float(r_t.get('peso_perdida') or 0) > 0:
+                info = part.get((r_t['proyecto'], r_t['tesela'])) or part_tes.get(r_t['tesela'])
+                self.assertIsNotNone(info, f"Tesela N2 {r_t['tesela']} no existe en particion.csv")
+                self.assertEqual(info['conjunto'], 'entrenamiento',
+                                 f"Tesela N2 {r_t['tesela']} tiene conjunto {info['conjunto']} en particion.csv")
+                cx, cy = float(info['x']), float(info['y'])
+                g_t = shp_box(cx - 1280.0, cy - 1280.0, cx + 1280.0, cy + 1280.0)
+                self.assertGreaterEqual(g_t.distance(u_eval), 2995.0,
+                                        f"Tesela N2 {r_t['tesela']} a < 3 km de eval")
 
 
 if __name__ == '__main__':

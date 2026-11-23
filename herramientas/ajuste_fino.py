@@ -113,8 +113,11 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
                 }
             break
 
+    CONJUNTOS_EXCLUIDOS = {'excluida', 'pendiente', 'sin_zona'}
+    if set(conjunto_permitido) & CONJUNTOS_EXCLUIDOS:
+        raise SystemExit(f'conjunto_permitido contiene conjuntos prohibidos: {set(conjunto_permitido) & CONJUNTOS_EXCLUIDOS}')
     for r in filas_ind:
-        if r['conjunto'] not in conjunto_permitido:
+        if r['conjunto'] in CONJUNTOS_EXCLUIDOS or r['conjunto'] not in conjunto_permitido:
             continue
         m = os.path.join(carpeta_mascaras, r['proyecto'], r['parche'] + '.tif')
         es_raiz_n2 = False
@@ -155,6 +158,24 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
         z = np.zeros((0, len(receta['canales']), 128, 128), np.float32)
         return z, np.zeros((0, 128, 128), np.float32), np.zeros((0, 128, 128), np.float32), []
     return np.stack(X), np.stack(Y), np.stack(V), usadas
+
+
+def verificar_conteos_nivel1(fl_ent, fl_val, fl_pru, metodos_n1, esperados=(560, 304, 360)):
+    """Aborta con SystemExit si los parches de Nivel 1 cargados no son exactamente 560 / 304 / 360,
+    e imprime los conteos por conjunto y por método (manual_v4 / clasificador_v5)."""
+    n_ent, n_val, n_pru = len(fl_ent), len(fl_val), len(fl_pru)
+    for nombre, fl, esp in (('entrenamiento', fl_ent, esperados[0]),
+                            ('validacion', fl_val, esperados[1]),
+                            ('prueba', fl_pru, esperados[2])):
+        c_m4 = sum(1 for r in fl if (metodos_n1.get(f"{r['proyecto']}__{r['parche']}") or metodos_n1.get(r['parche']) or 'manual_v4') == 'manual_v4')
+        c_v5 = len(fl) - c_m4
+        print(f'Nivel 1 {nombre:13s}: {len(fl):3d}/{esp:3d} parches (manual_v4={c_m4:3d}, clasificador_v5={c_v5:3d})')
+    if (n_ent, n_val, n_pru) != tuple(esperados):
+        raise SystemExit(
+            f'Conteo de Nivel 1 inválido: cargados (entrenamiento={n_ent}, validacion={n_val}, prueba={n_pru}) '
+            f'!= esperados {esperados}. Regenera parches_128/indice_parches_ampliado.csv desde particion.csv.'
+        )
+    return True
 
 
 def cargar_l4spe(ruta, receta, conjuntos):
@@ -199,18 +220,59 @@ def en_umbral(lista, u):
 
 
 def resumen_local(prob, Y, V, filas, u):
-    """Métricas locales a un umbral: píxeles, cicatrices tocadas y falsas alarmas en negativos."""
+    """Métricas locales a un umbral: píxeles exactos, tolerancia de 1 px (4-con y 8-con), cicatrices tocadas y por tamaño (>=30% solape), y falsas alarmas."""
+    from scipy import ndimage
     m = en_umbral(barrido(prob, Y, V), u)
     objs = objetos(Y * V)
     tocadas = sum(bool(((prob[i][sl] >= u) & (V[i][sl] > 0) & mm).any()) for i, sl, mm, _ in objs)
+    # Tolerancia de borde de 1 px (4-conectado y 8-conectado) y detección por cicatriz (>=30% de área cubierta)
+    st4 = ndimage.generate_binary_structure(2, 1)
+    st8 = np.ones((3, 3), dtype=bool)
+    tp4 = fp4 = fn4 = tp8 = fp8 = fn8 = 0.0
+    det_30 = {'10-50': [0, 0], '50-200': [0, 0], '>200': [0, 0], 'total_ge10': [0, 0]}
+    for i in range(len(prob)):
+        vi = V[i] > 0
+        yi = (Y[i] > 0) & vi
+        pi = (prob[i] >= u) & vi
+        if yi.any() or pi.any():
+            yd4 = ndimage.binary_dilation(yi, structure=st4) & vi
+            pd4 = ndimage.binary_dilation(pi, structure=st4) & vi
+            tp_p4 = float((pi & yd4).sum())
+            tp_g4 = float((yi & pd4).sum())
+            tp_m4 = 0.5 * (tp_p4 + tp_g4)
+            tp4 += tp_m4; fp4 += float((pi & ~yd4).sum()); fn4 += float((yi & ~pd4).sum())
+
+            yd8 = ndimage.binary_dilation(yi, structure=st8) & vi
+            pd8 = ndimage.binary_dilation(pi, structure=st8) & vi
+            tp_p8 = float((pi & yd8).sum())
+            tp_g8 = float((yi & pd8).sum())
+            tp_m8 = 0.5 * (tp_p8 + tp_g8)
+            tp8 += tp_m8; fp8 += float((pi & ~yd8).sum()); fn8 += float((yi & ~pd8).sum())
+        if yi.any():
+            lbl, nc = ndimage.label(yi, structure=st8)
+            for cid in range(1, nc + 1):
+                comp = (lbl == cid)
+                sz = int(comp.sum())
+                if sz < 10:
+                    continue
+                b_k = '10-50' if sz <= 50 else ('50-200' if sz <= 200 else '>200')
+                hit = float((comp & pi).sum()) / sz >= 0.30
+                det_30[b_k][1] += 1; det_30['total_ge10'][1] += 1
+                if hit:
+                    det_30[b_k][0] += 1; det_30['total_ge10'][0] += 1
+    iou_tol4 = round(tp4 / max(tp4 + fp4 + fn4, 1.0), 4)
+    iou_tol8 = round(tp8 / max(tp8 + fp8 + fn8, 1.0), 4)
+    det_res = {k: {'detectadas': v[0], 'total': v[1], 'pct': round(v[0] / max(v[1], 1) * 100.0, 1)} for k, v in det_30.items()}
     teselas = {}
     for i, r in enumerate(filas):
         t = teselas.setdefault((r['proyecto'], r['tesela']), [0.0, 0.0, 0.0])
         t[0] += float((Y[i] * V[i]).sum()); t[1] += float(((prob[i] >= u) & (V[i] > 0)).sum()); t[2] += float(V[i].sum())
     neg = [t for t in teselas.values() if t[0] == 0]
     px_neg, fa_neg = sum(t[2] for t in neg), sum(t[1] for t in neg)
-    return dict(m, cicatrices=len(objs), cicatrices_tocadas=tocadas, teselas=len(teselas),
-                teselas_negativas=len(neg),
+    return dict(m, iou_tol1px_4c=iou_tol4, iou_tol1px_8c=iou_tol8,
+                cicatrices=len(objs), cicatrices_tocadas=tocadas,
+                deteccion_cicatriz_30pct=det_res,
+                teselas=len(teselas), teselas_negativas=len(neg),
                 falsas_alarmas_ha_por_km2_en_negativos=round(fa_neg / max(px_neg, 1) * 100, 3))
 
 
@@ -314,6 +376,14 @@ def main():
     ap.add_argument('--sin-l4s', dest='sin_l4s', action='store_true',
                     help='no usa Landslide4Sense en nada: ni en el lote, ni como piso, ni en la medición. Solo datos del '
                          'Perú (La Convención y L4SPe). El modelo de partida sí viene de L4S (es el que ya se entrenó)')
+    ap.add_argument('--peso-clasificador-v5', dest='peso_clf_v5', type=float, default=0.5,
+                    help='peso en la pérdida de los parches de Nivel 1 de entrenamiento marcados con clasificador_v5 (manual_v4 lleva 1.0)')
+    ap.add_argument('--peso-val-l4spe', dest='peso_val_pe', type=float, default=0.7,
+                    help='peso de la validación de L4SPe del profesor al elegir época y umbral frente a la validación de La Convención (0.7 / 0.3)')
+    ap.add_argument('--decisiones', default=None,
+                    help='ruta a informes/decisiones_agente.csv para leer la columna metodo (manual_v4 vs clasificador_v5)')
+    ap.add_argument('--hilos-cpu', dest='hilos_cpu', type=int, default=12,
+                    help='núcleos de CPU para PyTorch cuando corre en CPU (por defecto 12)')
     ap.add_argument('--semilla', type=int, default=42)
     ap.add_argument('--limite', type=int, help='solo para probar: parches de L4S por conjunto')
     a = ap.parse_args()
@@ -327,6 +397,8 @@ def main():
     torch.manual_seed(a.semilla); np.random.seed(a.semilla)
     rng = np.random.default_rng(a.semilla)
     disp = 'cuda' if torch.cuda.is_available() else 'cpu'
+    if disp == 'cpu' and a.hilos_cpu > 0:
+        torch.set_num_threads(a.hilos_cpu)
     amp = disp == 'cuda'
     os.makedirs(a.salida, exist_ok=True)
     t0 = time.time()
@@ -372,12 +444,31 @@ def main():
     Xte, Yte, Vte = cargar(te, receta)
     Xl, Yl, Vl, Fl = cargar_locales(a.parches, a.mascaras, receta, escala, {'entrenamiento'})
     Xv, Yv, Vv, Fv = cargar_locales(a.parches, a.mascaras, receta, escala, {'validacion'})
+    Xt_loc, Yt_loc, Vt_loc, Ft_loc = cargar_locales(a.parches, a.mascaras, receta, escala, {'prueba'})
     origen_val = 'nivel 1' if len(Xv) else 'ninguna'
     if not len(Xv) and a.debiles and a.val_provisional:
         Xv, Yv, Vv, Fv = cargar_locales(a.parches, a.debiles, receta, escala, {'validacion'}, solo_con_positivos=True,
                                         tiers=tiers_val)
         origen_val = 'nivel 2 provisional (' + ', '.join(sorted(tiers_val)) + ')' if len(Xv) else 'ninguna'
-    Wl = np.ones(len(Xl), np.float32)
+    # Pesos de Nivel 1 por metodo: manual_v4 = 1.0, clasificador_v5 = a.peso_clf_v5 (0.5)
+    metodos_n1 = {}
+    ruta_dec = a.decisiones or os.path.join(os.path.dirname(os.path.abspath(a.parches.rstrip('/\\'))), 'informes', 'decisiones_agente.csv')
+    if os.path.exists(ruta_dec):
+        with open(ruta_dec, encoding='utf-8') as f_dec:
+            for r_d in csv.DictReader(f_dec):
+                m_d = (r_d.get('metodo') or '').strip()
+                if r_d.get('parche'):
+                    metodos_n1[r_d['parche'].strip()] = m_d
+                if r_d.get('id_iris'):
+                    metodos_n1[r_d['id_iris'].strip()] = m_d
+    Wl = np.array([
+        a.peso_clf_v5 if (metodos_n1.get(f"{r['proyecto']}__{r['parche']}") == 'clasificador_v5' or metodos_n1.get(r['parche']) == 'clasificador_v5') else 1.0
+        for r in Fl
+    ], dtype=np.float32)
+    n_n1_manual = int(sum(1 for w in Wl if w == 1.0))
+    n_n1_clf = len(Wl) - n_n1_manual
+    if not a.sin_local:
+        verificar_conteos_nivel1(Fl, Fv, Ft_loc, metodos_n1)
     n_debiles = 0
     if a.debiles and not a.sin_local:
         con_n1 = {r['parche'] for r in Fl}
@@ -470,7 +561,10 @@ def main():
         return out
 
     def puntaje(m):
-        # promedio de los IoU de validación que existen: L4SPe (manual, otras zonas del Perú) y La Convención
+        # Promedio ponderado (0.70 L4SPe del profesor + 0.30 validación local de La Convención)
+        if hay_pe_val and hay_val and hay_pos_val:
+            w_pe = float(a.peso_val_pe)
+            return float(w_pe * m['pe']['iou'] + (1.0 - w_pe) * m['local']['iou'])
         comp = ([m['pe']['iou']] if hay_pe_val else []) + ([m['local']['iou']] if hay_val and hay_pos_val else [])
         if comp:
             return float(np.mean(comp))
@@ -647,6 +741,13 @@ def main():
     usar_pe = hay_pe_val and cic_pe_va >= a.min_cic          # máscara manual: manda sobre la provisional
 
     def umbral_de(m):
+        if usar_pe and usar_local and m.get('pe_barrido') and m.get('local_barrido'):
+            w_pe = float(a.peso_val_pe)
+            pe_por_u = {round(float(r['umbral']), 2): r['iou'] for r in m['pe_barrido']}
+            loc_por_u = {round(float(r['umbral']), 2): r['iou'] for r in m['local_barrido']}
+            comunes = sorted(set(pe_por_u) & set(loc_por_u))
+            if comunes:
+                return max(comunes, key=lambda u_: w_pe * pe_por_u[u_] + (1.0 - w_pe) * loc_por_u[u_])
         if usar_pe:
             return m['pe']['umbral']
         if usar_local or m['l4s'] is None:
@@ -656,9 +757,13 @@ def main():
     u0, uF = umbral_de(m0), umbral_de(mF)
     res = {'firma': firma, 'arquitectura': arq, 'mejor_epoca': mejor['epoca'], 'mejoro': mejoro,
            'alfa_interpolacion': mejor.get('alfa', 1.0), 'interpolaciones': interpolaciones,
-           'umbral_operacion': uF, 'umbral_elegido_en': ('validación de L4SPe (máscara manual del profesor)' if usar_pe else
+           'umbral_operacion': uF,
+           'umbral_elegido_en': (f'promedio ponderado {a.peso_val_pe:.1f} L4SPe + {1-a.peso_val_pe:.1f} La Convención' if (usar_pe and usar_local) else
+                                 'validación de L4SPe (máscara manual del profesor)' if usar_pe else
                                  'validación local' if usar_local else 'validación de Landslide4Sense'),
            'config': config, 'epocas_corridas': ep_hechas, 'epocas_max': a.epocas,
+           'parches_n1_manual_v4': n_n1_manual, 'parches_n1_clasificador_v5': n_n1_clf,
+           'peso_clasificador_v5': a.peso_clf_v5, 'peso_val_l4spe': a.peso_val_pe,
            'validacion_local_origen': origen_val, 'base': {'firma': ck0.get('firma'), 'umbral': u0}}
     # prueba oficial de Landslide4Sense, una vez, con el umbral elegido en SU validación
     res['comparador_sin_aprendizaje'] = {'regla': 'GRVI <= 0, B4 >= 1.29 L4S (~600 DN) y pendiente >= 10°'}
@@ -682,6 +787,13 @@ def main():
             'umbral': a.umbral_base, 'base': resumen_local(pl0, Yv, Vv, Fv, a.umbral_base),
             'ajustado': resumen_local(plF, Yv, Vv, Fv, a.umbral_base)}
         res['local_mejora_iou'] = bootstrap_zonas(pl0, u0, plF, uF, Yv, Vv, Fv) if hay_pos_val else None
+        if len(Xt_loc):
+            pt_loc0, pt_locF = predecir(base_modelo, Xt_loc, disp), predecir(modelo, Xt_loc, disp)
+            pt_locR = regla_suelo_pendiente(Xt_loc, receta)
+            res['base']['local_prueba'] = resumen_local(pt_loc0, Yt_loc, Vt_loc, Ft_loc, u0)
+            res['local_prueba'] = resumen_local(pt_locF, Yt_loc, Vt_loc, Ft_loc, uF)
+            res['comparador_sin_aprendizaje']['local_prueba'] = resumen_local(pt_locR, Yt_loc, Vt_loc, Ft_loc, 0.5)
+            res['local_mejora_iou_prueba'] = bootstrap_zonas(pt_loc0, u0, pt_locF, uF, Yt_loc, Vt_loc, Ft_loc)
         res['local_advertencias'] = [s for s in (
             'la validación local se usó para elegir época y umbral: su IoU es optimista',
             f'solo {cic_va} cicatrices en validación local: resultado exploratorio' if cic_va < a.min_cic else '',
@@ -737,8 +849,14 @@ def main():
               f"| falsas alarmas {j['falsas_alarmas_ha_por_km2_en_negativos']} ha/km² en negativos")
         if mejoro and res.get('local_mejora_iou'):
             bz = res['local_mejora_iou']
-            print(f"mejora de IoU local, IC 95 % por zonas ({bz['zonas']}): [{bz['ic95'][0]:+.4f}, {bz['ic95'][1]:+.4f}]; "
+            print(f"mejora de IoU local (val), IC 95 % por zonas ({bz['zonas']}): [{bz['ic95'][0]:+.4f}, {bz['ic95'][1]:+.4f}]; "
                   f"gana en el {bz['gana_pct']} % de los remuestreos")
+        if res.get('local_prueba'):
+            rp_loc = res['comparador_sin_aprendizaje']['local_prueba']
+            bp_loc, jp_loc = res['base']['local_prueba'], res['local_prueba']
+            print(f"La Convención, PRUEBA SELLADA     regla   : {f4(rp_loc)}  | tol1px(8c) {rp_loc['iou_tol1px_8c']:.4f} | cic>=30% {rp_loc['deteccion_cicatriz_30pct']['total_ge10']['detectadas']}/{rp_loc['deteccion_cicatriz_30pct']['total_ge10']['total']}")
+            print(f"                                  base    : {f4(bp_loc)}  | tol1px(8c) {bp_loc['iou_tol1px_8c']:.4f} | cic>=30% {bp_loc['deteccion_cicatriz_30pct']['total_ge10']['detectadas']}/{bp_loc['deteccion_cicatriz_30pct']['total_ge10']['total']}")
+            print(f"                                  ajustado: {f4(jp_loc)}  | tol1px(8c) {jp_loc['iou_tol1px_8c']:.4f} | cic>=30% {jp_loc['deteccion_cicatriz_30pct']['total_ge10']['detectadas']}/{jp_loc['deteccion_cicatriz_30pct']['total_ge10']['total']}")
         for s in res['local_advertencias']:
             print('  ojo:', s)
     json.dump(res, open(os.path.join(a.salida, f'resultados_{base}.json'), 'w', encoding='utf-8'), indent=1, ensure_ascii=False)

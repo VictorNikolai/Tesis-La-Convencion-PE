@@ -1,0 +1,37 @@
+tipo,proyecto,parche,tesela,quien,detalle
+positivo_sobre_nube,datos_azar,azar_003_001_q2,azar_003_001,AGENTE,3 px positivos con B2>1000 y sin firma de suelo claro
+positivo_en_cauce,datos_azar,azar_004_001_q1,azar_004_001,AGENTE,positivo comp 1 (54 px): 56% en fondo de valle/cauce (eje=3.0x)
+blanco_saturado_cerca_nube,datos_ingemmet,ingemmet_005_001_q2,ingemmet_005_001,AGENTE,positivo comp 1: 61 px blanco saturado y nube a 1.4 px (revisar otra fecha seca)
+blanco_saturado_cerca_nube,datos_ingemmet,ingemmet_005_001_q2,ingemmet_005_001,AGENTE,positivo comp 2: 31 px blanco saturado y nube a 1.0 px (revisar otra fecha seca)
+positivo_sobre_nube,datos_ingemmet,ingemmet_005_001_q2,ingemmet_005_001,AGENTE,14 px positivos con B2>1000 y sin firma de suelo claro
+blanco_saturado_cerca_nube,datos_ingemmet,ingemmet_009_001_q3,ingemmet_009_001,AGENTE,positivo comp 1: 62 px blanco saturado y nube a 1.4 px (revisar otra fecha seca)
+borde_linea_recta,datos_ingemmet,ingemmet_009_001_q3,ingemmet_009_001,AGENTE,componente 7 toca el borde formando línea recta >= 15 px
+borde_linea_recta,datos_ingemmet,ingemmet_036_001_q3,ingemmet_036_001,AGENTE,componente 1 toca el borde formando línea recta >= 15 px
+positivo_sobre_nube,datos_ingemmet,ingemmet_040_001_q2,ingemmet_040_001,AGENTE,18 px positivos con B2>1000 y sin firma de suelo claro
+borde_linea_recta,datos_ingemmet,ingemmet_040_001_q3,ingemmet_040_001,AGENTE,componente 1 toca el borde formando línea recta >= 15 px
+borde_linea_recta,datos_ingemmet,ingemmet_040_001_q3,ingemmet_040_001,AGENTE,componente 2 toca el borde formando línea recta >= 15 px
+positivo_sobre_nube,datos_ingemmet,ingemmet_040_001_q3,ingemmet_040_001,AGENTE,12 px positivos con B2>1000 y sin firma de suelo claro
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q2,sinpad_37418_001,AGENTE,dudoso comp 9: 78% del perimetro interior (48 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q2,sinpad_37418_001,AGENTE,dudoso comp 11: 78% del perimetro interior (71 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q3,sinpad_37418_001,AGENTE,dudoso comp 15: 67% del perimetro interior (54 px) son tramos rectos >= 8.5 px
+positivo_sobre_nube,datos_prueba,ZN51_INKAWASI_001_q2,ZN51_INKAWASI_001,AGENTE,4 px positivos con B2>1000 y sin firma de suelo claro
+positivo_en_cauce,datos_prueba,ZN54_KUMPIRUSHIATO_001_q2,ZN54_KUMPIRUSHIATO_001,AGENTE,positivo comp 3 (21 px): 100% en fondo de valle/cauce (eje=4.8x)
+blanco_saturado_cerca_nube,datos_prueba,ZN54_KUMPIRUSHIATO_001_q2,ZN54_KUMPIRUSHIATO_001,AGENTE,positivo comp 5: 13 px blanco saturado y nube a 5.0 px (revisar otra fecha seca)
+positivo_en_cauce,datos_prueba,ZN54_KUMPIRUSHIATO_001_q2,ZN54_KUMPIRUSHIATO_001,AGENTE,positivo comp 7 (24 px): 75% en fondo de valle/cauce (eje=3.7x)
+positivo_en_cauce,datos_prueba,ZN60_QUELLOUNO_001_q1,ZN60_QUELLOUNO_001,AGENTE,positivo comp 1 (144 px): 75% en fondo de valle/cauce (eje=3.2x)
+positivo_sobre_nube,datos_prueba,ZN60_QUELLOUNO_001_q1,ZN60_QUELLOUNO_001,AGENTE,1 px positivos con B2>1000 y sin firma de suelo claro
+bordes_geometricos,datos_prueba,ZN63_QUELLOUNO_001_q1,ZN63_QUELLOUNO_001,AGENTE,positivo comp 5: 60% del perimetro interior (55 px) son tramos rectos >= 8.5 px
+positivo_en_cauce,datos_prueba,ZN67_KUMPIRUSHIATO_001_q3,ZN67_KUMPIRUSHIATO_001,AGENTE,positivo comp 3 (21 px): 90% en fondo de valle/cauce (eje=2.7x)
+positivo_en_cauce,datos_prueba,ZN69_KUMPIRUSHIATO_001_q1,ZN69_KUMPIRUSHIATO_001,AGENTE,positivo comp 1 (33 px): 61% en fondo de valle/cauce (eje=2.9x)
+positivo_en_cauce,datos_prueba,ZN69_KUMPIRUSHIATO_001_q1,ZN69_KUMPIRUSHIATO_001,AGENTE,positivo comp 5 (48 px): 62% en fondo de valle/cauce (eje=3.1x)
+positivo_en_cauce,datos_prueba,ZN75_MEGANTONI_001_q3,ZN75_MEGANTONI_001,AGENTE,positivo comp 1 (12 px): 67% en fondo de valle/cauce (eje=4.8x)
+positivo_en_cauce,datos_prueba,ZN75_MEGANTONI_001_q3,ZN75_MEGANTONI_001,AGENTE,positivo comp 3 (17 px): 100% en fondo de valle/cauce (eje=2.5x)
+positivo_en_cauce,datos_prueba,ZN75_MEGANTONI_001_q3,ZN75_MEGANTONI_001,AGENTE,positivo comp 11 (14 px): 100% en fondo de valle/cauce (eje=2.8x)
+positivo_sobre_nube,datos_prueba,ZN75_MEGANTONI_001_q3,ZN75_MEGANTONI_001,AGENTE,1 px positivos con B2>1000 y sin firma de suelo claro
+positivo_sobre_nube,datos_prueba,ZN79_VILCABAMBA_001_q1,ZN79_VILCABAMBA_001,AGENTE,1 px positivos con B2>1000 y sin firma de suelo claro
+bordes_geometricos,datos_prueba,ZN81_VILCABAMBA_001_q1,ZN81_VILCABAMBA_001,AGENTE,positivo comp 2: 71% del perimetro interior (47 px) son tramos rectos >= 8.5 px
+positivo_sobre_nube,datos_prueba,ZN81_VILCABAMBA_001_q1,ZN81_VILCABAMBA_001,AGENTE,1 px positivos con B2>1000 y sin firma de suelo claro
+bordes_geometricos,datos_prueba,ZN86_KUMPIRUSHIATO_001_q4,ZN86_KUMPIRUSHIATO_001,AGENTE,dudoso comp 2: 57% del perimetro interior (67 px) son tramos rectos >= 8.5 px
+positivo_en_cauce,datos_prueba,ZN87_QUELLOUNO_001_q2,ZN87_QUELLOUNO_001,AGENTE,positivo comp 4 (153 px): 78% en fondo de valle/cauce (eje=2.5x)
+bordes_geometricos,datos_prueba,ZN88_PICHARI_001_q4,ZN88_PICHARI_001,AGENTE,dudoso comp 1: 61% del perimetro interior (76 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,ZN88_PICHARI_001_q4,ZN88_PICHARI_001,AGENTE,dudoso comp 4: 72% del perimetro interior (131 px) son tramos rectos >= 8.5 px

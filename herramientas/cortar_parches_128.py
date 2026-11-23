@@ -34,6 +34,7 @@ PROYECTOS = {                      # carpeta -> (carpeta base de la que hereda z
     'datos_ingemmet': ('datos_ingemmet', 'base'),
     'datos_azar': ('datos_azar', 'base'),
     'datos_prueba': ('datos_prueba', 'base'),
+    'datos_val_dgrvi': ('datos_val_dgrvi', 'base'),
     'datos_nuevos_ent': ('datos_nuevos_ent', 'base'),
     'datos_laconvencion_2025': ('datos_laconvencion', 'otra_fecha_2025'),
     'datos_indeci_antes': ('datos_indeci', 'otra_fecha_antes'),

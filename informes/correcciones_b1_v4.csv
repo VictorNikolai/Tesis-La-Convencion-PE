@@ -1,0 +1,17 @@
+parche,conjunto,hallazgo_v3,antes_dec,despues_dec,pos_px_despues,dud_px_despues,accion
+datos_prueba__ZN96_QUELLOUNO_001_q1,prueba,ejemplo_B1_nube_y_camino,positivo,dudoso,0,5417,"Eliminados falsos positivos en nube (40-50, 30-35) y arco camino (70-95) tras toma 2025-07-10 limpia; reclasificado a dudoso."
+datos_prueba__ZN75_MEGANTONI_001_q3,prueba,positivo_en_cauce + positivo_sobre_nube,positivo,negativo_confirmado,0,0,Tomas 2023-06-21 y 2025-07-10 despejadas confirman cauce estable y artefacto de nube; pasa a negativo_confirmado.
+datos_prueba__ZN54_KUMPIRUSHIATO_001_q2,prueba,positivo_en_cauce + blanco_saturado_cerca_nube,positivo,dudoso,0,327,Reclasificado a dudoso por seguir fondo de valle/cauce (comp 3 y 7) con bruma cercana (comp 5).
+datos_prueba__ZN51_INKAWASI_001_q2,prueba,positivo_sobre_nube,positivo,positivo,222,0,Eliminado falso positivo sur (caserio/parcelas + 4 px B2>1000); conservada cicatriz nueva 2025 al NE.
+datos_prueba__ZN60_QUELLOUNO_001_q1,prueba,positivo_en_cauce + positivo_sobre_nube,positivo,dudoso,0,144,Reclasificado a dudoso por ubicarse en fondo de valle/terraza junto al rio (75%).
+datos_prueba__ZN67_KUMPIRUSHIATO_001_q3,prueba,positivo_en_cauce,positivo,positivo,96,93,Movido comp 3 en cauce y claro persistente del este a dudoso; conservada cicatriz nueva de ladera.
+datos_prueba__ZN69_KUMPIRUSHIATO_001_q1,prueba,positivo_en_cauce,positivo,positivo,193,267,Movidos comp 1 y 5 en cauce vertical a dudoso; conservada cicatriz lateral en ladera oeste.
+datos_prueba__ZN87_QUELLOUNO_001_q2,prueba,positivo_en_cauce,positivo,positivo,32,210,Movido comp 4 en fondo de quebrada a dudoso.
+datos_prueba__ZN79_VILCABAMBA_001_q1,prueba,positivo_sobre_nube,positivo,positivo,23,1,Verificada cicatriz nueva en 2024-06 y 2025-07 sin nubes; pasado 1 px B2>1000 a dudoso.
+datos_prueba__ZN81_VILCABAMBA_001_q1,prueba,positivo_sobre_nube,positivo,positivo,210,1,Verificados deslizamientos en 3 fechas despejadas; pasado 1 px B2>1000 a dudoso.
+datos_azar__azar_003_001_q2,entrenamiento,positivo_sobre_nube,positivo,positivo,308,711,Pasados 3 px B2>1000 de borde sur a dudoso.
+datos_azar__azar_004_001_q1,validacion,positivo_en_cauce,positivo,dudoso,0,54,Movido a dudoso por ubicarse >50% en fondo de concavidad/cauce.
+datos_ingemmet__ingemmet_005_001_q2,entrenamiento,blanco_saturado_cerca_nube / positivo_sobre_nube,positivo,positivo,3249,1085,Confirmado 0% nubes en 3 fechas secas (2023-2025); pasados 14 px B2>1000 neutros a dudoso y agregado soporte multifecha.
+datos_ingemmet__ingemmet_009_001_q3,entrenamiento,blanco_saturado_cerca_nube / positivo_sobre_nube,positivo,positivo,2900,971,Confirmado 0% nubes en 3 fechas secas (2023-2025); pasados 0 px B2>1000 neutros a dudoso y agregado soporte multifecha.
+datos_ingemmet__ingemmet_040_001_q2,entrenamiento,blanco_saturado_cerca_nube / positivo_sobre_nube,positivo,positivo,2584,18,Confirmado 0% nubes en 3 fechas secas (2023-2025); pasados 18 px B2>1000 neutros a dudoso y agregado soporte multifecha.
+datos_ingemmet__ingemmet_040_001_q3,entrenamiento,blanco_saturado_cerca_nube / positivo_sobre_nube,positivo,positivo,4726,12,Confirmado 0% nubes en 3 fechas secas (2023-2025); pasados 12 px B2>1000 neutros a dudoso y agregado soporte multifecha.

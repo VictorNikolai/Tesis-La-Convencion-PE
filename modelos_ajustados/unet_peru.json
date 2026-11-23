@@ -1,0 +1,92 @@
+{
+ "nombre": "unet_peru",
+ "etiqueta": "U-Net · resnet34 · ajustada con datos del Perú",
+ "autor": "Mejía López, L. C.; Huarcaya Pumacayo, V. N.",
+ "onnx": "unet_peru.onnx",
+ "canales": [
+  "B01",
+  "B02",
+  "B03",
+  "B04",
+  "pendiente",
+  "elevacion"
+ ],
+ "lado_px": 128,
+ "normalizacion": {
+  "metodo": "media_desv",
+  "percentiles": [
+   2,
+   98
+  ],
+  "canales": [
+   "B01",
+   "B02",
+   "B03",
+   "B04",
+   "pendiente",
+   "elevacion"
+  ],
+  "por_canal": {
+   "B01": {
+    "media": 0.925704,
+    "desv": 0.140988
+   },
+   "B02": {
+    "media": 0.922701,
+    "desv": 0.220698
+   },
+   "B03": {
+    "media": 0.954109,
+    "desv": 0.318425
+   },
+   "B04": {
+    "media": 0.959639,
+    "desv": 0.572375
+   },
+   "pendiente": {
+    "media": 1.251108,
+    "desv": 0.678369
+   },
+   "elevacion": {
+    "media": 1.649543,
+    "desv": 1.072711
+   }
+  },
+  "nota": "constantes en unidades de Landslide4Sense; los índices NDVI y NDWI se calculan sobre esas unidades y no se normalizan"
+ },
+ "salida": "sigmoide",
+ "umbral": 0.4,
+ "indices_internos": "GRVI y ExG de B03, B04 y B02, calculados dentro del ONNX",
+ "entrenamiento": {
+  "firma": "809315dc820e",
+  "arquitectura": "unet",
+  "codificador": "resnet34",
+  "dataset": "Landslide4Sense",
+  "epoca": 12,
+  "iou_validacion": null,
+  "prueba": {
+   "iou": null,
+   "f1": null,
+   "precision": null,
+   "recall": null
+  },
+  "particion": "grupos espaciales de TrainData (Fase 4)"
+ },
+ "escala_terreno": {
+  "pendiente": 20.292,
+  "elevacion": 772.82
+ },
+ "terreno_entrenamiento": "ALOS PALSAR (ASF) en Landslide4Sense: B13 pendiente, B14 DEM",
+ "exportacion": {
+  "opset": 17,
+  "paridad_max_logit": 4.76837158203125e-06,
+  "pesos": {
+   "capas_conv": 46,
+   "capas_en_inicializacion": 0,
+   "fraccion": 0.0,
+   "cabeza_sin_entrenar": false,
+   "sin_entrenar": false
+  },
+  "sha256_onnx": "d563efdd58df3dc0ee33b72fbc8a4669539c62e775dd18f05cf6e3ee99e583f4"
+ }
+}

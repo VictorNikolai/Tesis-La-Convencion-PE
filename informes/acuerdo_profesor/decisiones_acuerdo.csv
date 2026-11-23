@@ -1,0 +1,61 @@
+id_iris,parche,tesela,zona,conjunto,decision,confianza,pixeles_positivos,area_ha,fuentes,justificacion,tiempo_seg
+acuerdo_001,acuerdo_001,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_002,acuerdo_002,acuerdo,,prueba,positivo,0.85,208,2.08,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz vertical ramificada en ladera empinada,40.0
+acuerdo_003,acuerdo_003,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_004,acuerdo_004,acuerdo,,prueba,positivo,0.85,1419,14.19,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Deslizamiento principal blanco-naranja y brazo menor,40.0
+acuerdo_005,acuerdo_005,acuerdo,,prueba,positivo,0.85,224,2.24,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Dos cicatrices contiguas en ladera empinada,40.0
+acuerdo_006,acuerdo_006,acuerdo,,prueba,positivo,0.85,146,1.46,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz triangular en filo alto,40.0
+acuerdo_007,acuerdo_007,acuerdo,,prueba,positivo,0.85,526,5.26,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Gran deslizamiento elongado con cola hacia quebrada,40.0
+acuerdo_008,acuerdo_008,acuerdo,,prueba,positivo,0.85,481,4.81,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Deslizamiento claro en ladera boscosa empinada,40.0
+acuerdo_009,acuerdo_009,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_010,acuerdo_010,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_011,acuerdo_011,acuerdo,,prueba,positivo,0.85,167,1.67,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz blanca arqueada en flanco oeste,40.0
+acuerdo_012,acuerdo_012,acuerdo,,prueba,positivo,0.85,38,0.38,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz compacta brillante sobre quebrada,40.0
+acuerdo_013,acuerdo_013,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_014,acuerdo_014,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_015,acuerdo_015,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_016,acuerdo_016,acuerdo,,prueba,positivo,0.85,242,2.42,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz lobulada y surco central,40.0
+acuerdo_017,acuerdo_017,acuerdo,,prueba,positivo,0.85,92,0.92,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Escarpa vertical brillante en pared empinada,40.0
+acuerdo_018,acuerdo_018,acuerdo,,prueba,positivo,0.85,331,3.31,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Embudo desnudo blanco-cian hacia quebrada,40.0
+acuerdo_019,acuerdo_019,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_020,acuerdo_020,acuerdo,,prueba,positivo,0.85,712,7.12,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Flujo elongado N-S en ladera empinada,40.0
+acuerdo_021,acuerdo_021,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_022,acuerdo_022,acuerdo,,prueba,positivo,0.85,283,2.83,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz triangular aislada en bosque (rio excluido),40.0
+acuerdo_023,acuerdo_023,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_024,acuerdo_024,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_025,acuerdo_025,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_026,acuerdo_026,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_027,acuerdo_027,acuerdo,,prueba,positivo,0.85,403,4.03,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Deslizamiento triangular bajando al rio,40.0
+acuerdo_028,acuerdo_028,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_029,acuerdo_029,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_030,acuerdo_030,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_031,acuerdo_031,acuerdo,,prueba,positivo,0.85,574,5.74,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Gran cicatriz curvada en bosque,40.0
+acuerdo_032,acuerdo_032,acuerdo,,prueba,positivo,0.85,46,0.46,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz pequena curvada central (rio al E excluido),40.0
+acuerdo_033,acuerdo_033,acuerdo,,prueba,positivo,0.85,212,2.12,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz diagonal con deposito inferior,40.0
+acuerdo_034,acuerdo_034,acuerdo,,prueba,positivo,0.85,983,9.83,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Gran deslizamiento blanco descargando al rio (cauce y borde sup excluidos),40.0
+acuerdo_035,acuerdo_035,acuerdo,,prueba,positivo,0.85,274,2.74,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Deslizamiento triangular en ladera derecha,40.0
+acuerdo_036,acuerdo_036,acuerdo,,prueba,positivo,0.85,521,5.21,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz central curvada y escarpa izquierda,40.0
+acuerdo_037,acuerdo_037,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_038,acuerdo_038,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_039,acuerdo_039,acuerdo,,prueba,positivo,0.85,869,8.69,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Lobulos de deslizamiento en ladera inferior,40.0
+acuerdo_040,acuerdo_040,acuerdo,,prueba,positivo,0.85,51,0.51,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz diagonal naranja aislada en bosque,40.0
+acuerdo_041,acuerdo_041,acuerdo,,prueba,positivo,0.85,515,5.15,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Dos cicatrices descargando al canon central,40.0
+acuerdo_042,acuerdo_042,acuerdo,,prueba,positivo,0.85,32,0.32,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatrices activas centrales en ladera,40.0
+acuerdo_043,acuerdo_043,acuerdo,,prueba,positivo,0.85,1146,11.46,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Gran deslizamiento blanco alargado bien delimitado,40.0
+acuerdo_044,acuerdo_044,acuerdo,,prueba,positivo,0.85,258,2.58,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz triangular sobre meandro del rio,40.0
+acuerdo_045,acuerdo_045,acuerdo,,prueba,positivo,0.85,1374,13.74,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Flujo alargado diagonal por quebrada,40.0
+acuerdo_046,acuerdo_046,acuerdo,,prueba,positivo,0.85,460,4.6,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz ramificada blanca central,40.0
+acuerdo_047,acuerdo_047,acuerdo,,prueba,positivo,0.85,524,5.24,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Deslizamiento en abanico y corona superior,40.0
+acuerdo_048,acuerdo_048,acuerdo,,prueba,positivo,0.85,539,5.39,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Escarpa blanca en flanco oeste empinado,40.0
+acuerdo_049,acuerdo_049,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_050,acuerdo_050,acuerdo,,prueba,positivo,0.85,774,7.74,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Deslizamiento clasico en cigarro sobre ladera empinada,40.0
+acuerdo_051,acuerdo_051,acuerdo,,prueba,positivo,0.85,642,6.42,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Escarpa activa superior y flanco SW,40.0
+acuerdo_052,acuerdo_052,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_053,acuerdo_053,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_054,acuerdo_054,acuerdo,,prueba,positivo,0.85,950,9.5,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatrices multiples en laderas empinadas,40.0
+acuerdo_055,acuerdo_055,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_056,acuerdo_056,acuerdo,,prueba,positivo,0.85,57,0.57,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz arqueada en ladera oeste,40.0
+acuerdo_057,acuerdo_057,acuerdo,,prueba,positivo,0.85,1651,16.51,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Flujo dendritico ramificado en quebrada,40.0
+acuerdo_058,acuerdo_058,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_059,acuerdo_059,acuerdo,,prueba,negativo_confirmado,0.9,0,0.0,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,"Revision ciega sin cicatriz activa en ladera (bosque, vias, chacras, cauce de rio o roquedal alto).",12.0
+acuerdo_060,acuerdo_060,acuerdo,,prueba,positivo,0.85,195,1.95,S2 L1C CIEGO; GRVI relativo; Pendiente deg; DEM,Cicatriz triangular lateral entrando por el este al rio,40.0

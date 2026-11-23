@@ -35,6 +35,57 @@ ANCLAS_VALIDACION = {
     'sinpad_37418_001': 'Santa Ana (Quillabamba): taludes, Paraíso Alto y el negativo urbano 61214',
 }
 UMBRAL_M = 3560.0
+MIN_FRACCION_PROVINCIA = 0.50
+
+
+def comprobar_teselas_en_provincia(filas, raiz='.', ruta_limite=None, min_fraccion=MIN_FRACCION_PROVINCIA,
+                                   conjuntos=('entrenamiento', 'validacion', 'prueba')):
+    """Devuelve lista de errores para teselas activas con < min_fraccion de su área dentro de La Convención."""
+    import glob
+    import json
+    import rasterio
+    from shapely.geometry import shape, box
+    from shapely.ops import transform as shp_transform
+    from pyproj import Transformer
+
+    ruta_lim = ruta_limite or os.path.join(raiz, 'herramientas', 'limite_laconvencion.geojson')
+    if not os.path.exists(ruta_lim):
+        return [f'No existe el límite provincial: {ruta_lim}']
+    lim = shape(json.load(open(ruta_lim, encoding='utf-8'))['geometry'])
+    tr_ll = Transformer.from_crs('EPSG:32718', 'EPSG:4326', always_xy=True).transform
+
+    errores = []
+    for r in filas:
+        conj = (r.get('conjunto') or '').strip()
+        if conj not in conjuntos:
+            continue
+        t = (r.get('tesela') or '').strip()
+        bx = None
+        if t:
+            q_tifs = sorted(glob.glob(os.path.join(raiz, 'parches_128', '*', f'{t}_q*.tif')))
+            if q_tifs:
+                xs, ys = [], []
+                for qp in q_tifs:
+                    with rasterio.open(qp) as ds:
+                        b = ds.bounds
+                    xs.extend([b.left, b.right])
+                    ys.extend([b.bottom, b.top])
+                bx = box(min(xs), min(ys), max(xs), max(ys))
+        if bx is None:
+            try:
+                x, y = float(r['x']), float(r['y'])
+                bx = box(x - 1280.0, y - 1280.0, x + 1280.0, y + 1280.0)
+            except (KeyError, TypeError, ValueError):
+                errores.append(f'{t or "?"} ({conj}): sin geometría ni coordenadas UTM válidas')
+                continue
+        bx_ll = shp_transform(tr_ll, bx)
+        area = bx_ll.area
+        frac = (bx_ll.intersection(lim).area / area) if area > 0 else 0.0
+        if frac < min_fraccion:
+            errores.append(
+                f'{t} ({conj}, zona {r.get("zona", "?")}): solo {frac:.1%} dentro de La Convención (< {min_fraccion:.0%})'
+            )
+    return errores
 
 
 def main():

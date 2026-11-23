@@ -1,0 +1,23 @@
+tipo,proyecto,parche,tesela,quien,detalle
+bordes_geometricos,datos_azar,azar_019_001_q2,azar_019_001,AGENTE,dudoso comp 34: 56% del perimetro interior (35 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_azar,azar_027_001_q3,azar_027_001,AGENTE,dudoso comp 92: 66% del perimetro interior (39 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_azar,azar_038_001_q3,azar_038_001,AGENTE,dudoso comp 1: 59% del perimetro interior (39 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_indeci,sinpad_133797_001_q2,sinpad_133797_001,AGENTE,dudoso comp 15: 72% del perimetro interior (40 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_indeci,sinpad_92395_001_q4,sinpad_92395_001,AGENTE,dudoso comp 9: 64% del perimetro interior (53 px) son tramos rectos >= 8.5 px
+borde_linea_recta,datos_ingemmet,ingemmet_040_001_q3,ingemmet_040_001,AGENTE,componente 1 toca el borde formando línea recta >= 15 px
+borde_linea_recta,datos_ingemmet,ingemmet_040_001_q3,ingemmet_040_001,AGENTE,componente 2 toca el borde formando línea recta >= 15 px
+bordes_geometricos,datos_ingemmet,ingemmet_043_001_q3,ingemmet_043_001,AGENTE,dudoso comp 8: 65% del perimetro interior (30 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_ingemmet,ingemmet_055_001_q2,ingemmet_055_001,AGENTE,dudoso comp 10: 77% del perimetro interior (25 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_ingemmet,ingemmet_055_001_q2,ingemmet_055_001,AGENTE,dudoso comp 26: 63% del perimetro interior (202 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_21607_001_q1,sinpad_21607_001,AGENTE,dudoso comp 19: 56% del perimetro interior (36 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q2,sinpad_37418_001,AGENTE,dudoso comp 9: 78% del perimetro interior (48 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q2,sinpad_37418_001,AGENTE,dudoso comp 11: 78% del perimetro interior (71 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_laconvencion,sinpad_37418_001_q3,sinpad_37418_001,AGENTE,dudoso comp 15: 67% del perimetro interior (54 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_nuevos_ent,ZN14_SANTA_TERESA_001_q3,ZN14_SANTA_TERESA_001,AGENTE,dudoso comp 87: 62% del perimetro interior (28 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_nuevos_ent,ZN38_SANTA_TERESA_003_q1,ZN38_SANTA_TERESA_003,AGENTE,dudoso comp 28: 58% del perimetro interior (102 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_nuevos_ent,ZN39_SANTA_TERESA_002_q1,ZN39_SANTA_TERESA_002,AGENTE,dudoso comp 26: 91% del perimetro interior (25 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_nuevos_ent,zne_ind18_91024_001_q2,zne_ind18_91024_001,AGENTE,dudoso comp 3: 57% del perimetro interior (35 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,Z111_ECHARATE_007_q2,Z111_ECHARATE_007,AGENTE,dudoso comp 19: 72% del perimetro interior (30 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,Z111_ECHARATE_009_q2,Z111_ECHARATE_009,AGENTE,dudoso comp 29: 67% del perimetro interior (30 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_prueba,ZN06_ECHARATE_001_q4,ZN06_ECHARATE_001,AGENTE,dudoso comp 12: 61% del perimetro interior (49 px) son tramos rectos >= 8.5 px
+bordes_geometricos,datos_val_dgrvi,znv_ingc6_2315_001_q3,znv_ingc6_2315_001,AGENTE,dudoso comp 3: 65% del perimetro interior (37 px) son tramos rectos >= 8.5 px
