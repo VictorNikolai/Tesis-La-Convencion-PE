@@ -33,6 +33,16 @@ Además usamos los 838 parches peruanos marcados por nuestro asesor (conjunto L4
 
 El marcado se hizo en IRIS adaptado a parches de 128 px, sin ver la salida de ningún modelo en validación y prueba. La guía está en [`docs/GUIA_IRIS_128.md`](docs/GUIA_IRIS_128.md).
 
+## Cómo lo hicimos
+
+1. **Elegir zonas.** Partimos de puntos de INDECI, de la cartografía de INGEMMET y de búsquedas de cambio de verdor entre años secos (2018–2020 frente a 2023–2025). También agregamos zonas al azar y zonas difíciles a propósito: ríos, chacras, carreteras, poblados y laderas altas sin deslizamientos.
+2. **Descargar y componer.** Para cada tesela tomamos hasta seis escenas de temporada seca (junio a septiembre), quitamos nubes y sombras con la capa SCL y hicimos la mediana por píxel.
+3. **Marcar.** Cada parche se marcó viendo cuatro vistas: la imagen actual, la de 2018–2020, la imagen aérea y la máscara. Las reglas principales: solo suelo desnudo con forma de cicatriz en ladera; nada de carreteras, cauces, playas, chacras ni nubes; ante la duda, «dudoso». En validación y prueba se marcó sin ver nunca la salida de un modelo.
+4. **Separar en conjuntos.** Agrupamos las teselas por zonas y dejamos al menos 3 km entre entrenamiento, validación y prueba. Quitamos 72 teselas duplicadas o que se solapaban.
+5. **Ajustar los modelos.** U-Net y DeepLabV3+ con codificador ResNet-34. En cada lote de 16 parches mezclamos 8 de La Convención y 8 del conjunto del especialista, con tasa de aprendizaje de 3e-5, entre 15 y 30 épocas y en CPU. La época y el umbral se eligen solo con validación (70 % especialista y 30 % La Convención).
+6. **Evaluar una sola vez.** La prueba de 360 parches se usó una sola vez al final. Medimos IoU, F1, precisión y exhaustividad por píxel; detección por cicatriz (acierto si se cubre al menos el 30 %); falsas alarmas en hectáreas por km² de terreno sin deslizamientos; e intervalos de confianza remuestreando por zonas.
+7. **Filtrar después del modelo.** Quitamos predicciones sobre zonas urbanas y de agua según ESA WorldCover y, opcionalmente, las que no muestran pérdida de verdor frente a 2018–2020 (chacras o pastos que rebrotaron).
+
 ## Resultados
 
 En la prueba de La Convención, la U-Net ajustada pasó de un IoU de 0.011 a 0.131 y bajó las falsas alarmas de 12.5 a 0.22 ha/km². Detecta bien las cicatrices grandes (64 % de las mayores de 2 ha) y casi ninguna de las pequeñas. En la prueba del especialista llegó a un IoU de 0.430. DeepLabV3+ mejoró en la prueba del especialista (0.403), pero en La Convención se quedó en 0.019 por falsas alarmas en laderas altoandinas.
@@ -81,6 +91,13 @@ Así se ve el huaico de Echarate (antes, después, imagen aérea y las prediccio
 
 Los detalles están en [`informes/metricas_reformuladas.md`](informes/metricas_reformuladas.md) y [`informes/estudios_caso.md`](informes/estudios_caso.md).
 
+## Qué falta
+
+- Que el especialista revise una muestra de las máscaras de la prueba, para tener una medida con referencia humana en la misma provincia.
+- Probar un modelo con más bandas (B08, B11 y B12), que podría separar mejor el suelo arcilloso de los pastos secos.
+- Tratar los huaicos en cauce como una clase aparte.
+- Usar imágenes de mayor resolución para los deslizamientos pequeños.
+
 ## Modelos
 
 Las recetas (canales, normalización, umbral y filtro) están en `modelos_ajustados/`. Los archivos ONNX se descargan desde la sección *Releases*.
@@ -105,8 +122,11 @@ Las carpetas principales:
 
 El ajuste fino se corre con `herramientas/ajuste_fino.py` (opción `--sin-l4s` para usar solo datos peruanos) o desde el cuaderno `herramientas/Ajuste_Fino_LaConvencion.ipynb`.
 
-## Cita
+## Fuentes de datos
 
-Huarcaya Pumacayo, V. N. y Mejía López, L. C. (2026). *Sistema de segmentación semántica basado en imágenes satelitales Sentinel-2 para la identificación de deslizamientos en La Convención, Cusco* [Tesis de pregrado]. Universidad Peruana Cayetano Heredia.
-
-Datos usados: Sentinel-2 (Copernicus, vía Microsoft Planetary Computer), NASADEM, ESA WorldCover 2021, INGEMMET, INDECI y el conjunto L4SPe del Mg. Roy Marco Yali Samaniego.
+- **Sentinel-2 L2A** (Copernicus), descargado de Microsoft Planetary Computer: bandas B01 a B04 a 10 m, con la capa de nubes SCL para descartar nubes y sombras.
+- **NASADEM**: pendiente y elevación remuestreadas a 10 m.
+- **ESA WorldCover 2021**: cobertura del suelo para el filtro de zonas urbanas y de agua.
+- **INDECI**: matriz de emergencias 2003–2026 de la provincia (incluida en `datos/`).
+- **INGEMMET**: cartografía de peligros geológicos, usada para elegir zonas de búsqueda.
+- **L4SPe**: 838 parches peruanos marcados por el Mg. Roy Marco Yali Samaniego.
