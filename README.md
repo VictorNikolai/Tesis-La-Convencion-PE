@@ -1,172 +1,100 @@
-# Detección y Segmentación de Deslizamientos en La Convención (Cusco, Perú)
+# Deslizamientos en La Convención (Cusco, Perú) con datos peruanos
 
-Repositorio de investigación para la detección semiautomática de cicatrices de deslizamientos mediante imágenes satelitales **Sentinel-2 L2A**, modelos de elevación **ALOS PALSAR / NASADEM** y redes neuronales de segmentación (**U-Net ResNet-34** y **DeepLabV3+**).
+Conjunto de datos propio, protocolo de marcado y modelos de segmentación de deslizamientos ajustados **solo con datos del Perú** para la provincia de La Convención, Cusco. Imágenes **Sentinel-2 L2A** (10 m) y relieve **NASADEM** (pendiente y elevación).
+
+Tesis de Ingeniería Informática, Universidad Peruana Cayetano Heredia (2026):
+*Sistema de segmentación semántica basado en imágenes satelitales Sentinel-2 para la identificación de deslizamientos en La Convención, Cusco.*
+
+- **Autores:** Víctor Nikolai Huarcaya Pumacayo y Leonardo Camilo Mejía López
+- **Asesor:** Mg. Roy Marco Yali Samaniego
+- **Sistema web:** repositorio [Proyecto_Tesis_Deslizamiento](https://github.com/VictorNikolai/Proyecto_Tesis_Deslizamiento)
 
 ---
 
-## Estructura del repositorio
+## Qué contiene
+
+| Parte | Descripción |
+| :--- | :--- |
+| **Conjunto de La Convención** | 1 224 parches de 128 × 128 px con máscara de referencia en 306 teselas, más 564 parches de la prueba 2 y 16 de la prueba externa |
+| **Partición espacial** | Entrenamiento, validación y prueba separados al menos 3 km borde a borde, sin teselas duplicadas |
+| **Protocolo de marcado** | Marcado en IRIS a 128 × 128 px, ciego en validación y prueba, con revisión por lotes (`docs/GUIA_IRIS_128.md`) |
+| **Ajuste fino** | U-Net y DeepLabV3+ (ResNet-34) ajustados con La Convención y con L4SPe, sin datos extranjeros (`herramientas/ajuste_fino.py`) |
+| **Post-procesamiento** | Filtro de ESA WorldCover (urbano y agua; opcional altitud) y filtro de cambio entre fechas (ΔGRVI) |
+| **Evaluación** | Prueba sellada evaluada una sola vez, prueba 2 de falsas alarmas, métricas por objeto y estudios de caso de INDECI (`informes/`) |
+
+## Conjunto de datos
+
+| Conjunto | Teselas | Parches | Parches con deslizamiento | Cicatrices ≥ 10 px | Uso |
+| :--- | ---: | ---: | ---: | ---: | :--- |
+| Entrenamiento | 140 | 560 | 138 | 269 | Ajuste fino |
+| Validación | 76 | 304 | 39 | 59 | Época, umbral y post-procesamiento |
+| Prueba sellada | 90 | 360 | 38 | 80 | Evaluación final única |
+| Prueba 2 | 141 | 564 | 4 (cualitativos) | — | Falsas alarmas en 349 negativos difíciles |
+| Prueba externa | 4 | 16 | — | — | Solo referencial |
+| **L4SPe** (asesor) | — | 838 | — | — | Referencia peruana marcada por especialista (587 / 127 / 124) |
+
+- Cada parche: imagen GeoTIFF de 6 canales (B01, B02, B03, B04, pendiente, elevación) y máscara con **1** = deslizamiento, **0** = fondo, **255** = dudoso (nube, sombra, cauce, carretera; no cuenta).
+- Partición: `particion.csv` (por tesela). Decisiones de marcado por parche: `informes/decisiones_agente.csv` (columna `metodo`: `manual_v4` o `clasificador_v5`).
+- Las imágenes y máscaras no se suben al repositorio por su tamaño (paquete de 418 MB, disponible a pedido de los autores).
+
+## Resultados principales
+
+Prueba sellada de La Convención (360 parches, 80 cicatrices) y prueba del especialista (L4SPe, 124 parches):
+
+| Modelo | IoU La Convención | Falsas alarmas (ha/km²) | Cicatrices (de 80) | IoU L4SPe |
+| :--- | ---: | ---: | ---: | ---: |
+| U-Net base (sin datos peruanos) | 0.011 | 12.47 | 71 | 0.356 |
+| **U-Net ajustada (B1)** | **0.131** | **0.22** | 18 | **0.430** |
+| DeepLabV3+ ajustada (B2) | 0.019 | 1.43 | 10 | 0.403 |
+
+- La mejora de la U-Net en La Convención tiene un intervalo de confianza de [+0.041, +0.221] (bootstrap por zonas).
+- **Versión v6** (U-Net + filtro WorldCover): en 349 parches negativos difíciles nuevos, las falsas alarmas bajan de 0.095 a 0.021 ha/km² (−78 %).
+- Detección de cicatrices mayores de 2 ha: 64 % en La Convención y 82 % en L4SPe.
+
+### Límites conocidos
+
+- La referencia de La Convención coincide con la del especialista en un IoU de 0.30 a 0.39: es el techo de lo medible en la provincia.
+- Las cicatrices menores de ~0.2 ha (10–19 px) no se marcan de forma consistente a 10 m y casi no se detectan.
+- Los modelos ajustados no marcan los huaicos canalizados en el fondo del cauce.
+- Las metas iniciales del proyecto (IoU ≥ 0.70) no se alcanzan; ver `informes/metricas_reformuladas.md`.
+
+## Modelos
+
+Las recetas (`.json`) están en `modelos_ajustados/`; los archivos `.onnx` se publican como *Release* del repositorio.
+
+| Modelo | Umbral | Uso recomendado |
+| :--- | :---: | :--- |
+| `unet_v6` | 0.45 | Principal: sin espejos, con filtro WorldCover |
+| `deeplabv3plus_v6` | 0.60 | Alternativa (más falsas alarmas en laderas altoandinas) |
+| `unet_b1_v5`, `deeplabv3plus_b2_v5` | 0.30 / 0.40 | Modelos de la evaluación final sellada |
+
+Los modelos parten de una base preentrenada; el ajuste usa solo datos del Perú (La Convención + L4SPe).
+
+## Estructura
 
 ```text
-Tesis-La-Convencion-PE/
-├── docs/                           # Documentación y material visual de referencia
-│   ├── GUIA_IRIS_128.md            # Manual operativo de etiquetado a 128x128 px
-│   └── img/                        # Figuras de auditoría y demostración en IRIS
-├── herramientas/                   # Scripts de procesamiento, entrenamiento y pruebas
-│   ├── ajuste_fino.py              # Entrenamiento con pesos estratificados y geomorfometría
-│   ├── aumentar_d4_tiers.py        # Aumento geofísico invariante (grupo diedral D4)
-│   ├── clasificar_tiers_y_expandir.py
-│   ├── exportar_poligonos_qgis.py  # Vectorización suavizada (Chaikin) y estilo .qml
-│   ├── minar_hard_negatives.py     # Minería activa de negativos difíciles
-│   ├── nutrir_mascaras.py          # Extracción multitemporal y geológica
-│   ├── pipeline_entrenamiento.py   # Entrenamiento, ajuste fino y exportación ONNX
-│   ├── empaquetar_para_colab.py    # Empaquetado para ejecución en GPU (Colab)
-│   ├── Ajuste_Fino_LaConvencion.ipynb
-│   └── test_herramientas.py        # Suite de pruebas unitarias e integrales (9/9)
-├── nucleo/                         # Módulo base de configuración, modelos y recetas
-│   ├── config.py
-│   ├── modelos.py
-│   └── recetas.py                  # Normalización espectral y cálculo de CURVATURA / TPI
-├── resultados/                     # Salidas cartográficas y catálogos consolidados
-│   ├── cicatrices_consolidadas_qgis.geojson
-│   ├── cicatrices_consolidadas_qgis.qml
-│   ├── cicatrices_consolidadas_resumen.csv
-│   ├── catalogo_parches_tiers.csv
-│   ├── mascaras_nivel2_completo.csv
-│   └── particion.csv
-├── escala_laconvencion.json        # Constantes de normalización espectral provincial
-├── iniciar_iris_128.bat            # Lanzador local de la interfaz de etiquetado IRIS
-└── README.md
+herramientas/   descarga, corte de parches, marcado con IRIS, partición, ajuste fino,
+                exportación a ONNX, post-procesamiento, evaluación y pruebas (pytest)
+nucleo/         configuración, modelos y recetas de normalización
+informes/       resultados de cada etapa (CSV, JSON y Markdown)
+modelos_ajustados/  recetas y resultados de los modelos ajustados
+resultados_ajuste/  historial y métricas de cada corrida
+docs/           guía de IRIS y documentación del conjunto L4SPe
 ```
 
----
-
-## Metodología y especificaciones técnicas
-
-| Componente | Especificación |
-| :--- | :--- |
-| **Fuente satelital** | Sentinel-2 L2A (temporada seca junio–septiembre), corrección BOA |
-| **Relieve** | DEM ALOS PALSAR / NASADEM remuestreado a malla UTM 18S (10 m/px) |
-| **Parches de entrada** | Ventanas de $128 \times 128\text{ px}$ ($1{,}28 \times 1{,}28\text{ km}$) |
-| **Canales base (6)** | `B01`, `B02`, `B03`, `B04`, `pendiente` (grados) y `elevacion` (m) |
-| **Variables derivadas** | `GRVI`, `ExG`, `CURVATURA` laplaciana del DEM y `TPI` (ventana $5 \times 5$) |
-| **Arquitecturas** | U-Net ResNet-34 v4 (IoU L4S: $0{,}4602$) y DeepLabV3+ ResNet-34 (ensamble: $0{,}4656$) |
-
----
-
-## Etiquetado en IRIS ($128 \times 128$)
-
-Para la validación y refinamiento humano de máscaras se utiliza la interfaz **IRIS** (*Intelligent Remote Sensing Image Segmentation*) configurada a $128 \times 128\text{ px}$ (guía detallada en [`docs/GUIA_IRIS_128.md`](docs/GUIA_IRIS_128.md)).
-
-### Instalación y ejecución de IRIS
-
-Requiere **Python 3.10+** y **Node.js (npm)**:
+## Uso rápido
 
 ```powershell
-# 1. Clonar el código fuente de IRIS en iris_app/
-git clone https://github.com/gt-csse/iris.git iris_app
+pip install -r requirements.txt      # o: torch, segmentation-models-pytorch, rasterio, onnxruntime
+pytest herramientas/test_herramientas.py -q
 
-# 2. Instalar dependencias de Python y el paquete IRIS
-pip install -e iris_app
-pip install rasterio scikit-learn matplotlib pillow scipy
-
-# 3. Compilar la interfaz web (React / Vite)
-npm --prefix iris_app install
-npm --prefix iris_app run build
+# Ajuste fino con datos peruanos (sin datos extranjeros)
+python herramientas/ajuste_fino.py --sin-l4s --desde ckpt_base/<modelo>.pt --stats ckpt_base/<stats>.json `
+  --parches parches_128 --mascaras mascaras_nivel1/parches_128 --l4spe l4spe_profesor.npz
 ```
 
-Para exportar los parches, iniciar el servidor local e importar las máscaras validadas:
+## Cómo citar
 
-```powershell
-# Exportar proyecto a iris_128/
-python herramientas/iris_128.py exportar --salida iris_128
+Huarcaya Pumacayo, V. N. y Mejía López, L. C. (2026). *Sistema de segmentación semántica basado en imágenes satelitales Sentinel-2 para la identificación de deslizamientos en La Convención, Cusco* [Tesis de pregrado]. Universidad Peruana Cayetano Heredia.
 
-# Iniciar el servidor web local (o hacer doble clic en iniciar_iris_128.bat)
-python herramientas/iris_128.py abrir --iris iris_128
-# Abrir en el navegador: http://127.0.0.1:5000/segmentation/ (usuario: admin | clave: laconvencion)
-
-# Importar las máscaras guardadas a Nivel 1
-python herramientas/iris_128.py importar --iris iris_128 --salida mascaras_nivel1
-```
-
-![Demostración de etiquetado en IRIS 128](docs/img/video_tutorial_iris.gif)
-
-![Mapa de interfaz IRIS 128](docs/img/mapa_interfaz_iris.png)
-
----
-
-## Auditoría de calidad y resultados consolidados
-
-Las máscaras multitemporales (2018–2025, eventos INDECI y cartografía geológica de INGEMMET) se filtran mediante compacidad morfológica ($\text{área}/\text{perímetro} \ge 1{,}38\text{ px}$) y se estratifican en niveles de confianza (**Oro**, **Plata**, **Bronce** y **Hard Negatives**):
-
-![Auditoría de calidad y variables geomorfométricas](docs/img/auditoria_calidad_tesis.png)
-
-### Resumen cuantitativo del conjunto de entrenamiento
-
-| Etapa / Artefacto | Resultado | Archivo en repositorio |
-| :--- | :--- | :--- |
-| **Teselas procesadas** | 353 teselas (96 con cicatrices propuestas, 783,3 ha) | [`resultados/mascaras_nivel2_completo.csv`](resultados/mascaras_nivel2_completo.csv) |
-| **Ventana deslizante + Tiers** | 310 parches centrados nuevos (196 Tier Oro, 125 Tier Plata) | [`resultados/catalogo_parches_tiers.csv`](resultados/catalogo_parches_tiers.csv) |
-| **Aumento geofísico $D_4$** | 2,003 parches positivos vs 577 negativos (total: 2,580 parches) | [`herramientas/aumentar_d4_tiers.py`](herramientas/aumentar_d4_tiers.py) |
-| **Minería de negativos difíciles** | 443 negativos difíciles identificados (peso de pérdida `0.8`) | [`herramientas/minar_hard_negatives.py`](herramientas/minar_hard_negatives.py) |
-| **Polígonos suavizados (QGIS)** | 499 polígonos (409 Oro, 58 Plata, 32 Bronce; 609,1 ha) | [`resultados/cicatrices_consolidadas_qgis.geojson`](resultados/cicatrices_consolidadas_qgis.geojson) |
-| **Control ciego inter-anotador** | 3 teselas reservadas intactas (`15525`, `48878`, `557`) | [`herramientas/acuerdo_anotadores.py`](herramientas/acuerdo_anotadores.py) |
-
----
-
-## Verificación automática
-
-```powershell
-python herramientas/test_herramientas.py
-```
-
-Todas las pruebas unitarias e integrales (partición espacial sin fuga, regla de nubes, métricas de acuerdo inter-anotador, cálculo geomorfométrico de `CURVATURA`/`TPI`, pesos por Tier y suavizado cartográfico de Chaikin) pasan al 100% (`9/9 OK`).
-
----
-
-## Entrenamiento, ajuste fino y exportación ONNX
-
-El flujo de modelado se divide en **cuatro etapas secuenciales y reproducibles**, diseñadas para entrenar y contrastar **U-Net (ResNet-34)** y **DeepLabV3+ (ResNet-34)** hasta obtener los archivos finales **ONNX** (`.onnx`) y sus recetas `.json` para despliegue en producción.
-
-### Etapa 1. Entrenamiento base global (`herramientas/entrenar.py`)
-* **Objetivo:** Dotar al *encoder* ResNet-34 (pre-entrenado en ImageNet) de capacidad general para reconocer deslizamientos a partir de los 3,799 parches de *Landslide4Sense*.
-* **Configuración técnica:**
-  * **Función de pérdida:** Combinación de *Binary Cross-Entropy* con *Online Hard Example Mining* (`--ohem 0.25`) y *Dice Loss* (`--peso-dice 0.5`).
-  * **Índices internos (`--indices-verdor`):** Calcula `GRVI` y `ExG` dentro del propio grafo de la red, de modo que viajan compilados dentro del `.onnx`.
-  * **Estabilización:** Promedio móvil exponencial de pesos (`--ema 0.999`), calentamiento de tasa de aprendizaje (`--calentamiento 5`) y promediado de las 5 mejores épocas (`--promediar 5`).
-* **Salidas:** Checkpoint `.pt` y estadísticas de normalización `stats_norm_<firma>.json`.
-
-### Etapa 2. Ajuste fino en La Convención (`herramientas/ajuste_fino.py`)
-* **Objetivo:** Especializar el modelo base a la geomorfología y reflectancia andino-amazónica de La Convención sin olvidar lo aprendido en *Landslide4Sense*.
-* **Configuración técnica:**
-  * **Lotes mixtos (`--frac-local 0.5`):** Cada lote combina 50% de parches locales de La Convención (los **2,580 parches** balanceados con simetría $D_4$) y 50% de *Landslide4Sense* como ancla.
-  * **Pérdida estratificada por Tiers:** Aplica el peso de `resultados/catalogo_parches_tiers.csv` por parche (`1.0` Tier Oro, `0.8` *Hard Negatives*, `0.5` Tier Plata, `0.3`/`0.2` Tier Bronce) e ignora píxeles `255` (nubes/dudosos).
-  * **Tasa baja (`--lr 3e-5`):** Diez veces menor que el entrenamiento base para refinar pesos sin destruir el *encoder*; admite `--geomorfologia` para expandir la primera capa (`conv1`) e incorporar `CURVATURA` y `TPI`.
-  * **Criterio de aceptación:** Solo guarda un nuevo modelo si mejora en validación local sin caer más de `0.03` de IoU en *Landslide4Sense*.
-
-### Etapa 3. Comparación de arquitecturas (`pipeline_entrenamiento.py`)
-* **Objetivo:** Contrastar rigurosamente **U-Net ResNet-34** (precisión en bordes mediante *skip connections*) frente a **DeepLabV3+ ResNet-34** (contexto multiescala mediante *Atrous Spatial Pyramid Pooling*) y frente a la línea base física sin aprendizaje (regla espectral + pendiente).
-
-### Etapa 4. Exportación y verificación ONNX (`exportar_onnx.py` y `verificar_onnx.py`)
-* **Objetivo:** Compilar ambos modelos (`.pt` $\rightarrow$ `.onnx`) junto con su receta `.json` (orden de canales, constantes de normalización, tipo de salida y umbral óptimo), verificando que la inferencia en `onnxruntime` reproduzca exactamente las métricas de PyTorch.
-
-### Comandos de ejecución
-
-```powershell
-# 1. Benchmark comparativo completo: entrena U-Net ResNet-34 y DeepLabV3+ ResNet-34,
-#    exporta ambos modelos a formato ONNX y verifica sus métricas oficiales
-python herramientas/pipeline_entrenamiento.py comparativo --l4s /ruta/l4s
-
-# 2. Entrenamiento base individual (unet o deeplabv3plus) + ONNX
-python herramientas/pipeline_entrenamiento.py base --l4s /ruta/l4s --arquitectura unet
-
-# 3. Ajuste fino en La Convención (2,580 parches estratificados + Hard Negatives + Vía 3)
-#    y exportación automática del ONNX ajustado
-python herramientas/pipeline_entrenamiento.py ajuste \
-    --l4s /ruta/l4s \
-    --desde /ruta/mejor_unet_b1b4b13b14.pt \
-    --stats /ruta/stats_norm.json \
-    --geomorfologia
-```
-
-*(Para ejecución en GPU gratuita de Google Colab, utilizar el cuaderno sincronizado [`herramientas/Ajuste_Fino_LaConvencion.ipynb`](herramientas/Ajuste_Fino_LaConvencion.ipynb)).*
-
+Fuentes de datos: Sentinel-2 (ESA/Copernicus, vía Microsoft Planetary Computer), NASADEM, ESA WorldCover 2021, INGEMMET, INDECI y el conjunto L4SPe del Mg. Roy Marco Yali Samaniego.

@@ -2,7 +2,7 @@
 Máscaras PROVISIONALES de nivel 2: propuestas de INGEMMET visibles en la imagen.
 
 NO son etiquetas humanas. Salen de cruzar el polígono levantado en campo por INGEMMET con
-lo que la imagen Sentinel-2 muestra como suelo desnudo, y de una revisión visual de Claude
+lo que la imagen Sentinel-2 muestra como suelo desnudo, y de una revisión visual asistida
 (archivo decisiones.csv). Sirven para probar el código y, con peso bajo, como entrenamiento
 débil DESPUÉS de que una persona acepte o rechace cada pieza. Nunca se usan para medir.
 
@@ -127,7 +127,7 @@ def main():
                 dec, mot = 'aceptada', 'automática: sin observación'
             p['tipo_ingemmet'] = tipo.get(p['objectid'], '')
             p['decision'], p['motivo'], p['nivel'] = dec, mot, 2
-            p['fuente'] = 'INGEMMET ∩ suelo desnudo visible; revisión visual de Claude; NO es etiqueta humana'
+            p['fuente'] = 'INGEMMET ∩ suelo desnudo visible; revisión visual asistida; NO es etiqueta humana'
             n[dec] += 1
             ha[dec] += p['area_ha']
             capas[dec].append(g)

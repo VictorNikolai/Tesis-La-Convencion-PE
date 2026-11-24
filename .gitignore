@@ -49,7 +49,7 @@ iris_ejemplo_demo/proyecto_iris/
 iris_ejemplo_demo/mascaras_nivel1_demo/**/*.tif
 _entrega/
 _respaldos/
-_temporal_claude/
+_temporal*/
 ckpt_base/
 ckpt_peru/
 iris_128_*/
