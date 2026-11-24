@@ -160,6 +160,92 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
     return np.stack(X), np.stack(Y), np.stack(V), usadas
 
 
+def mapa_peso_pequenas(Y, peso=1.0, max_px=50):
+    """Devuelve un mapa (N, H, W) float32 con valor `peso` sobre componentes positivos 8-conectados
+    de tamaño < max_px, y 1.0 en el resto (fondo y cicatrices grandes)."""
+    W = np.ones_like(Y, dtype=np.float32)
+    if peso <= 1.0 or len(Y) == 0:
+        return W
+    from scipy import ndimage
+    st8 = np.ones((3, 3), dtype=bool)
+    for i in range(len(Y)):
+        yi = Y[i] > 0
+        if not yi.any():
+            continue
+        lab, n = ndimage.label(yi, structure=st8)
+        for cid in range(1, n + 1):
+            cm = (lab == cid)
+            if int(cm.sum()) < max_px:
+                W[i][cm] = float(peso)
+    return W
+
+
+def banco_cicatrices_pequenas(X, Y, V, mask_elegible, min_px=10, max_px=120):
+    """Extrae recortes reales de cicatrices pequeñas (min_px <= area <= max_px) exclusivamente
+    de los parches con mask_elegible[i] == True (manual_v4 de entrenamiento)."""
+    from scipy import ndimage
+    st8 = np.ones((3, 3), dtype=bool)
+    banco = []
+    for i in range(len(X)):
+        if not mask_elegible[i]:
+            continue
+        yi = (Y[i] > 0) & (V[i] > 0)
+        if not yi.any():
+            continue
+        lab, n = ndimage.label(yi, structure=st8)
+        for cid, sl in enumerate(ndimage.find_objects(lab), 1):
+            if sl is None:
+                continue
+            cm = (lab[sl] == cid)
+            sz = int(cm.sum())
+            if min_px <= sz <= max_px:
+                # Guardar recorte espectral (primeros 4 canales B01..B04) y máscara booleana
+                banco.append((X[i, :4, sl[0], sl[1]].copy(), cm.copy(), sz))
+    return banco
+
+
+def aplicar_copiar_pegar(xb, yb, vb, banco, rng, prob=0.5, max_pegar=2, peso_pequenas=1.0):
+    """Aplica copy-paste de cicatrices pequeñas reales sobre un lote local (xb, yb, vb) in-place copy.
+    Pega solo los 4 canales espectrales (conserva pendiente y elevación reales del parche destino)
+    en posiciones válidas sin superposición con positivos o píxeles dudosos."""
+    if not banco or prob <= 0.0:
+        return xb, yb, vb
+    xb = xb.copy(); yb = yb.copy(); vb = vb.copy()
+    H, W = yb.shape[-2], yb.shape[-1]
+    for i in range(len(xb)):
+        if rng.random() >= prob:
+            continue
+        n_peg = int(rng.integers(1, max_pegar + 1))
+        for _ in range(n_peg):
+            patch_x, patch_m, sz = banco[int(rng.integers(0, len(banco)))]
+            k = int(rng.integers(0, 4))
+            px = np.rot90(patch_x, k, axes=(-2, -1))
+            pm = np.rot90(patch_m, k, axes=(-2, -1))
+            if bool(rng.integers(0, 2)):
+                px = px[..., ::-1]
+                pm = pm[..., ::-1]
+            # Variación radiométrica suave (±5 %) para evitar memorización exacta
+            jitter = float(rng.uniform(0.95, 1.05))
+            px = px * jitter
+            ph, pw = pm.shape
+            if ph >= H - 4 or pw >= W - 4:
+                continue
+            for _intento in range(12):
+                r0 = int(rng.integers(2, H - ph - 2))
+                c0 = int(rng.integers(2, W - pw - 2))
+                v_sub = vb[i, r0:r0 + ph, c0:c0 + pw]
+                y_sub = yb[i, r0:r0 + ph, c0:c0 + pw]
+                if (v_sub[pm] > 0).all() and not (y_sub[pm] > 0).any():
+                    xb[i, :4, r0:r0 + ph, c0:c0 + pw][:, pm] = px[:, pm]
+                    yb[i, r0:r0 + ph, c0:c0 + pw][pm] = 1.0
+                    if peso_pequenas > 1.0 and sz < 50:
+                        vb[i, r0:r0 + ph, c0:c0 + pw][pm] = np.maximum(
+                            vb[i, r0:r0 + ph, c0:c0 + pw][pm], float(peso_pequenas)
+                        )
+                    break
+    return xb, yb, vb
+
+
 def verificar_conteos_nivel1(fl_ent, fl_val, fl_pru, metodos_n1, fl_pru2=None, esperados=(560, 304, 360, 564),
                              esperados_pru2_neg=349):
     """Aborta con SystemExit si los parches de Nivel 1 cargados no coinciden exactamente con los conteos
@@ -398,6 +484,12 @@ def main():
                          'Perú (La Convención y L4SPe). El modelo de partida sí viene de L4S (es el que ya se entrenó)')
     ap.add_argument('--peso-clasificador-v5', dest='peso_clf_v5', type=float, default=0.5,
                     help='peso en la pérdida de los parches de Nivel 1 de entrenamiento marcados con clasificador_v5 (manual_v4 lleva 1.0)')
+    ap.add_argument('--peso-pequenas', dest='peso_pequenas', type=float, default=1.0,
+                    help='factor de peso extra en la pérdida para cicatrices pequeñas (<50 px) en entrenamiento (ej. 2.0 o 3.0)')
+    ap.add_argument('--copiar-pegar-pequenas', dest='copiar_pegar', type=float, default=0.0,
+                    help='probabilidad de copy-paste de cicatrices pequeñas reales (solo manual_v4 de entrenamiento) por parche local')
+    ap.add_argument('--solo-validacion', dest='solo_validacion', action='store_true',
+                    help='no evalúa ningún conjunto de prueba (ni prueba local, ni L4SPe prueba, ni L4S prueba); solo validación')
     ap.add_argument('--peso-val-l4spe', dest='peso_val_pe', type=float, default=0.7,
                     help='peso de la validación de L4SPe del profesor al elegir época y umbral frente a la validación de La Convención (0.7 / 0.3)')
     ap.add_argument('--decisiones', default=None,
@@ -485,11 +577,19 @@ def main():
         a.peso_clf_v5 if (metodos_n1.get(f"{r['proyecto']}__{r['parche']}") == 'clasificador_v5' or metodos_n1.get(r['parche']) == 'clasificador_v5') else 1.0
         for r in Fl
     ], dtype=np.float32)
-    n_n1_manual = int(sum(1 for w in Wl if w == 1.0))
+    mask_manual_v4 = np.array([
+        (metodos_n1.get(f"{r['proyecto']}__{r['parche']}") or metodos_n1.get(r['parche']) or 'manual_v4') == 'manual_v4'
+        for r in Fl
+    ], dtype=bool)
+    n_n1_manual = int(mask_manual_v4.sum())
     n_n1_clf = len(Wl) - n_n1_manual
     if not a.sin_local:
         _, _, _, Ft_loc2 = cargar_locales(a.parches, a.mascaras, receta, escala, {'prueba2'})
         verificar_conteos_nivel1(Fl, Fv, Ft_loc, metodos_n1, fl_pru2=Ft_loc2)
+    banco_cp = []
+    if a.copiar_pegar > 0.0 and not a.sin_local:
+        banco_cp = banco_cicatrices_pequenas(Xl, Yl, Vl, mask_manual_v4, min_px=10, max_px=120)
+        print(f'copy-paste (10b): banco de {len(banco_cp)} cicatrices pequeñas reales (solo manual_v4 entrenamiento), prob={a.copiar_pegar}')
     n_debiles = 0
     if a.debiles and not a.sin_local:
         con_n1 = {r['parche'] for r in Fl}
@@ -502,12 +602,15 @@ def main():
             Wl = np.concatenate([Wl, pesos_q])
             Fl = Fl + [Fd[i] for i in quedan]
             n_debiles = len(quedan)
+    W_tam_l = mapa_peso_pequenas(Yl, peso=a.peso_pequenas, max_px=50)
     Xp = Yp = Vp = Xpv = Ypv = Vpv = Xpt = Ypt = Vpt = None
+    W_tam_p = None
     Fp = Fpv = Fpt = []
     if a.l4spe:
         Xp, Yp, Vp, Fp = cargar_l4spe(a.l4spe, receta, {'entrenamiento'})
         Xpv, Ypv, Vpv, Fpv = cargar_l4spe(a.l4spe, receta, {'validacion'})
         Xpt, Ypt, Vpt, Fpt = cargar_l4spe(a.l4spe, receta, {'prueba'})
+        W_tam_p = mapa_peso_pequenas(Yp, peso=a.peso_pequenas, max_px=50)
         if len(Xp) < 4 or len(Xpv) < 1:
             raise SystemExit(f'L4SPe: {len(Xp)} parches de entrenamiento y {len(Xpv)} de validación; revisa {a.l4spe}')
         print(f'L4SPe (profesor): entrenamiento {len(Xp)} parches / {len({r["zona"] for r in Fp})} zonas, '
@@ -613,6 +716,7 @@ def main():
                                      'congelar_encoder': a.congelar, 'bn_libre': a.bn_libre, 'tolerancia_l4s': a.tol,
                                      'semilla': a.semilla, 'parches_locales': len(Xl), 'parches_debiles': n_debiles,
                                      'peso_debil': a.peso_debil if n_debiles else None,
+                                     'peso_pequenas': a.peso_pequenas, 'copiar_pegar_pequenas': a.copiar_pegar,
                                      'zonas_entrenamiento': sorted(zonas_tr), 'zonas_validacion': sorted(zonas_va)})
     firma = hashlib.sha1(json.dumps(dict(config, arquitectura=arq), sort_keys=True).encode()).hexdigest()[:12]
     base = f'{arq}_{ETIQUETA_CANALES}_{firma}'
@@ -659,10 +763,14 @@ def main():
             xs, ys, vs = [], [], []
             if n_loc:
                 jl = rng.integers(0, len(Xl), n_loc)
-                xs.append(Xl[jl]); ys.append(Yl[jl]); vs.append(Vl[jl] * Wl[jl][:, None, None])
+                xb_l, yb_l, vb_l = Xl[jl], Yl[jl], Vl[jl] * Wl[jl][:, None, None] * W_tam_l[jl]
+                if banco_cp:
+                    xb_l, yb_l, vb_l = aplicar_copiar_pegar(xb_l, yb_l, vb_l, banco_cp, rng,
+                                                            prob=a.copiar_pegar, peso_pequenas=a.peso_pequenas)
+                xs.append(xb_l); ys.append(yb_l); vs.append(vb_l)
             if n_pe:
                 jp = rng.integers(0, len(Xp), n_pe)
-                xs.append(Xp[jp]); ys.append(Yp[jp]); vs.append(Vp[jp] * a.peso_l4spe)
+                xs.append(Xp[jp]); ys.append(Yp[jp]); vs.append(Vp[jp] * a.peso_l4spe * W_tam_p[jp])
             if n_l4s:
                 if pos + n_l4s > len(cola_l4s):
                     cola_l4s = rng.permutation(len(Xtr)); pos = 0
@@ -790,14 +898,15 @@ def main():
     res['comparador_sin_aprendizaje'] = {'regla': 'GRVI <= 0, B4 >= 1.29 L4S (~600 DN) y pendiente >= 10°'}
     res['usa_l4s'] = not a.sin_l4s
     if not a.sin_l4s:
-        pt0, ptF = predecir(base_modelo, Xte, disp), predecir(modelo, Xte, disp)
-        ptR = regla_suelo_pendiente(Xte, receta)
         res['base']['l4s_validacion'] = m0['l4s']
-        res['base']['l4s_prueba'] = en_umbral(barrido(pt0, Yte, Vte), m0['l4s']['umbral'])
         res['validacion'] = mF['l4s']
-        res['prueba'] = en_umbral(barrido(ptF, Yte, Vte), mF['l4s']['umbral'])
-        res['comparador_sin_aprendizaje']['l4s_prueba'] = en_umbral(barrido(ptR, Yte, Vte), 0.5)
         res['barrido_validacion'] = mF['l4s_barrido']
+        if not a.solo_validacion:
+            pt0, ptF = predecir(base_modelo, Xte, disp), predecir(modelo, Xte, disp)
+            ptR = regla_suelo_pendiente(Xte, receta)
+            res['base']['l4s_prueba'] = en_umbral(barrido(pt0, Yte, Vte), m0['l4s']['umbral'])
+            res['prueba'] = en_umbral(barrido(ptF, Yte, Vte), mF['l4s']['umbral'])
+            res['comparador_sin_aprendizaje']['l4s_prueba'] = en_umbral(barrido(ptR, Yte, Vte), 0.5)
     if hay_val:
         pl0, plF = predecir(base_modelo, Xv, disp), predecir(modelo, Xv, disp)
         plR = regla_suelo_pendiente(Xv, receta)
@@ -808,7 +917,7 @@ def main():
             'umbral': a.umbral_base, 'base': resumen_local(pl0, Yv, Vv, Fv, a.umbral_base),
             'ajustado': resumen_local(plF, Yv, Vv, Fv, a.umbral_base)}
         res['local_mejora_iou'] = bootstrap_zonas(pl0, u0, plF, uF, Yv, Vv, Fv) if hay_pos_val else None
-        if len(Xt_loc):
+        if len(Xt_loc) and not a.solo_validacion:
             pt_loc0, pt_locF = predecir(base_modelo, Xt_loc, disp), predecir(modelo, Xt_loc, disp)
             pt_locR = regla_suelo_pendiente(Xt_loc, receta)
             res['base']['local_prueba'] = resumen_local(pt_loc0, Yt_loc, Vt_loc, Ft_loc, u0)
@@ -823,13 +932,17 @@ def main():
             if origen_val.startswith('nivel 2') else '') if s]
     if hay_pe:
         pv0, pvF = predecir(base_modelo, Xpv, disp), predecir(modelo, Xpv, disp)
-        pt0_, ptF_ = predecir(base_modelo, Xpt, disp), predecir(modelo, Xpt, disp)
         res['l4spe'] = {
             'nota': 'máscaras manuales del profesor, otras zonas del Perú (no La Convención); entrada de Sentinel-2 L1C',
             'validacion': {'base': resumen_local(pv0, Ypv, Vpv, Fpv, u0), 'ajustado': resumen_local(pvF, Ypv, Vpv, Fpv, uF)},
-            'prueba': {'base': resumen_local(pt0_, Ypt, Vpt, Fpt, u0), 'ajustado': resumen_local(ptF_, Ypt, Vpt, Fpt, uF),
-                       'regla': resumen_local(regla_suelo_pendiente(Xpt, receta), Ypt, Vpt, Fpt, 0.5)},
-            'mejora_iou_prueba': bootstrap_zonas(pt0_, u0, ptF_, uF, Ypt, Vpt, Fpt)}
+        }
+        if not a.solo_validacion:
+            pt0_, ptF_ = predecir(base_modelo, Xpt, disp), predecir(modelo, Xpt, disp)
+            res['l4spe']['prueba'] = {
+                'base': resumen_local(pt0_, Ypt, Vpt, Fpt, u0), 'ajustado': resumen_local(ptF_, Ypt, Vpt, Fpt, uF),
+                'regla': resumen_local(regla_suelo_pendiente(Xpt, receta), Ypt, Vpt, Fpt, 0.5),
+            }
+            res['l4spe']['mejora_iou_prueba'] = bootstrap_zonas(pt0_, u0, ptF_, uF, Ypt, Vpt, Fpt)
         res['local_advertencias'] = res.get('local_advertencias', []) + [
             'L4SPe es de otras zonas del Perú y de imágenes L1C: que mejore ahí no garantiza mejora en La Convención (L2A)']
     res['minutos'] = round((time.time() - t0) / 60, 1)
@@ -844,7 +957,7 @@ def main():
         json.dump(stats, open(os.path.join(a.salida, f'stats_norm_{firma}.json'), 'w', encoding='utf-8'), indent=1)
         print(f"mejor época {mejor['epoca']}" + (f" mezclada con alfa {mejor['alfa']}" if mejor.get('alfa', 1.0) < 1 else '')
               + f"; umbral {uF} (elegido en {res['umbral_elegido_en']})")
-    if hay_pe:
+    if hay_pe and not a.solo_validacion:
         pr = res['l4spe']['prueba']
         print(f"L4SPe (profesor), prueba de {len(Xpt)} parches de otras zonas del Perú:")
         for nombre in ('regla', 'base', 'ajustado'):
@@ -855,7 +968,7 @@ def main():
         if bz:
             print(f"mejora de IoU en L4SPe (prueba), IC 95 % por zonas ({bz['zonas']}): [{bz['ic95'][0]:+.4f}, {bz['ic95'][1]:+.4f}]")
     f4 = lambda r: f"IoU {r['iou']:.4f}  F1 {r['f1']:.4f}  precisión {r['precision']:.4f}  exhaustividad {r['recall']:.4f}"
-    if not a.sin_l4s:
+    if not a.sin_l4s and not a.solo_validacion:
         print(f"Landslide4Sense, prueba oficial   regla   : {f4(res['comparador_sin_aprendizaje']['l4s_prueba'])}")
         print(f"                                  base    : {f4(res['base']['l4s_prueba'])}")
         print(f"                                  ajustado: {f4(res['prueba'])}")

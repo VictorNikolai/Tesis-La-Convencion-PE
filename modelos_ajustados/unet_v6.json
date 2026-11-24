@@ -1,0 +1,109 @@
+{
+ "nombre": "unet_v6",
+ "etiqueta": "U-Net · resnet34",
+ "autor": "Huarcaya Pumacayo, V. N.",
+ "onnx": "unet_v6.onnx",
+ "canales": [
+  "B01",
+  "B02",
+  "B03",
+  "B04",
+  "pendiente",
+  "elevacion"
+ ],
+ "lado_px": 128,
+ "normalizacion": {
+  "metodo": "media_desv",
+  "percentiles": [
+   2,
+   98
+  ],
+  "canales": [
+   "B01",
+   "B02",
+   "B03",
+   "B04",
+   "pendiente",
+   "elevacion"
+  ],
+  "por_canal": {
+   "B01": {
+    "media": 0.925704,
+    "desv": 0.140988
+   },
+   "B02": {
+    "media": 0.922701,
+    "desv": 0.220698
+   },
+   "B03": {
+    "media": 0.954109,
+    "desv": 0.318425
+   },
+   "B04": {
+    "media": 0.959639,
+    "desv": 0.572375
+   },
+   "pendiente": {
+    "media": 1.251108,
+    "desv": 0.678369
+   },
+   "elevacion": {
+    "media": 1.649543,
+    "desv": 1.072711
+   }
+  },
+  "nota": "constantes en unidades de Landslide4Sense; los índices NDVI y NDWI se calculan sobre esas unidades y no se normalizan"
+ },
+ "salida": "sigmoide",
+ "umbral": 0.45,
+ "umbral_con_tta": 0.45,
+ "umbral_sin_tta": 0.45,
+ "requiere_tta": false,
+ "tta_recomendacion": "Opcional (4 espejos): en CPU ONNX Runtime pasa de 18.6 ms a 60.9 ms/parche (3.28x). Sin TTA + filtro ya logra 0.0212 ha/km2 en prueba2 (5.4 % de negativos) y IoU 0.1387 post hoc; con TTA + filtro logra 0.0231 ha/km2 (4.6 %) y IoU 0.1453 post hoc. Para Render se recomienda SIN TTA + filtro.",
+ "posproceso": {
+  "filtro": "wc_dem_3200_agua_urb",
+  "fuente_cobertura": "colección esa-worldcover (ESA WorldCover 10 m 2021 v200) de Planetary Computer",
+  "altitud_min_m": 3200,
+  "clases_worldcover_altoandino": [20, 30, 60, 70, 100],
+  "clases_worldcover_siempre_excluidas": [50, 80],
+  "regla": "suprimir predicción si (elevacion >= 3200 m y WC en {20,30,60,70,100}) o WC en {50,80}"
+ },
+ "latencia_cpu_ort_ms": {
+  "sin_tta": 18.6,
+  "tta_4": 60.9
+ },
+ "estado": "fuera del sistema desplegado (modelos/ intacto)",
+ "indices_internos": "GRVI y ExG de B03, B04 y B02, calculados dentro del ONNX",
+ "entrenamiento": {
+  "firma": "7c0b35452807",
+  "arquitectura": "unet",
+  "codificador": "resnet34",
+  "dataset": "Landslide4Sense",
+  "epoca": 24,
+  "iou_validacion": null,
+  "prueba": {
+   "iou": null,
+   "f1": null,
+   "precision": null,
+   "recall": null
+  },
+  "particion": "grupos espaciales de TrainData (Fase 4)"
+ },
+ "escala_terreno": {
+  "pendiente": 20.292,
+  "elevacion": 772.82
+ },
+ "terreno_entrenamiento": "ALOS PALSAR (ASF) en Landslide4Sense: B13 pendiente, B14 DEM",
+ "exportacion": {
+  "opset": 17,
+  "paridad_max_logit": 4.291534423828125e-06,
+  "pesos": {
+   "capas_conv": 46,
+   "capas_en_inicializacion": 0,
+   "fraccion": 0.0,
+   "cabeza_sin_entrenar": false,
+   "sin_entrenar": false
+  },
+  "sha256_onnx": "5419f7e38bb5bd814ae04a29ffa3f01748190cd42004920f9b6c5f6a1a6dcaa3"
+ }
+}

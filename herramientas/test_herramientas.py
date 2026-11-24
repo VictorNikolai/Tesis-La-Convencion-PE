@@ -812,6 +812,61 @@ class TestAjusteFinoComponentes(unittest.TestCase):
                 self.assertGreaterEqual(g_t.distance(u_eval), 2995.0,
                                         f"Tesela N2 {r_t['tesela']} a < 3 km de eval")
 
+    def test_peso_pequenas_y_copiar_pegar_solo_manual(self):
+        """Verifica 10a (peso extra solo en <50 px) y 10b (banco copy-paste exclusivamente manual_v4)."""
+        import ajuste_fino as af
+        X = np.zeros((3, 6, 32, 32), dtype=np.float32)
+        X[:, 4] = 25.0   # pendiente
+        X[:, 5] = 1500.0 # elevacion
+        Y = np.zeros((3, 32, 32), dtype=np.float32)
+        V = np.ones((3, 32, 32), dtype=np.float32)
+        # Parche 0 (manual_v4): cicatriz pequeña 4x4 = 16 px
+        Y[0, 5:9, 5:9] = 1.0
+        X[0, :4, 5:9, 5:9] = 9.0
+        # Parche 1 (clasificador_v5, NO elegible): cicatriz pequeña 5x5 = 25 px
+        Y[1, 10:15, 10:15] = 1.0
+        X[1, :4, 10:15, 10:15] = 7.0
+        # Parche 2 (manual_v4): cicatriz grande 10x10 = 100 px (>50 px)
+        Y[2, 10:20, 10:20] = 1.0
+        W = af.mapa_peso_pequenas(Y, peso=3.0, max_px=50)
+        self.assertEqual(float(W[0, 6, 6]), 3.0)
+        self.assertEqual(float(W[0, 0, 0]), 1.0)
+        self.assertEqual(float(W[2, 12, 12]), 1.0)
+        banco = af.banco_cicatrices_pequenas(X, Y, V, np.array([True, False, True]), min_px=10, max_px=60)
+        self.assertEqual(len(banco), 1)
+        self.assertEqual(banco[0][2], 16)
+        # Aplicar copy-paste sobre parche negativo con región dudosa V=0
+        xb = np.zeros((1, 6, 32, 32), dtype=np.float32)
+        xb[0, 4] = 30.0; xb[0, 5] = 1800.0
+        yb = np.zeros((1, 32, 32), dtype=np.float32)
+        vb = np.ones((1, 32, 32), dtype=np.float32)
+        vb[0, :10, :] = 0.0
+        xb2, yb2, vb2 = af.aplicar_copiar_pegar(xb, yb, vb, banco, np.random.default_rng(7), prob=1.0, max_pegar=1, peso_pequenas=2.0)
+        self.assertEqual(int((yb2 > 0).sum()), 16)
+        self.assertEqual(int(((yb2 > 0) & (vb == 0)).sum()), 0)
+        self.assertTrue(np.allclose(xb2[0, 4], 30.0))
+        self.assertTrue(np.allclose(xb2[0, 5], 1800.0))
+        self.assertEqual(float(vb2[yb2 > 0].min()), 2.0)
+
+    def test_posproceso_v6_filtro_altoandino_y_ensamble(self):
+        """Verifica filtro altoandino WorldCover+DEM y ensamble DeepLab gated by U-Net."""
+        import posproceso_v6 as pp6
+        p_u = np.zeros((1, 16, 16), dtype=np.float32)
+        p_d = np.zeros((1, 16, 16), dtype=np.float32)
+        p_u[0, 2:5, 2:5] = 0.8
+        p_d[0, 2:6, 2:6] = 0.7   # tocado por U-Net -> se conserva
+        p_d[0, 10:13, 10:13] = 0.9  # aislado sin U-Net -> se filtra
+        g = pp6.combinar_ensamble(p_u, p_d, modo='deeplab_gated_by_unet', u_gate=0.2)
+        self.assertAlmostEqual(float(g[0, 3, 3]), 0.7, places=5)
+        self.assertEqual(float(g[0, 11, 11]), 0.0)
+        elev = np.full((1, 16, 16), 3500.0, dtype=np.float32)
+        elev[0, :8, :] = 1500.0
+        wc = np.full((1, 16, 16), 30, dtype=np.uint8)  # grassland
+        p_in = np.full((1, 16, 16), 0.6, dtype=np.float32)
+        p_f = pp6.aplicar_filtro_altoandino(p_in, elev, wc, modo='wc_dem_3200')
+        self.assertAlmostEqual(float(p_f[0, 2, 2]), 0.6, places=5)
+        self.assertEqual(float(p_f[0, 12, 12]), 0.0)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

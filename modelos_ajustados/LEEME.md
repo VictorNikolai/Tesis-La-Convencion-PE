@@ -6,7 +6,37 @@
 
 ---
 
-## Recomendación de Uso Operativo
+## Recomendación de Uso Operativo (Protocolo v6 — 24/11/2026)
+
+- **Modelo principal recomendado para despliegue en Render: `unet_v6` (`U-Net · resnet34` con `GRVI` y `ExG` internos, umbral $u^* = 0.45$, SIN TTA + filtro `wc_dem_3200_agua_urb`).**
+  - En **`prueba2` sellada (principal, 349 negativos confirmados por tipo)** reduce las falsas alarmas a **`0.0212 ha/km²`** (`5.4 %` de parches negativos con marca; **`−78 %`** frente a `unet_b1_v5` sin posproceso [`0.0948 ha/km²`, `14.9 %`] y **`−60 %`** frente a `unet_b1_v5` con el mismo filtro [`0.0529 ha/km²`, `9.7 %`]). En altoandino cae de `0.3483` (`53.1 %`) a **`0.0273 ha/km²`** (`10.2 %`).
+  - En **`prueba` sellada antigua (360, «post hoc»)** alcanza **`IoU = 0.1387`** (`0.1598` tol `1 px` 8-con, `FA = 0.161 ha/km²`), y con **TTA 4 espejos** sube a **`IoU = 0.1453`** (`0.1667` tol `1 px` 8-con, `FA = 0.134 ha/km²`), superando en ambos casos a `unet_b1_v5` (`0.1311` / `0.220` sin posproceso; `0.1419` / `0.155` con TTA+filtro). En **`L4SPe` test («post hoc»)** mantiene **`IoU = 0.4229`** sin TTA y **`0.4249`** con TTA.
+  - **Costo en CPU (ONNX Runtime):** **`18.6 ms/parche`** sin TTA vs **`60.9 ms/parche`** con TTA 4 (`3.28×`). Para servicio web en Render se recomienda **sin TTA + filtro `wc_dem_3200_agua_urb`**; para análisis fuera de línea (informes/mapas de tesis) puede activarse **TTA 4** (`+0.0066` IoU post hoc y `−0.027 ha/km²` FA en prueba 360).
+- **Modelo alternativo: `deeplabv3plus_v6` (`DeepLabV3+ · resnet34`, umbral $u^* = 0.70$ sin TTA / $u^* = 0.60$ con TTA + filtro `wc_dem_3200_agua_urb`).**
+  - Reduce las falsas alarmas en `prueba2` a **`0.0249 ha/km²`** con TTA (`0.0259` sin TTA) frente a `0.1056 ha/km²` de `deeplabv3plus_b2_v5` (`−76 %`), pero en `prueba` 360 («post hoc») conserva falsas alarmas altas (`1.408 ha/km²`, `IoU = 0.0193`) en laderas secas por debajo de 3 200 m, lo que también penaliza el ensamble `0.5/0.5` en `prueba` 360 (`IoU = 0.0477`, `FA = 0.537 ha/km²`).
+
+---
+
+## 0. Modelos Protocolo v6 (`unet_v6` y `deeplabv3plus_v6` — 24/11/2026)
+
+### 0.1 `unet_v6` — U-Net Ajustada (Modelo Principal v6)
+- **Archivos:** `unet_v6.onnx` (`97.8 MB`, SHA-256: `5419f7e38bb5bd814ae04a29ffa3f01748190cd42004920f9b6c5f6a1a6dcaa3`) + receta `unet_v6.json`.
+- **Estado:** **Fuera del sistema desplegado** (`modelos/` intacto).
+- **Firma / Época / Semilla:** `7c0b35452807` (`Control_B1_unet_s42`), época **`24`** (`alfa = 1.0`), entrenada sobre datos de Tarea 4 (fragmentos `10–19 px` de entrenamiento devueltos de fondo `0` a `DUDOSO 255`, sin `10a/10b`).
+- **Paridad PyTorch / ONNX:** diferencia máxima de logit **`4.29e-06`** (`opset 17`, `46` capas convolucionales, `0` sin entrenar).
+- **Filtro posproceso (`wc_dem_3200_agua_urb`):** suprime predicciones en `DEM ≥ 3 200 m` sobre clases ESA WorldCover 10 m `{20, 30, 60, 70, 100}` y en clases `{50: urbano, 80: agua}` a cualquier altitud (fuente: colección `esa-worldcover` 2021 v200 de Planetary Computer).
+- **Umbral operativo:** **`0.45`** (con y sin TTA). **Latencia ORT CPU:** `18.6 ms/parche` sin TTA | `60.9 ms/parche` con TTA 4.
+
+### 0.2 `deeplabv3plus_v6` — DeepLabV3+ Ajustada (Modelo Alternativo v6)
+- **Archivos:** `deeplabv3plus_v6.onnx` (`89.8 MB`, SHA-256: `94e56a68ff89f6bc5fa476506020f27fec6e7e2dc67ce4901c3f3beea04e36ca`) + receta `deeplabv3plus_v6.json`.
+- **Estado:** **Fuera del sistema desplegado** (`modelos/` intacto).
+- **Firma / Época / Semilla:** `ac82bc42d339` (`C2_deeplab_p2_cp_s42`), época **`28`** (`alfa = 1.0`), entrenada sobre datos de Tarea 4 + `peso_pequenas = 2.0` + `copy-paste = 0.5` (solo `manual_v4`).
+- **Paridad PyTorch / ONNX:** diferencia máxima de logit **`8.58e-06`** (`opset 17`, `51` capas convolucionales, `0` sin entrenar).
+- **Umbral operativo:** **`0.70`** sin TTA / **`0.60`** con TTA 4 + filtro `wc_dem_3200_agua_urb`. **Latencia ORT CPU:** `16.0 ms/parche` sin TTA | `55.4 ms/parche` con TTA 4.
+
+---
+
+## Recomendación Histórica Protocolo v5 (23/11/2026)
 
 - **Modelo principal recomendado: `unet_b1_v5` (`U-Net · resnet34` con índices internos `GRVI` y `ExG`, umbral $u^* = 0.30$).**
   Obtiene el mejor desempeño tanto en la **`prueba` sellada de La Convención (`360` parches, 100 % `manual_v4`)** con **`IoU = 0.1311`** (`0.1506` con tolerancia de borde de `1 px` 8-con, `F1 = 0.2319`, `22.5 %` de cicatrices $\ge 10\text{ px}$ detectadas, `40.0 %` en `50–200 px` y `63.6 %` en `> 200 px`) y la menor tasa de falsas alarmas en teselas negativas (**`0.220 ha/km²`**), como en la **`prueba` del experto humano L4SPe (`124` parches)** con **`IoU = 0.4297`** (`0.5470` con tolerancia `1 px` 8-con, `F1 = 0.6011`, `54.2 %` de cicatrices detectadas y `82.2 %` en `> 200 px`).

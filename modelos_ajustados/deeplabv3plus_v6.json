@@ -1,0 +1,134 @@
+{
+ "nombre": "deeplabv3plus_v6",
+ "etiqueta": "DeepLabV3+ · resnet34",
+ "autor": "Huarcaya Pumacayo, V. N.",
+ "onnx": "deeplabv3plus_v6.onnx",
+ "canales": [
+  "B01",
+  "B02",
+  "B03",
+  "B04",
+  "pendiente",
+  "elevacion"
+ ],
+ "lado_px": 128,
+ "normalizacion": {
+  "metodo": "media_desv",
+  "percentiles": [
+   2,
+   98
+  ],
+  "canales": [
+   "B01",
+   "B02",
+   "B03",
+   "B04",
+   "pendiente",
+   "elevacion"
+  ],
+  "por_canal": {
+   "B01": {
+    "media": 0.925704,
+    "desv": 0.140988
+   },
+   "B02": {
+    "media": 0.922701,
+    "desv": 0.220698
+   },
+   "B03": {
+    "media": 0.954109,
+    "desv": 0.318425
+   },
+   "B04": {
+    "media": 0.959639,
+    "desv": 0.572375
+   },
+   "pendiente": {
+    "media": 1.251108,
+    "desv": 0.678369
+   },
+   "elevacion": {
+    "media": 1.649543,
+    "desv": 1.072711
+   }
+  },
+  "nota": "constantes en unidades de Landslide4Sense; los índices NDVI y NDWI se calculan sobre esas unidades y no se normalizan"
+ },
+ "salida": "sigmoide",
+ "umbral": 0.7,
+ "umbral_con_tta": 0.6,
+ "umbral_sin_tta": 0.7,
+ "requiere_tta": false,
+ "tta_recomendacion": "Opcional (4 espejos): en CPU ONNX Runtime pasa de 16.0 ms a 55.4 ms/parche (3.46x). Aporta +0.0110 IoU post hoc en L4SPe (0.3844 -> 0.3954), pero DeepLabV3+ mantiene falsas alarmas elevadas en prueba 360 (1.408 ha/km2); se mantiene como modelo alternativo detrás de unet_v6.",
+ "posproceso": {
+  "filtro": "wc_dem_3200_agua_urb",
+  "fuente_cobertura": "colección esa-worldcover (ESA WorldCover 10 m 2021 v200) de Planetary Computer",
+  "altitud_min_m": 3200,
+  "clases_worldcover_altoandino": [20, 30, 60, 70, 100],
+  "clases_worldcover_siempre_excluidas": [50, 80],
+  "regla": "suprimir predicción si (elevacion >= 3200 m y WC en {20,30,60,70,100}) o WC en {50,80}"
+ },
+ "latencia_cpu_ort_ms": {
+  "sin_tta": 16.0,
+  "tta_4": 55.4
+ },
+ "estado": "fuera del sistema desplegado (modelos/ intacto)",
+ "entrenamiento": {
+  "firma": "ac82bc42d339",
+  "arquitectura": "deeplabv3plus",
+  "codificador": "resnet34",
+  "dataset": "Landslide4Sense (ibm-nasa-geospatial/Landslide4sense, conjuntos oficiales)",
+  "epoca": 28,
+  "iou_validacion": null,
+  "prueba": {
+   "iou": null,
+   "f1": null,
+   "precision": null,
+   "recall": null
+  },
+  "particion": "oficial: entrenamiento, validación (época y umbral), prueba (una vez)"
+ },
+ "rango_entrenamiento": {
+  "B01": {
+   "min": 0.678172,
+   "max": 1.800664
+  },
+  "B02": {
+   "min": 0.602693,
+   "max": 2.523551
+  },
+  "B03": {
+   "min": 0.450697,
+   "max": 3.12172
+  },
+  "B04": {
+   "min": 0.354918,
+   "max": 4.937407
+  },
+  "pendiente": {
+   "min": 0.0,
+   "max": 3.301748
+  },
+  "elevacion": {
+   "min": 0.029761,
+   "max": 4.737126
+  }
+ },
+ "escala_terreno": {
+  "pendiente": 20.292,
+  "elevacion": 772.82
+ },
+ "terreno_entrenamiento": "ALOS PALSAR (ASF) en Landslide4Sense: B13 pendiente, B14 DEM",
+ "exportacion": {
+  "opset": 17,
+  "paridad_max_logit": 8.58306884765625e-06,
+  "pesos": {
+   "capas_conv": 51,
+   "capas_en_inicializacion": 0,
+   "fraccion": 0.0,
+   "cabeza_sin_entrenar": false,
+   "sin_entrenar": false
+  },
+  "sha256_onnx": "94e56a68ff89f6bc5fa476506020f27fec6e7e2dc67ce4901c3f3beea04e36ca"
+ }
+}
