@@ -85,7 +85,7 @@ docs/           guía de IRIS y documentación del conjunto L4SPe
 ## Uso rápido
 
 ```powershell
-pip install -r requirements.txt      # o: torch, segmentation-models-pytorch, rasterio, onnxruntime
+pip install torch segmentation-models-pytorch rasterio onnxruntime pystac-client planetary-computer pytest
 pytest herramientas/test_herramientas.py -q
 
 # Ajuste fino con datos peruanos (sin datos extranjeros)
