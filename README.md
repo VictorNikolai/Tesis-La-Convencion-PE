@@ -8,7 +8,11 @@ Este repositorio reúne los datos, el código y los resultados de nuestra tesis 
 
 ## Por qué La Convención
 
-La provincia tiene relieve muy empinado, selva en la parte baja y lluvias fuertes entre enero y abril. INDECI registra cientos de deslizamientos, huaicos y derrumbes en los últimos años, pero casi siempre ubicados en la capital del distrito, no en la cicatriz. Los modelos entrenados con datos de otros países, aplicados tal cual aquí, marcaban cualquier ladera seca o techo como deslizamiento. Por eso armamos un conjunto propio de la provincia.
+La provincia tiene relieve muy empinado, selva en la parte baja y lluvias fuertes entre enero y abril. La matriz de emergencias que nos entregó INDECI ([`datos/indeci_laconvencion_2003_2026.csv`](datos/indeci_laconvencion_2003_2026.csv)) tiene 638 eventos entre 2003 y 2026: 310 deslizamientos, 169 derrumbes, 138 huaicos y 21 aludes. El 82 % ocurrió entre enero y abril.
+
+![Eventos de INDECI por año y por mes](docs/img/indeci_eventos.png)
+
+El problema es que casi todos los eventos están ubicados en la capital del distrito, no en la cicatriz. Los modelos entrenados con datos de otros países, aplicados tal cual aquí, marcaban cualquier ladera seca o techo como deslizamiento. Por eso armamos un conjunto propio de la provincia.
 
 ## Los datos
 
@@ -39,15 +43,33 @@ En la prueba de La Convención, la U-Net ajustada pasó de un IoU de 0.011 a 0.1
 | U-Net ajustada | **0.131** | **0.22** | **0.430** |
 | DeepLabV3+ ajustada | 0.019 | 1.43 | 0.403 |
 
+### Los mejores resultados
+
+- **IoU de 0.430** (F1 de 60.1 %) de la U-Net en la prueba del especialista, frente a 0.356 del modelo sin datos peruanos.
+- **75.7 % de F1** en esa misma prueba si se acepta un error de borde de 2 píxeles, justo sobre la meta de 75.5 % que nos habíamos puesto (con un margen que va de 70.1 % a 80.8 %).
+- **82 % de los deslizamientos mayores de 2 ha** detectados en la prueba del especialista, y 64 % en la prueba de La Convención.
+- **98 % menos falsas alarmas** en La Convención: de 12.5 a 0.22 ha/km².
+- **0.021 ha/km²** de falsas alarmas en 349 parches nuevos con ríos, chacras, carreteras, poblados y laderas altas, con la versión que usa WorldCover.
+
 Algunos ejemplos de la prueba (referencia en verde, predicción en rojo): tres aciertos, dos omisiones y una falsa alarma de DeepLabV3+ en una ladera de roca y pajonal.
 
 <img src="docs/img/aciertos_errores.jpg" width="620" alt="Aciertos y errores en la prueba">
 
 Una segunda versión agrega un filtro con el mapa de cobertura ESA WorldCover (zonas urbanas y de agua) y una comparación con la imagen de 2018–2020. Con eso, en 564 parches nuevos con terreno difícil (ríos, chacras, carreteras, poblados, laderas altas) las falsas alarmas bajaron de 0.095 a 0.021 ha/km².
 
-### Un caso real: huaico de Echarate, febrero de 2021
+### Comprobación con eventos de INDECI
 
-Ubicamos la cicatriz comparando imágenes de antes y después, sin usar el modelo. Abajo, de izquierda a derecha: el modelo sin datos peruanos marca 87 ha, casi todo laderas secas; los modelos ajustados limpian esas falsas alarmas, pero tampoco marcan el huaico dentro del cauce.
+Para ver si el sistema funciona sobre eventos reales tomamos tres emergencias grandes de la matriz de INDECI. Como sus coordenadas son las de la capital del distrito, buscamos la cicatriz real comparando imágenes secas de antes y después del evento (sin usar el modelo) y la confirmamos en imagen aérea. Después corrimos los modelos en un área de 3 × 3 km alrededor.
+
+| Evento INDECI | ¿Dónde está la cicatriz? | Sin datos peruanos | U-Net ajustada |
+| :--- | :--- | :--- | :--- |
+| Alud de Santa Teresa, 23/02/2020 (202 viviendas destruidas) | 9 km de la capital, quebrada Sahuayaco | La marca, pero con 5.1 ha falsas | La marca, con 0.15 ha falsas |
+| Huaico de Echarate, 16/02/2021 | 3 km de la capital, en el cauce | La marca, pero con 83.8 ha falsas | Marca parte, 3.1 ha falsas |
+| Deslizamiento de Vilcabamba, 27/03/2021 | 14 km de la capital, a 3 535 m | La marca, con 1.5 ha falsas | La marca, sin falsas alarmas |
+
+En los tres casos el modelo ajustado reduce mucho las falsas alarmas: en Echarate pasa de 83.8 a 3.1 ha, unas 27 veces menos. El huaico de Echarate muestra el límite que ya veíamos: lo que corre por el fondo del cauce no se marca. El detalle de cada caso está en [`informes/estudios_caso.md`](informes/estudios_caso.md).
+
+Así se ve el huaico de Echarate (antes, después, imagen aérea y las predicciones de los tres modelos):
 
 ![Estudio de caso en Echarate](docs/img/caso_echarate_2021.jpg)
 
