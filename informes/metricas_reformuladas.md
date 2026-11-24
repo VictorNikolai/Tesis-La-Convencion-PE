@@ -82,3 +82,14 @@ Metas originales del proyecto: **`IoU ≥ 0.70`**, **`F1 > 75.5 %`**, **`Recall 
 | **FP ≤ 15 %** | Tasa FP píxel (`1 − Prec`, todas) | 78.7 % [52.8, 93.1] *(U-Net v6 (sin TTA+flt))* | 36.2 % [29.6, 42.8] *(DeepLabV3+ v6 (sin TTA+flt))* | **No** |
 | **FP ≤ 15 %** | Tasa FP objeto (total `≥ 10 px`) | 80.5 % [63.9, 92.0] *(U-Net v6 (sin TTA+flt))* | 24.6 % [19.1, 30.4] *(U-Net v6 (sin TTA+flt))* | **No** |
 | **FP ≤ 15 %** | Tasa FP objeto (`≥ 50 px`) | 83.8 % [68.5, 94.3] *(U-Net v6 (sin TTA+flt))* | 30.2 % [23.7, 36.0] *(U-Net v6 (sin TTA+flt))* | **No** |
+
+---
+
+## 4. Resumen de Alcance frente a las Metas (5 líneas)
+
+1. En **L4SPe** (máscaras manuales del especialista), solo **F1 píxel con tolerancia de 2 px** alcanza la meta (`75.7 % [70.1, 80.8] > 75.5 %`), y **Recall de objetos `≥ 2 ha`** queda cerca (`82.2 % [74.2, 89.6]` frente a `> 85 %`).
+2. El resto de metas en L4SPe (`IoU ≥ 0.70`, máximo `0.6099` con tol. 2 px; `FP ≤ 15 %`, mínimo `24.6 %` por objeto con `U-Net v6`) no se cumplen, aunque `U-Net v6` recorta los falsos positivos por objeto de `106` a `71`.
+3. En **La Convención (`prueba` 360)**, **ninguna formulación se acerca a las metas originales** (`IoU` máximo `0.1703`, `F1` máximo `28.5 %`, `Recall` máximo `63.6 %` en `≥ 2 ha`, `FP` mínimo `78.7 %` por píxel y `80.5 %` por objeto).
+4. La brecha en La Convención refleja tanto la dificultad intrínseca de cicatrices pequeñas (`< 0.5 ha`) en selva/ceja de selva a `10 m` como el límite de concordancia humana (`IoU 0.30–0.39` frente al especialista).
+5. Por ello, los modelos peruanos deben presentarse como **herramienta de apoyo y priorización territorial con fuerte reducción de falsas alarmas** (`−78 %` en `prueba2`), y no como reemplazo de la verificación experta.
+
