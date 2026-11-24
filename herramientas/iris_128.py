@@ -36,7 +36,7 @@ RAIZ_PROY = os.path.dirname(AQUI)
 sys.path.insert(0, AQUI)
 from cortar_parches_128 import LADO, cuadrantes  # noqa: E402
 
-BASES = ['datos_laconvencion', 'datos_indeci', 'datos_ingemmet', 'datos_azar', 'datos_prueba', 'datos_val_dgrvi', 'datos_nuevos_ent']
+BASES = ['datos_laconvencion', 'datos_indeci', 'datos_ingemmet', 'datos_azar', 'datos_prueba', 'datos_prueba2', 'datos_val_dgrvi', 'datos_nuevos_ent']
 NOMBRES_8 = [
     'B1', 'B2', 'B3', 'B4', 'B13 pendiente (grados)', 'B14 DEM (m)',
     'probabilidad del modelo', 'cajas del modelo (contorno)'

@@ -762,9 +762,9 @@ class TestAjusteFinoComponentes(unittest.TestCase):
         part = {(r['proyecto'], r['tesela']): r for r in csv.DictReader(open('particion.csv', encoding='utf-8'))}
         part_tes = {r['tesela']: r for r in part.values()}
 
-        # 1) Verificar que indice_parches_ampliado.csv coincida por tesela con particion.csv y sume 560/304/360 en Nivel 1
+        # 1) Verificar que indice_parches_ampliado.csv coincida por tesela con particion.csv y sume 560/304/360/252 en Nivel 1
         filas_amp = list(csv.DictReader(open('parches_128/indice_parches_ampliado.csv', encoding='utf-8')))
-        n1_por_c = {'entrenamiento': [], 'validacion': [], 'prueba': []}
+        n1_por_c = {'entrenamiento': [], 'validacion': [], 'prueba': [], 'prueba2': []}
         for r in filas_amp:
             if r['tesela'] in part_tes:
                 self.assertEqual(r['conjunto'], part_tes[r['tesela']]['conjunto'],
@@ -779,17 +779,24 @@ class TestAjusteFinoComponentes(unittest.TestCase):
             metodos_n1[r_d['id_iris']] = r_d['metodo']
 
         self.assertTrue(af.verificar_conteos_nivel1(
-            n1_por_c['entrenamiento'], n1_por_c['validacion'], n1_por_c['prueba'], metodos_n1
+            n1_por_c['entrenamiento'], n1_por_c['validacion'], n1_por_c['prueba'], metodos_n1,
+            fl_pru2=n1_por_c['prueba2']
         ))
         with self.assertRaises(SystemExit):
             af.verificar_conteos_nivel1(
-                n1_por_c['entrenamiento'][:-1], n1_por_c['validacion'], n1_por_c['prueba'], metodos_n1
+                n1_por_c['entrenamiento'][:-1], n1_por_c['validacion'], n1_por_c['prueba'], metodos_n1,
+                fl_pru2=n1_por_c['prueba2']
+            )
+        with self.assertRaises(SystemExit):
+            af.verificar_conteos_nivel1(
+                n1_por_c['entrenamiento'], n1_por_c['validacion'], n1_por_c['prueba'], metodos_n1,
+                fl_pru2=n1_por_c['prueba2'][:-1]
             )
 
         # 2) Verificar que Nivel 2 en entrenamiento esté 100% en entrenamiento en particion.csv y a >= 3000m de eval
         geoms_eval = []
         for (proy, tes), r in part.items():
-            if r['conjunto'] in ('validacion', 'prueba', 'prueba_externa'):
+            if r['conjunto'] in ('validacion', 'prueba', 'prueba2', 'prueba_externa'):
                 cx, cy = float(r['x']), float(r['y'])
                 geoms_eval.append(shp_box(cx - 1280.0, cy - 1280.0, cx + 1280.0, cy + 1280.0))
         u_eval = unary_union(geoms_eval)

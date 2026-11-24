@@ -435,11 +435,214 @@ def revisar(raiz='.', nivel1=None, parches=None, decisiones=None, particion=None
     return hallazgos
 
 
+def evaluar_cicatrices_r1_r5(raiz='.', proyecto_filtro=None, salida_csv=None):
+    """Comprobaciones automáticas R1–R5 del protocolo v6 por cada cicatriz positiva (>= 10 px):
+      R1: GRVI_post medio < 0 (suelo desnudo; verde claro NO es cicatriz)
+      R2: imagen anterior despejada (nubes/sombra/nodata < 10 % sobre el polígono)
+      R3: <= 50 % del polígono a <= 2 px (20 m) de vía OSM o red de drenaje (TPI_21 < -1.5 m)
+      R4: no es ladera seca estable por encima de 3000 m (|dGRVI| < 0.03 y elev > 3000 m)
+      R5: 100 % dentro del límite provincial (herramientas/limite_laconvencion.geojson)
+    Devuelve lista de diccionarios (uno por cicatriz) y opcionalmente escribe CSV."""
+    import json
+    import rasterio
+    from rasterio.warp import transform_bounds
+    from scipy import ndimage
+    from shapely.geometry import Point, box, shape
+    from shapely.ops import transform as shp_transform, unary_union
+    from shapely.strtree import STRtree
+    from pyproj import Transformer
+
+    dir_n1 = os.path.join(raiz, 'mascaras_nivel1')
+    dir_p128 = os.path.join(raiz, 'parches_128')
+
+    # Límite provincial
+    lim_path = os.path.join(raiz, 'herramientas', 'limite_laconvencion.geojson')
+    lim_ll = shape(json.load(open(lim_path, encoding='utf-8'))['geometry']) if os.path.exists(lim_path) else None
+
+    # Red vial OSM
+    vias_path = os.path.join(raiz, 'herramientas', 'carreteras_laconvencion.geojson')
+    vias_ll, tree_vias = [], None
+    if os.path.exists(vias_path):
+        gj_v = json.load(open(vias_path, encoding='utf-8'))
+        vias_ll = [shape(f['geometry']) for f in gj_v.get('features', []) if f.get('geometry')]
+        if vias_ll:
+            tree_vias = STRtree(vias_ll)
+
+    # Mapa proyecto -> proyecto_antes
+    proy_antes_map = {
+        'datos_prueba2': 'datos_prueba2_antes',
+        'datos_prueba': 'datos_prueba_antes',
+        'datos_indeci': 'datos_indeci_antes',
+        'datos_ingemmet': 'datos_ingemmet_antes',
+        'datos_nuevos_ent': 'datos_nuevos_ent_antes',
+    }
+
+    transf_cache = {}
+    lim_utm_cache = {}
+    st8 = np.ones((3, 3), dtype=bool)
+    filas_out = []
+
+    patron = os.path.join(dir_n1, 'parches_128', proyecto_filtro or '*', '*.tif')
+    for ruta_m in sorted(glob.glob(patron)):
+        proy = os.path.basename(os.path.dirname(ruta_m))
+        parche = os.path.splitext(os.path.basename(ruta_m))[0]
+        tesela = parche[:-3] if len(parche) > 3 and parche[-3:-1] == '_q' else parche
+        with rasterio.open(ruta_m) as dm:
+            mk = dm.read(1)
+            m_tr, m_crs, m_bounds = dm.transform, dm.crs, dm.bounds
+        pos = mk == 1
+        if not pos.any():
+            continue
+
+        ruta_img = os.path.join(dir_p128, proy, f'{parche}.tif')
+        if not os.path.exists(ruta_img):
+            continue
+        with rasterio.open(ruta_img) as di:
+            arr = di.read().astype(np.float32)
+        b2, b3, b4, pend, elev = arr[1], arr[2], arr[3], arr[4], arr[5]
+        den = b3 + b4
+        grvi_post = np.where(den > 0, (b3 - b4) / np.where(den > 0, den, 1.0), 0.0)
+        tpi21 = elev - ndimage.uniform_filter(elev, size=21, mode='nearest')
+        red_drenaje = tpi21 < -1.5
+        dist_dren_px = ndimage.distance_transform_edt(~red_drenaje)
+
+        # Imagen anterior (si existe)
+        proy_a = proy_antes_map.get(proy)
+        ruta_pre = os.path.join(dir_p128, proy_a, f'{parche}.tif') if proy_a else None
+        if ruta_pre and os.path.exists(ruta_pre):
+            with rasterio.open(ruta_pre) as da:
+                ap = da.read().astype(np.float32)
+            b2a, b3a, b4a = ap[1], ap[2], ap[3]
+            den_a = b3a + b4a
+            grvi_pre = np.where(den_a > 0, (b3a - b4a) / np.where(den_a > 0, den_a, 1.0), np.nan)
+            # Nube, sombra densa o nodata en imagen anterior
+            nube_a = (b2a <= 0) | (b2a > 900.0) | ((b2a > 600.0) & (b4a < 1.15 * b2a)) | ((b2a < 150.0) & (b3a < 200.0) & (b4a < 180.0))
+        else:
+            grvi_pre = None
+            nube_a = None
+
+        # Proyección UTM para vías y límite provincial
+        u_via = None
+        lim_utm = None
+        if m_crs is not None:
+            kc = str(m_crs)
+            if kc not in transf_cache:
+                transf_cache[kc] = Transformer.from_crs('EPSG:4326', kc, always_xy=True).transform
+            tr_utm = transf_cache[kc]
+            if lim_ll is not None:
+                if kc not in lim_utm_cache:
+                    lim_utm_cache[kc] = shp_transform(tr_utm, lim_ll)
+                lim_utm = lim_utm_cache[kc]
+            if tree_vias is not None:
+                b_ll = transform_bounds(m_crs, 'EPSG:4326', m_bounds.left, m_bounds.bottom, m_bounds.right, m_bounds.top)
+                idxs_v = tree_vias.query(box(b_ll[0] - 0.002, b_ll[1] - 0.002, b_ll[2] + 0.002, b_ll[3] + 0.002))
+                if len(idxs_v):
+                    u_via = unary_union([shp_transform(tr_utm, vias_ll[i]) for i in idxs_v])
+
+        lbl, nc = ndimage.label(pos, structure=st8)
+        for cid in range(1, nc + 1):
+            comp = lbl == cid
+            sz = int(comp.sum())
+            if sz < 10:
+                continue
+            g_post_m = float(grvi_post[comp].mean())
+            elev_m = float(elev[comp].mean())
+            pend_m = float(pend[comp].mean())
+            tpi_m = float(tpi21[comp].mean())
+
+            if nube_a is not None:
+                pct_nube_a = float(nube_a[comp].mean()) * 100.0
+                desp = comp & (~nube_a) & np.isfinite(grvi_pre)
+                if desp.any():
+                    dgrvi_m = float((grvi_post[desp] - grvi_pre[desp]).mean())
+                else:
+                    dgrvi_m = float('nan')
+            else:
+                pct_nube_a = float('nan')
+                dgrvi_m = float('nan')
+
+            rr, cc = np.where(comp)
+            eig_r, _ = _eje_principal(rr, cc)
+            pts = [Point(*(m_tr * (float(c0) + 0.5, float(r0) + 0.5))) for r0, c0 in zip(rr, cc)]
+
+            # Distancia a vía OSM y red de drenaje TPI
+            d_dren_m = dist_dren_px[comp] * 10.0
+            if u_via is not None:
+                d_via_m = np.array([pt.distance(u_via) for pt in pts], dtype=np.float32)
+                d_min_vc = np.minimum(d_via_m, d_dren_m)
+                d_via_med = float(np.median(d_via_m))
+            else:
+                d_min_vc = d_dren_m
+                d_via_med = float('inf')
+            dist_vc_med = float(np.median(d_min_vc))
+            frac_le2px = float((d_min_vc <= 20.0).mean())
+
+            # % dentro del límite provincial
+            if lim_utm is not None:
+                pct_lim = float(np.mean([lim_utm.contains(pt) for pt in pts])) * 100.0
+            else:
+                pct_lim = 100.0
+
+            fallas = []
+            if g_post_m >= 0.0:
+                fallas.append('R1')
+            if np.isfinite(pct_nube_a) and pct_nube_a >= 10.0:
+                fallas.append('R2')
+            if frac_le2px > 0.50:
+                fallas.append('R3')
+            if elev_m > 3000.0 and np.isfinite(dgrvi_m) and abs(dgrvi_m) < 0.03:
+                fallas.append('R4')
+            if pct_lim < 100.0:
+                fallas.append('R5')
+
+            filas_out.append({
+                'proyecto': proy, 'parche': parche, 'tesela': tesela, 'comp_id': cid, 'px': sz,
+                'grvi_post': round(g_post_m, 4),
+                'dgrvi': round(dgrvi_m, 4) if np.isfinite(dgrvi_m) else '',
+                'pct_nube_antes': round(pct_nube_a, 1) if np.isfinite(pct_nube_a) else '',
+                'dist_via_cauce_m': round(dist_vc_med, 1),
+                'frac_le_2px_vc': round(frac_le2px, 3),
+                'dist_via_osm_m': round(d_via_med, 1) if np.isfinite(d_via_med) else '',
+                'altitud_m': round(elev_m, 1),
+                'pendiente_deg': round(pend_m, 1),
+                'tpi21_m': round(tpi_m, 2),
+                'eje_ratio': round(eig_r, 2),
+                'pct_dentro_limite': round(pct_lim, 1),
+                'reglas_falladas': ';'.join(fallas) if fallas else 'OK',
+            })
+
+    if salida_csv:
+        os.makedirs(os.path.dirname(os.path.abspath(salida_csv)), exist_ok=True)
+        cols = ['proyecto', 'parche', 'tesela', 'comp_id', 'px', 'grvi_post', 'dgrvi', 'pct_nube_antes',
+                'dist_via_cauce_m', 'frac_le_2px_vc', 'dist_via_osm_m', 'altitud_m', 'pendiente_deg',
+                'tpi21_m', 'eje_ratio', 'pct_dentro_limite', 'reglas_falladas']
+        with open(salida_csv, 'w', newline='', encoding='utf-8') as f:
+            w = csv.DictWriter(f, fieldnames=cols)
+            w.writeheader()
+            w.writerows(filas_out)
+    return filas_out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
     ap.add_argument('--raiz', default='.')
     ap.add_argument('--salida-csv', default=None)
+    ap.add_argument('--r1-r5-proyecto', default=None, help='Evalúa R1–R5 por cicatriz en este proyecto (ej. datos_prueba2)')
+    ap.add_argument('--r1-r5-csv', default=None, help='CSV de salida para la tabla por cicatriz R1–R5')
     a = ap.parse_args()
+    if a.r1_r5_proyecto or a.r1_r5_csv:
+        filas = evaluar_cicatrices_r1_r5(a.raiz, proyecto_filtro=a.r1_r5_proyecto, salida_csv=a.r1_r5_csv)
+        c_ok = sum(1 for r in filas if r['reglas_falladas'] == 'OK')
+        print(f'Auditoria R1-R5 completada: {len(filas)} cicatrices ({c_ok} OK, {len(filas) - c_ok} marcadas por R1-R5).')
+        cnt = collections.Counter()
+        for r in filas:
+            if r['reglas_falladas'] != 'OK':
+                for tag in r['reglas_falladas'].split(';'):
+                    cnt[tag] += 1
+        for k, v in sorted(cnt.items()):
+            print(f'  {k}: {v}')
+        if not a.salida_csv:
+            return
     hallazgos = revisar(a.raiz)
     por_tipo = collections.Counter(h['tipo'] for h in hallazgos)
     print(f'Revisión Nivel 1 completada: {len(hallazgos)} hallazgos.')

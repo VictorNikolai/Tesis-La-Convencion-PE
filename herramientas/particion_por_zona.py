@@ -39,7 +39,7 @@ MIN_FRACCION_PROVINCIA = 0.50
 
 
 def comprobar_teselas_en_provincia(filas, raiz='.', ruta_limite=None, min_fraccion=MIN_FRACCION_PROVINCIA,
-                                   conjuntos=('entrenamiento', 'validacion', 'prueba')):
+                                   conjuntos=('entrenamiento', 'validacion', 'prueba', 'prueba2')):
     """Devuelve lista de errores para teselas activas con < min_fraccion de su área dentro de La Convención."""
     import glob
     import json

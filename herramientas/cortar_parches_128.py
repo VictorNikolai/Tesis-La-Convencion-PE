@@ -34,12 +34,14 @@ PROYECTOS = {                      # carpeta -> (carpeta base de la que hereda z
     'datos_ingemmet': ('datos_ingemmet', 'base'),
     'datos_azar': ('datos_azar', 'base'),
     'datos_prueba': ('datos_prueba', 'base'),
+    'datos_prueba2': ('datos_prueba2', 'base'),
     'datos_val_dgrvi': ('datos_val_dgrvi', 'base'),
     'datos_nuevos_ent': ('datos_nuevos_ent', 'base'),
     'datos_laconvencion_2025': ('datos_laconvencion', 'otra_fecha_2025'),
     'datos_indeci_antes': ('datos_indeci', 'otra_fecha_antes'),
     'datos_ingemmet_antes': ('datos_ingemmet', 'otra_fecha_antes'),
     'datos_prueba_antes': ('datos_prueba', 'otra_fecha_antes'),
+    'datos_prueba2_antes': ('datos_prueba2', 'otra_fecha_antes'),
     'datos_nuevos_ent_antes': ('datos_nuevos_ent', 'otra_fecha_antes'),
 }
 BANDAS = ['B1', 'B2', 'B3', 'B4', 'B13 pendiente (grados)', 'B14 DEM (m)']

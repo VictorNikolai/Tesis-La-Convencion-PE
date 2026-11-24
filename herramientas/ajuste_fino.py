@@ -160,21 +160,41 @@ def cargar_locales(carpeta_parches, carpeta_mascaras, receta, escala, conjunto_p
     return np.stack(X), np.stack(Y), np.stack(V), usadas
 
 
-def verificar_conteos_nivel1(fl_ent, fl_val, fl_pru, metodos_n1, esperados=(560, 304, 360)):
-    """Aborta con SystemExit si los parches de Nivel 1 cargados no son exactamente 560 / 304 / 360,
-    e imprime los conteos por conjunto y por método (manual_v4 / clasificador_v5)."""
+def verificar_conteos_nivel1(fl_ent, fl_val, fl_pru, metodos_n1, fl_pru2=None, esperados=(560, 304, 360, 564),
+                             esperados_pru2_neg=349):
+    """Aborta con SystemExit si los parches de Nivel 1 cargados no coinciden exactamente con los conteos
+    esperados (entrenamiento / validacion / prueba / prueba2), e imprime los conteos por conjunto y por método."""
     n_ent, n_val, n_pru = len(fl_ent), len(fl_val), len(fl_pru)
-    for nombre, fl, esp in (('entrenamiento', fl_ent, esperados[0]),
-                            ('validacion', fl_val, esperados[1]),
-                            ('prueba', fl_pru, esperados[2])):
+    items = [
+        ('entrenamiento', fl_ent, esperados[0]),
+        ('validacion', fl_val, esperados[1]),
+        ('prueba', fl_pru, esperados[2]),
+    ]
+    actuales = [n_ent, n_val, n_pru]
+    esp_chk = list(esperados[:3])
+    if fl_pru2 is not None and len(esperados) >= 4:
+        items.append(('prueba2', fl_pru2, esperados[3]))
+        actuales.append(len(fl_pru2))
+        esp_chk.append(esperados[3])
+    for nombre, fl, esp in items:
         c_m4 = sum(1 for r in fl if (metodos_n1.get(f"{r['proyecto']}__{r['parche']}") or metodos_n1.get(r['parche']) or 'manual_v4') == 'manual_v4')
         c_v5 = len(fl) - c_m4
-        print(f'Nivel 1 {nombre:13s}: {len(fl):3d}/{esp:3d} parches (manual_v4={c_m4:3d}, clasificador_v5={c_v5:3d})')
-    if (n_ent, n_val, n_pru) != tuple(esperados):
+        extra = ''
+        if nombre == 'prueba2' and esperados_pru2_neg is not None:
+            n_neg_tipo = sum(1 for r in fl if (r.get('tipo_negativo') or '').strip())
+            extra = f' | neg_confirmados_con_tipo={n_neg_tipo}/{esperados_pru2_neg}'
+        print(f'Nivel 1 {nombre:13s}: {len(fl):3d}/{esp:3d} parches (manual_v4={c_m4:3d}, clasificador_v5={c_v5:3d}){extra}')
+    if tuple(actuales) != tuple(esp_chk):
         raise SystemExit(
-            f'Conteo de Nivel 1 inválido: cargados (entrenamiento={n_ent}, validacion={n_val}, prueba={n_pru}) '
-            f'!= esperados {esperados}. Regenera parches_128/indice_parches_ampliado.csv desde particion.csv.'
+            f'Conteo de Nivel 1 inválido: cargados {tuple(actuales)} != esperados {tuple(esp_chk)}. '
+            f'Regenera parches_128/indice_parches_ampliado.csv desde particion.csv.'
         )
+    if fl_pru2 is not None and esperados_pru2_neg is not None:
+        n_neg_tipo = sum(1 for r in fl_pru2 if (r.get('tipo_negativo') or '').strip())
+        if n_neg_tipo != esperados_pru2_neg:
+            raise SystemExit(
+                f'prueba2 sellada inválida: {n_neg_tipo} negativos con tipo_negativo != {esperados_pru2_neg} esperados.'
+            )
     return True
 
 
@@ -468,7 +488,8 @@ def main():
     n_n1_manual = int(sum(1 for w in Wl if w == 1.0))
     n_n1_clf = len(Wl) - n_n1_manual
     if not a.sin_local:
-        verificar_conteos_nivel1(Fl, Fv, Ft_loc, metodos_n1)
+        _, _, _, Ft_loc2 = cargar_locales(a.parches, a.mascaras, receta, escala, {'prueba2'})
+        verificar_conteos_nivel1(Fl, Fv, Ft_loc, metodos_n1, fl_pru2=Ft_loc2)
     n_debiles = 0
     if a.debiles and not a.sin_local:
         con_n1 = {r['parche'] for r in Fl}
