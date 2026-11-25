@@ -6,6 +6,17 @@
 
 ---
 
+## Recomendación v9 (Combinación de `unet_v6` + `P3` con posproceso selectivo — `v9.json`)
+
+- **¿Qué cambió frente a `v6` y `v8`?**
+  1. Frente a **`v6`** (que era fuerte en La Convención pero perdía cicatrices frente al especialista L4SPe), **`v9`** incorpora el ensamble `0.6 × U-Net_v6 + 0.4 × P3_solo_profesor` con TTA de 4 espejos, umbral por histéresis (`0.70 / 0.25`) y morfología (`min_px = 20`, cierre de `1 px`), heredados de `v8`.
+  2. Frente a **`v8`** (donde `P3` disparaba falsas alarmas en laderas altoandinas de roca y pajonal), **`v9` (`E1`)** anula el peso de `P3` (`peso P3 = 0`, quedando solo `U-Net_v6`) por encima de **`3 200 m`** o sobre cobertura **WorldCover `30` (pajonal) y `60` (suelo desnudo/escaso)**, manteniendo el filtro base `wc_urb_agua` (urbano `50` y agua `80`) sin corte fijo de altitud sobre `U-Net_v6`.
+  3. **`v9` añade filtros selectivos sin costo en cicatrices reales (`E4b` y `E4c`):** elimina componentes que se solapan `> 20 %` con edificaciones/zonas residenciales de OSM (`E4b`) y componentes que ganaron verdor entre 2018–2020 y 2023–2025 (`ΔGRVI > +0.05`, rebrote de chacra o pasto, `E4c`).
+  4. **Qué se probó y se descartó en validación:** el rescate de pequeñas `10–49 px` (`E3`) no recuperó cicatrices válidas (`0/15`), el filtro de rectangularidad (`E4a`) destruyó `62` cicatrices reales en `L4SPe val`, y el rescate de grandes `E2` elevó las falsas alarmas sobre `E1` por encima del tope de `v6`.
+- **Efecto en validación:** en `La Convención val (304)` reduce las falsas alarmas a **`0.0263 ha/km²`** (`−26 %` frente a `v6 = 0.0355` y `−25 %` frente a `v8 = 0.0350`) y sube el `IoU` a **`0.1633`** (`v6 = 0.1542`), mientras en `L4SPe val (127)` conserva **`41/48` (`85.4 %`)** en cicatrices `≥ 2 ha` y `F1` por objeto de **`65.6 %`**. Receta completa en [v9.json](v9.json).
+
+---
+
 ## Recomendación de Uso Operativo (Protocolo v6 — 24/11/2026)
 
 - **Modelo principal recomendado para despliegue en Render: `unet_v6` (`U-Net · resnet34` con `GRVI` y `ExG` internos, umbral $u^* = 0.45$, SIN TTA + filtro `wc_dem_3200_agua_urb`).**

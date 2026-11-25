@@ -889,6 +889,54 @@ class TestAjusteFinoComponentes(unittest.TestCase):
         self.assertEqual(int(mm[0, 2:8, 2:8].sum()), 36)   # hueco rellenado
         self.assertEqual(int(mm[0, 17:19, 2:4].sum()), 0)  # < 10 px eliminado
 
+    def test_mejora_v9_rescates_filtros_y_verificar_metricas(self):
+        """Verifica rescates E2/E3, filtros E4a/E4b/E4c y metricas_desde_cero."""
+        import mejora_v9 as v9
+        import verificar_metricas as vm
+
+        ctx = {
+            'dgrvi': np.zeros((1, 40, 40), dtype=np.float32),
+            'ok_ant': np.ones((1, 40, 40), dtype=bool),
+            'pend': np.full((1, 40, 40), 30.0, dtype=np.float32),
+            'wc': np.full((1, 40, 40), 10, dtype=np.uint8),
+            'tpi_cauce': np.zeros((1, 40, 40), dtype=bool),
+            'cerca_via': np.zeros((1, 40, 40), dtype=bool),
+            'cerca_ns': np.zeros((1, 40, 40), dtype=bool),
+            'edif_mask': np.zeros((1, 40, 40), dtype=bool),
+        }
+        # E2: componente 8x8 = 64 px con prob=0.20, dGRVI=-0.12, pend=30 -> se rescata
+        prob = np.zeros((1, 40, 40), dtype=np.float32)
+        prob[0, 2:10, 2:10] = 0.20
+        ctx['dgrvi'][0, 2:10, 2:10] = -0.12
+        m_e2 = v9.aplicar_e2_rescate_grande(np.zeros((1, 40, 40), dtype=bool), prob, ctx, u_rescate=0.15, t_rescate=-0.08)
+        self.assertEqual(int(m_e2[0, 2:10, 2:10].sum()), 64)
+
+        # E3: componente alargado 12x2 = 24 px, prob=0.30, dGRVI=-0.15, pend=30 -> se rescata
+        prob3 = np.zeros((1, 40, 40), dtype=np.float32)
+        prob3[0, 20:32, 5:7] = 0.30
+        ctx['dgrvi'][0, 20:32, 5:7] = -0.15
+        m_e3 = v9.aplicar_e3_rescate_pequeno(np.zeros((1, 40, 40), dtype=bool), prob3, ctx, u_peq=0.25)
+        self.assertEqual(int(m_e3[0, 20:32, 5:7].sum()), 24)
+
+        # E4: bloque edificacion (E4b) y bloque rebrote dGRVI=+0.10 (E4c) deben eliminarse
+        m_in = np.zeros((1, 40, 40), dtype=bool)
+        m_in[0, 2:6, 20:24] = True
+        ctx['edif_mask'][0, 2:6, 20:24] = True
+        m_in[0, 20:25, 20:25] = True
+        ctx['dgrvi'][0, 20:25, 20:25] = 0.10
+        m_e4 = v9.aplicar_e4_filtros(m_in, ctx, usar_forma=False, usar_edif=True, usar_rebrote=True)
+        self.assertEqual(int(m_e4.sum()), 0)
+
+        # Verificar metricas_desde_cero
+        gt = np.zeros((1, 40, 40), dtype=np.uint8)
+        gt[0, 10:20, 10:20] = 1
+        pred = np.zeros((1, 40, 40), dtype=np.uint8)
+        pred[0, 10:20, 10:20] = 1
+        val = np.ones((1, 40, 40), dtype=np.uint8)
+        r0 = vm.metricas_desde_cero(pred, gt, val)
+        self.assertAlmostEqual(r0['iou_0px'], 1.0, places=4)
+        self.assertAlmostEqual(r0['obj50_f1'], 1.0, places=4)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

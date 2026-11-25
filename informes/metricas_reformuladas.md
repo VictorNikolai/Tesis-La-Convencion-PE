@@ -93,3 +93,10 @@ Metas originales del proyecto: **`IoU ≥ 0.70`**, **`F1 > 75.5 %`**, **`Recall 
 4. La brecha en La Convención refleja tanto la dificultad intrínseca de cicatrices pequeñas (`< 0.5 ha`) en selva/ceja de selva a `10 m` como el límite de concordancia humana (`IoU 0.30–0.39` frente al especialista).
 5. Por ello, los modelos peruanos deben presentarse como **herramienta de apoyo y priorización territorial con fuerte reducción de falsas alarmas** (`−78 %` en `prueba2`), y no como reemplazo de la verificación experta.
 
+## Actualización v9 («post hoc»)
+
+| Conjunto | IoU 0 px | IoU 2 px | F1 2 px | F1 obj `≥ 0.1 ha` | F1 obj `≥ 0.5 ha` | Det `≥ 2 ha` | FA neg. (`ha/km²`) |
+|---|---|---|---|---|---|---|---:|
+| `prueba` (360) | 0.1455 [0.0455, 0.2838] | 0.1744 [0.0553, 0.3412] | 29.7 % [10.5, 50.9] | 25.6 % [13.2, 36.0] | 34.7 % [13.6, 51.0] | 72.7 % [27.3, 100.0] | 0.193 |
+| `L4SPe` test (124) | 0.4298 [0.3771, 0.4847] | 0.6055 [0.5351, 0.6771] | 75.4 % [69.7, 80.8] | 67.9 % [62.6, 73.5] | 74.5 % [69.4, 80.0] | 83.6 % [75.0, 94.1] | 0.823 |
+| `prueba2` (349 neg.) | — | — | — | — | — | — | **0.0157** (2.3 %) |

@@ -1,0 +1,8 @@
+nombre,parametros_probados,parametro_elegido,lc_iou,pe_iou,lc_f1_objeto,pe_f1_objeto,lc_det_10_49,lc_det_50_199,lc_det_ge200,pe_det_10_49,pe_det_50_199,pe_det_ge200,fa_lc_val_ha_km2,cicatrices_ganadas_lc,cicatrices_perdidas_lc,cicatrices_ganadas_pe,cicatrices_perdidas_pe,decision
+E1_quitar_p3_altoandino,"corte={2800..3600}, cond_wc={0,1}, hist={0.70/0.25,0.60/0.30}","corte=3200m, wc30_60=True, hist=0.7/0.25",0.1603,0.3583,0.0698,0.6557,0/15,0/28,3/16,84/229,154/229,41/48,0.0304,1,2,15,13,aceptada
+E2_rescate_cambio_grandes,"u_rescate={0.10..0.30}, t_rescate={-0.05..-0.15}","u=0.15, t=-0.05",0.1565,0.3552,0.0816,0.5989,0/15,0/28,4/16,87/229,151/229,39/48,0.0355,0,0,0,0,aceptada
+E3_rescate_pequenas,"u_peq={0.20,0.25,0.30,0.35,0.40,0.45}",u_peq=0.2,0.1542,0.3552,0.0808,0.5989,0/15,0/28,4/16,87/229,151/229,39/48,0.0355,0,0,0,0,descartada
+E4a_forma,E4a_forma,E4a_forma,0.1575,0.3295,0.092,0.5375,0/15,0/28,4/16,57/229,120/229,38/48,0.0286,0,0,0,62,descartada
+E4b_edificaciones,E4b_edificaciones,E4b_edificaciones,0.1544,0.3552,0.0808,0.5989,0/15,0/28,4/16,87/229,151/229,39/48,0.0351,0,0,0,0,aceptada
+E4c_rebrote,E4c_rebrote,E4c_rebrote,0.1543,0.3552,0.0808,0.5989,0/15,0/28,4/16,87/229,151/229,39/48,0.0353,0,0,0,0,aceptada
+E4_todos,E4_todos,E4_todos,0.1578,0.3295,0.092,0.5375,0/15,0/28,4/16,57/229,120/229,38/48,0.0279,0,0,0,62,descartada

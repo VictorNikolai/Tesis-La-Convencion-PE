@@ -1,0 +1,42 @@
+{
+  "modelos": {
+    "principal": "unet_v6",
+    "auxiliar": "P3_solo_profesor"
+  },
+  "pesos_ensamble": {
+    "unet_v6": 0.6,
+    "P3_solo_profesor": 0.4
+  },
+  "tta_4_espejos": true,
+  "e1_corte_altitud_m": 3200,
+  "e1_condicion_wc_30_60": true,
+  "filtro_wc_base": "wc_urb_agua",
+  "histeresis": {
+    "u_alto": 0.7,
+    "u_bajo": 0.25
+  },
+  "e2_rescate_grande": {
+    "activo": false,
+    "u_rescate": 0.15,
+    "t_rescate": -0.05,
+    "pend_min": 20.0,
+    "area_min": 50
+  },
+  "e3_rescate_pequeno": {
+    "activo": false,
+    "u_peq": 0.2,
+    "dgrvi_max": -0.1,
+    "pend_min": 25.0,
+    "elong_min": 1.8
+  },
+  "e4_filtros": {
+    "forma_rect_075": false,
+    "edificaciones_020": true,
+    "rebrote_dgrvi_005": true
+  },
+  "morfologia": {
+    "min_px": 20,
+    "closing_1px": true,
+    "fill_holes": false
+  }
+}

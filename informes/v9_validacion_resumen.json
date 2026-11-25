@@ -1,0 +1,204 @@
+{
+  "base_v6": {
+    "lc": {
+      "iou_0px": 0.1542,
+      "f1_2px": 0.3169,
+      "obj10_f1": 0.0808,
+      "obj10_tp": 4,
+      "obj10_tot": 59,
+      "det_10_49": "0/15",
+      "det_10_49_tp": 0,
+      "det_50_199": "0/28",
+      "det_50_199_tp": 0,
+      "det_ge200": "4/16",
+      "det_ge200_tp": 4,
+      "det_ge200_rec": 0.25,
+      "fa_ha_km2": 0.0355
+    },
+    "pe": {
+      "iou_0px": 0.3552,
+      "f1_2px": 0.7062,
+      "obj10_f1": 0.5989,
+      "obj10_tp": 277,
+      "obj10_tot": 506,
+      "det_10_49": "87/229",
+      "det_10_49_tp": 87,
+      "det_50_199": "151/229",
+      "det_50_199_tp": 151,
+      "det_ge200": "39/48",
+      "det_ge200_tp": 39,
+      "det_ge200_rec": 0.8125,
+      "fa_ha_km2": 0.3662
+    },
+    "fa_alto_lc": 0.0888
+  },
+  "ref_v8": {
+    "lc": {
+      "iou_0px": 0.2044,
+      "f1_2px": 0.381,
+      "obj10_f1": 0.0789,
+      "obj10_tp": 3,
+      "obj10_tot": 59,
+      "det_10_49": "0/15",
+      "det_10_49_tp": 0,
+      "det_50_199": "0/28",
+      "det_50_199_tp": 0,
+      "det_ge200": "3/16",
+      "det_ge200_tp": 3,
+      "det_ge200_rec": 0.1875,
+      "fa_ha_km2": 0.035
+    },
+    "pe": {
+      "iou_0px": 0.3572,
+      "f1_2px": 0.7059,
+      "obj10_f1": 0.658,
+      "obj10_tp": 278,
+      "obj10_tot": 506,
+      "det_10_49": "82/229",
+      "det_10_49_tp": 82,
+      "det_50_199": "155/229",
+      "det_50_199_tp": 155,
+      "det_ge200": "41/48",
+      "det_ge200_tp": 41,
+      "det_ge200_rec": 0.8542,
+      "fa_ha_km2": 0.3866
+    },
+    "fa_alto_lc": 0.117
+  },
+  "aceptadas": {
+    "E1": true,
+    "E2": true,
+    "E3": false,
+    "E4a_forma": false,
+    "E4b_edificaciones": true,
+    "E4c_rebrote": true
+  },
+  "parametros_v9": {
+    "modelos": {
+      "principal": "unet_v6",
+      "auxiliar": "P3_solo_profesor"
+    },
+    "pesos_ensamble": {
+      "unet_v6": 0.6,
+      "P3_solo_profesor": 0.4
+    },
+    "tta_4_espejos": true,
+    "e1_corte_altitud_m": 3200,
+    "e1_condicion_wc_30_60": true,
+    "filtro_wc_base": "wc_urb_agua",
+    "histeresis": {
+      "u_alto": 0.7,
+      "u_bajo": 0.25
+    },
+    "e2_rescate_grande": {
+      "activo": false,
+      "u_rescate": 0.15,
+      "t_rescate": -0.05,
+      "pend_min": 20.0,
+      "area_min": 50
+    },
+    "e3_rescate_pequeno": {
+      "activo": false,
+      "u_peq": 0.2,
+      "dgrvi_max": -0.1,
+      "pend_min": 25.0,
+      "elong_min": 1.8
+    },
+    "e4_filtros": {
+      "forma_rect_075": false,
+      "edificaciones_020": true,
+      "rebrote_dgrvi_005": true
+    },
+    "morfologia": {
+      "min_px": 20,
+      "closing_1px": true,
+      "fill_holes": false
+    }
+  },
+  "e7_ganador_val": {
+    "usar_e2": false,
+    "corte": 3200,
+    "cond_wc": true,
+    "ua": 0.7,
+    "ub": 0.25,
+    "min_px": 20,
+    "puntaje_07_03": 0.2987,
+    "cumple_cond_v9": true,
+    "lc": {
+      "iou_0px": 0.1633,
+      "f1_2px": 0.317,
+      "obj10_f1": 0.0759,
+      "obj10_tp": 3,
+      "obj10_tot": 59,
+      "det_10_49": "0/15",
+      "det_10_49_tp": 0,
+      "det_50_199": "0/28",
+      "det_50_199_tp": 0,
+      "det_ge200": "3/16",
+      "det_ge200_tp": 3,
+      "det_ge200_rec": 0.1875,
+      "fa_ha_km2": 0.0263
+    },
+    "pe": {
+      "iou_0px": 0.3568,
+      "f1_2px": 0.7056,
+      "obj10_f1": 0.6564,
+      "obj10_tp": 277,
+      "obj10_tot": 506,
+      "det_10_49": "82/229",
+      "det_10_49_tp": 82,
+      "det_50_199": "154/229",
+      "det_50_199_tp": 154,
+      "det_ge200": "41/48",
+      "det_ge200_tp": 41,
+      "det_ge200_rec": 0.8542,
+      "fa_ha_km2": 0.3866
+    }
+  },
+  "ablacion": [
+    {
+      "variante": "v9_completo",
+      "puntaje_07_03": 0.2987,
+      "lc_iou": 0.1633,
+      "lc_f1_obj": 0.0759,
+      "lc_fa_ha_km2": 0.0263,
+      "lc_det": "3/59",
+      "pe_iou": 0.3568,
+      "pe_f1_obj": 0.6564,
+      "pe_det_ge200": "41/48"
+    },
+    {
+      "variante": "sin_E1",
+      "puntaje_07_03": 0.2875,
+      "lc_iou": 0.1665,
+      "lc_f1_obj": 0.0879,
+      "lc_fa_ha_km2": 0.0342,
+      "lc_det": "4/59",
+      "pe_iou": 0.3393,
+      "pe_f1_obj": 0.654,
+      "pe_det_ge200": "39/48"
+    },
+    {
+      "variante": "sin_E4b_edif",
+      "puntaje_07_03": 0.2987,
+      "lc_iou": 0.1633,
+      "lc_f1_obj": 0.0759,
+      "lc_fa_ha_km2": 0.0263,
+      "lc_det": "3/59",
+      "pe_iou": 0.3568,
+      "pe_f1_obj": 0.6564,
+      "pe_det_ge200": "41/48"
+    },
+    {
+      "variante": "sin_E4c_rebrote",
+      "puntaje_07_03": 0.2987,
+      "lc_iou": 0.1633,
+      "lc_f1_obj": 0.0759,
+      "lc_fa_ha_km2": 0.0263,
+      "lc_det": "3/59",
+      "pe_iou": 0.3568,
+      "pe_f1_obj": 0.6564,
+      "pe_det_ge200": "41/48"
+    }
+  ]
+}

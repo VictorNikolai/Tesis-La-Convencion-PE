@@ -1,0 +1,5 @@
+filtro,fa_total_lc,fa_chacra_pasto,fa_urbano,fa_altoandino,fa_bosque,lc_f1_obj,pe_f1_obj,perdidas_lc,perdidas_pe,cumple_criterio
+E4a_forma,0.0286,0.0281,0.0,0.0783,0.0122,0.092,0.5375,0,62,0
+E4b_edificaciones,0.0351,0.0552,0.0,0.0888,0.0166,0.0808,0.5989,0,0,1
+E4c_rebrote,0.0353,0.0552,0.0,0.0877,0.0172,0.0808,0.5989,0,0,1
+E4_todos,0.0279,0.0281,0.0,0.0773,0.0117,0.092,0.5375,0,62,0
