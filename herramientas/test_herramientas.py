@@ -867,6 +867,28 @@ class TestAjusteFinoComponentes(unittest.TestCase):
         self.assertAlmostEqual(float(p_f[0, 2, 2]), 0.6, places=5)
         self.assertEqual(float(p_f[0, 12, 12]), 0.0)
 
+    def test_mejora_v8_histeresis_y_morfologia(self):
+        """Verifica umbral con histeresis 8-conectada y post-proceso por objeto (relleno + min_px)."""
+        import mejora_v8_l4spe as mv8
+        p = np.zeros((1, 20, 20), dtype=np.float32)
+        # Componente 1 (6x6 = 36 px con hueco central): borde a 0.25, semilla 1 px a 0.65
+        p[0, 2:8, 2:8] = 0.25
+        p[0, 4:6, 4:6] = 0.0   # hueco interno 2x2
+        p[0, 2, 2] = 0.65      # semilla >= u_alto
+        # Componente 2 aislado (4x4 = 16 px) solo a 0.35 (< u_alto=0.50) -> debe descartarse
+        p[0, 12:16, 12:16] = 0.35
+        # Componente 3 chico (2x2 = 4 px) a 0.70 -> pasa histeresis pero cae por min_px=10
+        p[0, 17:19, 2:4] = 0.70
+
+        mh = mv8.umbral_histeresis(p, u_alto=0.50, u_bajo=0.20)
+        self.assertEqual(int(mh[0, 2:8, 2:8].sum()), 32)   # 36 - 4 del hueco
+        self.assertEqual(int(mh[0, 12:16, 12:16].sum()), 0)
+        self.assertEqual(int(mh[0, 17:19, 2:4].sum()), 4)
+
+        mm = mv8.postproceso_objeto(mh, min_px=10, fill_holes=True, closing_1px=False)
+        self.assertEqual(int(mm[0, 2:8, 2:8].sum()), 36)   # hueco rellenado
+        self.assertEqual(int(mm[0, 17:19, 2:4].sum()), 0)  # < 10 px eliminado
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
