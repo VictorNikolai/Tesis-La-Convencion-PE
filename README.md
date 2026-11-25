@@ -67,6 +67,25 @@ Algunos ejemplos de la prueba (referencia en verde, predicción en rojo): tres a
 
 Una segunda versión agrega un filtro con el mapa de cobertura ESA WorldCover (zonas urbanas y de agua) y una comparación con la imagen de 2018–2020. Con eso, en 564 parches nuevos con terreno difícil (ríos, chacras, carreteras, poblados, laderas altas) las falsas alarmas bajaron de 0.095 a 0.021 ha/km².
 
+### Versión final (v9)
+
+Después de revisar los errores uno por uno armamos una última versión. Junta la U-Net v6 con un segundo modelo (salvo por encima de 3 200 m, donde manda solo la v6), usa un umbral doble (0.70 para arrancar una cicatriz y 0.25 para extenderla) y descarta lo que cae sobre edificaciones de OpenStreetMap o sobre terreno que reverdeció frente a 2018–2020.
+
+| Prueba | Métrica | v6 | v9 |
+| :--- | :--- | ---: | ---: |
+| Especialista | F1 por cicatriz (≥ 0.5 ha) | 66.7 % | **74.5 %** |
+| Especialista | Cicatrices ≥ 2 ha detectadas | 79.5 % | **83.6 %** |
+| La Convención | F1 por cicatriz (≥ 0.5 ha) | 25.0 % | **34.7 %** |
+| Negativos difíciles | Falsas alarmas (ha/km²) | 0.031 | **0.016** |
+
+La mejora en F1 por cicatriz es clara en las dos pruebas; el IoU casi no cambia. Ojo: estas cifras se calcularon sobre pruebas que ya habíamos usado, así que son una comparación, no una evaluación nueva.
+
+![Comparación v6, v8 y v9](docs/img/v9_comparativa.png)
+
+Un ejemplo en Santa Teresa: la v6 marcaba una ladera que no es deslizamiento y la v9 ya no.
+
+![Falsa alarma eliminada en Santa Teresa](docs/img/v9_falsa_alarma.jpg)
+
 ### Comprobación con eventos de INDECI
 
 Para ver si el sistema funciona sobre eventos reales tomamos tres emergencias grandes de la matriz de INDECI. Como sus coordenadas son las de la capital del distrito, buscamos la cicatriz real comparando imágenes secas de antes y después del evento (sin usar el modelo) y la confirmamos en imagen aérea. Después corrimos los modelos en un área de 3 × 3 km alrededor.
