@@ -1,0 +1,40 @@
+id_fa,parche,zona,cid,px,ha,elev_m,pend_deg,wc_dom,dgrvi,via_pct,cauce_pct,edif_pct,ns_pct,clase,clase_desc
+1,ZN04_VILCABAMBA_004_q1,ZN04_VILCABAMBA,1,1960,19.6,2359.0,40.8,30,-0.043,0.0,4.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+2,ZN04_VILCABAMBA_001_q3,ZN04_VILCABAMBA,1,999,9.99,2346.0,47.8,30,-0.023,0.0,2.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+3,ZN51_INKAWASI_001_q4,ZN51_INKAWASI,1,757,7.57,1870.0,39.4,30,-0.095,1.0,2.0,0.0,0.0,d,Chacra o pasto
+4,ZN60_QUELLOUNO_001_q4,ZN60_QUELLOUNO,1,625,6.25,1200.0,42.0,10,-0.193,0.0,2.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+5,ZN04_VILCABAMBA_001_q4,ZN04_VILCABAMBA,1,549,5.49,2206.0,38.1,10,-0.129,0.0,1.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+6,ZN57_VILCABAMBA_001_q1,ZN57_VILCABAMBA,1,496,4.96,2323.0,37.6,30,-0.162,1.0,1.0,0.0,0.0,e,Carretera o construcción
+7,ZN51_INKAWASI_001_q4,ZN51_INKAWASI,2,468,4.68,1930.0,42.1,30,-0.106,1.0,1.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+8,ZN01_OCOBAMBA_001_q3,ZN01_OCOBAMBA,1,401,4.01,1760.0,34.2,30,0.051,0.0,1.0,0.0,0.0,d,Chacra o pasto
+9,ZN77_INKAWASI_001_q3,ZN77_INKAWASI,1,368,3.68,1055.0,40.0,30,-0.03,0.0,0.0,0.0,0.0,c,Cauce o playa
+10,ZN51_INKAWASI_001_q2,ZN51_INKAWASI,1,358,3.58,1598.0,40.2,30,-0.058,0.0,1.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+11,ZN41_VILCABAMBA_001_q3,ZN41_VILCABAMBA,1,345,3.45,1549.0,37.8,30,-0.016,0.0,1.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+12,ZN77_INKAWASI_001_q4,ZN77_INKAWASI,1,332,3.32,1175.0,42.4,30,-0.018,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+13,ZN71_VILCABAMBA_001_q2,ZN71_VILCABAMBA,1,316,3.16,3793.0,22.2,30,-0.079,0.0,1.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+14,ZN51_INKAWASI_001_q1,ZN51_INKAWASI,1,298,2.98,1385.0,46.3,30,0.032,0.0,1.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+15,ZN77_INKAWASI_001_q3,ZN77_INKAWASI,2,278,2.78,1461.0,40.6,30,-0.002,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+16,ZN01_OCOBAMBA_002_q4,ZN01_OCOBAMBA,1,250,2.5,1059.0,38.6,30,-0.005,0.0,0.0,0.0,0.0,d,Chacra o pasto
+17,ZN40_VILCABAMBA_001_q3,ZN40_VILCABAMBA,1,240,2.4,2168.0,37.2,30,0.018,0.0,1.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+18,ZN77_INKAWASI_001_q1,ZN77_INKAWASI,1,233,2.33,1156.0,41.4,30,-0.004,0.0,1.0,0.0,0.0,c,Cauce o playa
+19,ZN01_OCOBAMBA_004_q4,ZN01_OCOBAMBA,1,199,1.99,1606.0,35.7,30,-0.042,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+20,ZN02_OCOBAMBA_002_q2,ZN02_OCOBAMBA,2,184,1.84,3611.0,42.4,30,-0.005,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+21,ZN83_INKAWASI_001_q1,ZN83_INKAWASI,1,182,1.82,1466.0,43.9,30,0.007,0.0,1.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+22,ZN55_SANTA_TERESA_001_q2,ZN55_SANTA_TERESA,1,157,1.57,3207.0,36.4,10,-0.163,0.0,1.0,0.0,1.0,c,Cauce o playa
+23,ZN76_QUELLOUNO_001_q1,ZN76_QUELLOUNO,1,115,1.15,1487.0,47.3,30,-0.009,0.0,0.0,0.0,0.0,d,Chacra o pasto
+24,ZN41_VILCABAMBA_001_q1,ZN41_VILCABAMBA,1,107,1.07,1244.0,44.8,30,-0.01,0.0,1.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+25,ZN83_INKAWASI_001_q3,ZN83_INKAWASI,1,106,1.06,1244.0,60.6,30,0.031,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+26,ZN66_VILCABAMBA_001_q4,ZN66_VILCABAMBA,2,104,1.04,3128.0,40.6,10,-0.136,0.0,0.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+27,ZN02_OCOBAMBA_002_q1,ZN02_OCOBAMBA,1,103,1.03,3001.0,30.9,60,-0.001,0.0,1.0,0.0,0.0,c,Cauce o playa
+28,ZN01_OCOBAMBA_004_q1,ZN01_OCOBAMBA,1,102,1.02,1143.0,37.6,10,-0.029,0.0,0.0,0.0,0.0,d,Chacra o pasto
+29,ZN02_OCOBAMBA_002_q2,ZN02_OCOBAMBA,1,80,0.8,3582.0,39.0,30,-0.034,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+30,ZN66_VILCABAMBA_001_q4,ZN66_VILCABAMBA,1,76,0.76,3057.0,37.6,10,-0.117,0.0,0.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+31,ZN71_VILCABAMBA_001_q1,ZN71_VILCABAMBA,1,47,0.47,3928.0,58.1,30,-0.032,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+32,ZN02_OCOBAMBA_001_q2,ZN02_OCOBAMBA,1,41,0.41,2925.0,35.5,30,0.009,0.0,0.0,0.0,0.0,e,Carretera o construcción
+33,ZN97_VILCABAMBA_001_q1,ZN97_VILCABAMBA,1,34,0.34,3501.0,37.0,30,0.024,0.0,0.0,0.0,0.0,e,Carretera o construcción
+34,ZN41_VILCABAMBA_001_q4,ZN41_VILCABAMBA,1,27,0.27,1646.0,34.3,30,-0.016,0.0,0.0,0.0,0.0,b,Suelo desnudo o claro (ladera árida/roca)
+35,ZN66_VILCABAMBA_001_q4,ZN66_VILCABAMBA,3,26,0.26,3277.0,41.7,10,-0.058,0.0,0.0,0.0,0.0,f,Nube o sombra
+36,ZN66_VILCABAMBA_001_q3,ZN66_VILCABAMBA,1,25,0.25,3448.0,29.8,10,0.032,0.0,0.0,0.0,0.0,f,Nube o sombra
+37,ZN64_QUELLOUNO_001_q3,ZN64_QUELLOUNO,3,1,0.01,2487.0,39.1,10,-0.212,0.0,0.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+38,ZN64_QUELLOUNO_001_q3,ZN64_QUELLOUNO,4,1,0.01,2497.0,36.6,10,-0.14,0.0,0.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
+39,ZN84_QUELLOUNO_001_q4,ZN84_QUELLOUNO,2,1,0.01,1708.0,10.2,10,-0.246,0.0,0.0,0.0,0.0,a,Posible cicatriz real no marcada en referencia
