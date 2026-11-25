@@ -1090,9 +1090,12 @@ def _generar_figuras_finales(res, Xraw_t, Yt, Vt, Ft, mv6_t, mv9_t,
         _, pch, rgb, gt, p6, p9, tit, exp = item
         plot_4paneles(os.path.join(fdir, f'0{k}_fa_eliminada_{pch}.png'), rgb, gt, p6, p9, tit, exp)
 
-    # 2 cicatrices grandes (>= 50 px) y 2 pequenas (< 50 px) recuperadas
+    # 2 cicatrices grandes (>= 50 px) y 2 pequenas (< 50 px) recuperadas (excluyendo parches con >=100 px FP)
+    parches_fp_grande = {Fpt[i]['parche'] for i in range(len(Ypt)) if int((mv9_pe[i] & (~((Ypt[i] > 0) & (Vpt[i] > 0)))).sum()) >= 100}
     rec_grandes, rec_peq = [], []
     for d in camb_pe['cicatrices_recuperadas']:
+        if d['parche'] in parches_fp_grande:
+            continue
         i = d['_idx']
         item = (d['px_gt'], d['parche'], _rgb_desde_raw(Xraw_pt[i], True), (Ypt[i] > 0) & (Vpt[i] > 0), mv6_pe[i], mv9_pe[i],
                 f"Cicatriz {'grande' if d['px_gt']>=50 else 'pequeña'} recuperada (L4SPe test): {d['parche']} ({d['px_gt']} px)",

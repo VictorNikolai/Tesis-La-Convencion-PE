@@ -22,6 +22,10 @@
 | **v8** | 0.1138 [0.0336, 0.2625] | 23.8 % [7.8, 48.5] | 36.1 % [16.1, 52.3] | 54.5 % [25.0, 85.7] | 0.298 |
 | **v9** | 0.1455 [0.0455, 0.2838] | 29.7 % [10.5, 50.9] | 34.7 % [13.6, 51.0] | 72.7 % [27.3, 100.0] | 0.193 |
 
+> [!NOTE]
+> - La detección `≥ 2 ha` en la `prueba` sellada de La Convención se basa en **`11` cicatrices** (`IC 95 %: 27.3–100.0 %`), por lo que el intervalo es amplio.
+> - En los parches negativos de **`L4SPe` test**, `v9` presenta más falsas alarmas que `v6` (**`0.823`** frente a **`0.612 ha/km²`**), ya que `L4SPe` no dispone de WorldCover ni de imagen anterior para activar los filtros de `v9`.
+
 ### 1c. `prueba2` Sellada (`349` negativos confirmados por `tipo_negativo`)
 
 | Modelo | **TOTAL (`ha/km²` / `%`)** | `altoandino` (49) | `chacra_o_pasto` (9) | `rio` (34) | `carretera` (8) | `poblado` (6) | `bosque_ladera` (243) |
@@ -32,7 +36,7 @@
 
 ## 2. Verificación Independiente (`herramientas/verificar_metricas.py`)
 
-- **Recálculo desde cero:** `iou_0px`, `f1_0px`, `obj10_f1`, `obj50_f1`, `obj200_rec` y `prueba2` (`0.0305` / `0.0499` / `0.0157 ha/km²`) coinciden con `informes/evaluacion_v9.json` con diferencia `< 1e-4`. Las únicas diferencias `> 1e-3` (`0.007–0.019`) ocurren en `iou_2px / f1_2px` porque `metricas_reformuladas.py` define `F1_tol` a partir de `prec_tol = tp_p / (tp_p + fp)` y `rec_tol = tp_g / (tp_g + fn)` (y `IoU_tol = F1_tol / (2 - F1_tol)`), mientras el script independiente evaluó `tp = min(tp_p, tp_g)` sobre `tp + fp + fn`.
+- **Recálculo desde cero:** `iou_0px`, `f1_0px`, `obj10_f1`, `obj50_f1`, `obj200_rec` y `prueba2` (`0.0305` / `0.0499` / `0.0157 ha/km²`) coinciden con `informes/evaluacion_v9.json` con diferencia `< 1e-4`. La tolerancia de `1–2 px` se calcula como en `metricas_reformuladas.py` (`F1_tol` desde `prec_tol` y `rec_tol`; `IoU_tol = F1_tol / (2 − F1_tol)`); la diferencia con el recálculo independiente (`0.007–0.019`, que usó `tp = min(tp_p, tp_g)` sobre `tp + fp + fn`) se debe a la definición, no a un error.
 - **Auditoría de fuga e integridad:** conteos exactos `560 / 304 / 360 / 564` (`conteos_ok = True`), `0` teselas compartidas, `0` zonas compartidas, `0` parches de prueba en entrenamiento, y distancia espacial mínima `>= 3 km` verificada por `test_herramientas.py`.
 - **ONNX y paridad:** `modelos_ajustados/unet_v6.onnx` (`SHA-256: 5419f7e38bb5bd814ae04a29ffa3f01748190cd42004920f9b6c5f6a1a6dcaa3`), diferencia máxima absoluta de logit frente a PyTorch en `20` parches = `1.53e-05`.
 - **Pruebas unitarias:** `pytest herramientas/test_herramientas.py -q` → `21 passed`.
