@@ -1,0 +1,353 @@
+{
+  "checks_5": [
+    {
+      "parche": "ZN25_ECHARATE_001_q4",
+      "crs_igual": true,
+      "shape_ir_q": [
+        3,
+        128,
+        128
+      ],
+      "diff_transform": 0.0,
+      "corr_b04_tag": "0.4382"
+    },
+    {
+      "parche": "ingemmet_043_001_q2",
+      "crs_igual": true,
+      "shape_ir_q": [
+        3,
+        128,
+        128
+      ],
+      "diff_transform": 0.0,
+      "corr_b04_tag": "0.8363"
+    },
+    {
+      "parche": "azar_048_001_q2",
+      "crs_igual": true,
+      "shape_ir_q": [
+        3,
+        128,
+        128
+      ],
+      "diff_transform": 0.0,
+      "corr_b04_tag": "0.6661"
+    },
+    {
+      "parche": "sinpad_47364_001_q2",
+      "crs_igual": true,
+      "shape_ir_q": [
+        3,
+        128,
+        128
+      ],
+      "diff_transform": 0.0,
+      "corr_b04_tag": "0.9988"
+    },
+    {
+      "parche": "ingemmet_041_001_q3",
+      "crs_igual": true,
+      "shape_ir_q": [
+        3,
+        128,
+        128
+      ],
+      "diff_transform": 0.0,
+      "corr_b04_tag": "0.7451"
+    }
+  ],
+  "stats_ir": {
+    "B08": {
+      "media": 2769.08154296875,
+      "desv": 902.7420654296875
+    },
+    "B11": {
+      "media": 1652.4129638671875,
+      "desv": 522.9837036132812
+    },
+    "B12": {
+      "media": 821.7603149414062,
+      "desv": 387.14080810546875
+    }
+  },
+  "historial": [
+    {
+      "epoca": 0,
+      "iou_val": 0.1366,
+      "umbral": 0.4,
+      "loss": 0.0
+    }
+  ],
+  "receta_v10": {
+    "nombre": "unet_v10_9b",
+    "onnx": "unet_v10_9b.onnx",
+    "sha256": "04ad2b4e7dce99a0a7954fb603e89a1430c569fa8992e5a44dfe2d2d1a7e73c4",
+    "canales": [
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "pendiente",
+      "elevacion",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "umbral": 0.4,
+    "epoca": 0,
+    "filtro_wc": "wc_urb_agua",
+    "iou_val": 0.1366,
+    "paridad_onnx_20": 3.24249267578125e-05
+  },
+  "prueba_360": {
+    "p0": {
+      "counts": [
+        2263,
+        9999,
+        6429
+      ],
+      "iou": 0.1211,
+      "iou_ic95": [
+        0.0292,
+        0.2416
+      ],
+      "f1": 0.216,
+      "f1_ic95": [
+        0.0567,
+        0.3892
+      ],
+      "prec": 0.1846,
+      "prec_ic95": [
+        0.0435,
+        0.391
+      ],
+      "rec": 0.2604,
+      "rec_ic95": [
+        0.0729,
+        0.4898
+      ],
+      "fp_rate": 0.8154,
+      "fp_rate_ic95": [
+        0.609,
+        0.9565
+      ]
+    },
+    "p2": {
+      "counts": [
+        2738,
+        9750,
+        5728
+      ],
+      "iou": 0.1503,
+      "iou_ic95": [
+        0.0379,
+        0.2962
+      ],
+      "f1": 0.2613,
+      "f1_ic95": [
+        0.0731,
+        0.457
+      ],
+      "prec": 0.2193,
+      "prec_ic95": [
+        0.0555,
+        0.4477
+      ],
+      "rec": 0.3234,
+      "rec_ic95": [
+        0.0916,
+        0.5979
+      ],
+      "fp_rate": 0.7807,
+      "fp_rate_ic95": [
+        0.5523,
+        0.9445
+      ]
+    },
+    "o10": {
+      "counts": [
+        11,
+        69,
+        86
+      ],
+      "iou": 0.0663,
+      "iou_ic95": [
+        0.0216,
+        0.1233
+      ],
+      "f1": 0.1243,
+      "f1_ic95": [
+        0.0424,
+        0.2195
+      ],
+      "prec": 0.1134,
+      "prec_ic95": [
+        0.0331,
+        0.2368
+      ],
+      "rec": 0.1375,
+      "rec_ic95": [
+        0.0476,
+        0.2942
+      ],
+      "fp_rate": 0.8866,
+      "fp_rate_ic95": [
+        0.7632,
+        0.9669
+      ]
+    },
+    "o50": {
+      "counts": [
+        10,
+        16,
+        86
+      ],
+      "iou": 0.0893,
+      "iou_ic95": [
+        0.022,
+        0.1809
+      ],
+      "f1": 0.1639,
+      "f1_ic95": [
+        0.043,
+        0.3064
+      ],
+      "prec": 0.1042,
+      "prec_ic95": [
+        0.0254,
+        0.2223
+      ],
+      "rec": 0.3846,
+      "rec_ic95": [
+        0.1364,
+        0.6298
+      ],
+      "fp_rate": 0.8958,
+      "fp_rate_ic95": [
+        0.7777,
+        0.9746
+      ]
+    },
+    "o200": {
+      "counts": [
+        7,
+        4,
+        86
+      ],
+      "iou": 0.0722,
+      "iou_ic95": [
+        0.0085,
+        0.1667
+      ],
+      "f1": 0.1346,
+      "f1_ic95": [
+        0.0169,
+        0.2857
+      ],
+      "prec": 0.0753,
+      "prec_ic95": [
+        0.0089,
+        0.1765
+      ],
+      "rec": 0.6364,
+      "rec_ic95": [
+        0.1429,
+        0.9231
+      ],
+      "fp_rate": 0.9247,
+      "fp_rate_ic95": [
+        0.8235,
+        0.9911
+      ]
+    }
+  },
+  "prueba2": {
+    "TOTAL_349": {
+      "n_parches": 349,
+      "fa_ha_km2": 0.0203,
+      "parches_con_marca": 23,
+      "pct_con_marca": 6.6,
+      "px_fa": 1162
+    },
+    "altoandino": {
+      "n_parches": 49,
+      "fa_ha_km2": 0.0516,
+      "parches_con_marca": 10,
+      "pct_con_marca": 20.4,
+      "px_fa": 414
+    },
+    "chacra_o_pasto": {
+      "n_parches": 9,
+      "fa_ha_km2": 0.1371,
+      "parches_con_marca": 1,
+      "pct_con_marca": 11.1,
+      "px_fa": 202
+    },
+    "rio": {
+      "n_parches": 34,
+      "fa_ha_km2": 0.002,
+      "parches_con_marca": 1,
+      "pct_con_marca": 2.9,
+      "px_fa": 11
+    },
+    "carretera": {
+      "n_parches": 8,
+      "fa_ha_km2": 0.0,
+      "parches_con_marca": 0,
+      "pct_con_marca": 0.0,
+      "px_fa": 0
+    },
+    "poblado": {
+      "n_parches": 6,
+      "fa_ha_km2": 0.055,
+      "parches_con_marca": 1,
+      "pct_con_marca": 16.7,
+      "px_fa": 54
+    },
+    "bosque_ladera": {
+      "n_parches": 243,
+      "fa_ha_km2": 0.0121,
+      "parches_con_marca": 10,
+      "pct_con_marca": 4.1,
+      "px_fa": 481
+    }
+  },
+  "fa_v9_en_v10": {
+    "b": {
+      "n_v9": 16,
+      "px_v9": 5700,
+      "n_siguen_v10": 16,
+      "px_v10_en_zona": 3006
+    },
+    "d": {
+      "n_v9": 5,
+      "px_v9": 1625,
+      "n_siguen_v10": 3,
+      "px_v10_en_zona": 818
+    },
+    "a": {
+      "n_v9": 9,
+      "px_v9": 2183,
+      "n_siguen_v10": 2,
+      "px_v10_en_zona": 788
+    },
+    "e": {
+      "n_v9": 3,
+      "px_v9": 571,
+      "n_siguen_v10": 3,
+      "px_v10_en_zona": 534
+    },
+    "c": {
+      "n_v9": 4,
+      "px_v9": 861,
+      "n_siguen_v10": 4,
+      "px_v10_en_zona": 525
+    },
+    "f": {
+      "n_v9": 2,
+      "px_v9": 51,
+      "n_siguen_v10": 2,
+      "px_v10_en_zona": 8
+    }
+  }
+}

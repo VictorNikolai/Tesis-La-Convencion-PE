@@ -1,0 +1,21 @@
+{
+  "nombre": "unet_v10_9b",
+  "onnx": "unet_v10_9b.onnx",
+  "sha256": "04ad2b4e7dce99a0a7954fb603e89a1430c569fa8992e5a44dfe2d2d1a7e73c4",
+  "canales": [
+    "B01",
+    "B02",
+    "B03",
+    "B04",
+    "pendiente",
+    "elevacion",
+    "B08",
+    "B11",
+    "B12"
+  ],
+  "umbral": 0.4,
+  "epoca": 0,
+  "filtro_wc": "wc_urb_agua",
+  "iou_val": 0.1366,
+  "paridad_onnx_20": 3.24249267578125e-05
+}
