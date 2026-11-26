@@ -86,6 +86,20 @@ Un ejemplo en Santa Teresa: la v6 marcaba una ladera que no es deslizamiento y l
 
 ![Falsa alarma eliminada en Santa Teresa](docs/img/v9_falsa_alarma.jpg)
 
+### ¿Por qué el IoU no llega a 0.70?
+
+Separamos los píxeles con error en tipos. En la prueba del especialista casi la mitad del error está en el borde, a 1 o 2 píxeles del contorno: aun con bordes perfectos el IoU quedaría en 0.62–0.65. En La Convención el error es otro: sobre todo falsas alarmas completas, y unas 22 ha de esas "falsas alarmas" parecen cicatrices reales que no marcamos.
+
+![Descomposición del error](docs/img/iou_diagnostico.png)
+
+Si contamos solo cicatrices de 0.5 ha o más y aceptamos 2 píxeles de error en el borde (lo razonable a 10 m), la v9 llega a un IoU de 0.61 y un F1 de 75.7 % en la prueba del especialista.
+
+El modelo acierta más en cicatrices grandes, en laderas muy empinadas y en zonas altas; falla en las pequeñas y en selva baja, donde la vegetación las cubre rápido.
+
+![Aciertos por tamaño y altitud](docs/img/analisis_errores.png)
+
+También probamos refinar bordes, un modelo con infrarrojo (B08, B11 y B12) y un filtro con NDVI. Los dos primeros no mejoraron en validación y los dejamos; el filtro baja todavía más las falsas alarmas, pero se come algunas cicatrices revegetadas, así que quedó como opción.
+
 ### Comprobación con eventos de INDECI
 
 Para ver si el sistema funciona sobre eventos reales tomamos tres emergencias grandes de la matriz de INDECI. Como sus coordenadas son las de la capital del distrito, buscamos la cicatriz real comparando imágenes secas de antes y después del evento (sin usar el modelo) y la confirmamos en imagen aérea. Después corrimos los modelos en un área de 3 × 3 km alrededor.
@@ -112,7 +126,9 @@ Los detalles están en [`informes/metricas_reformuladas.md`](informes/metricas_r
 
 ## Qué falta
 
-- Que el especialista revise una muestra de las máscaras de la prueba, para tener una medida con referencia humana en la misma provincia.
+- Remarcar con el especialista los 55 parches de la prueba con más desacuerdo (lista y láminas en la rama `mejora-iou`).
+- Usar la imagen anterior y la actual juntas como entrada, para que el modelo vea el cambio y no solo suelo desnudo.
+- Entrenar en GPU con una pérdida que cuide el borde.
 - Probar un modelo con más bandas (B08, B11 y B12), que podría separar mejor el suelo arcilloso de los pastos secos.
 - Tratar los huaicos en cauce como una clase aparte.
 - Usar imágenes de mayor resolución para los deslizamientos pequeños.
