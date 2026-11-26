@@ -4,7 +4,8 @@ Este repositorio reúne los datos, el código y los resultados de nuestra tesis 
 
 **Autores:** Víctor Nikolai Huarcaya Pumacayo y Leonardo Camilo Mejía López
 **Asesor:** Mg. Roy Marco Yali Samaniego
-**Aplicación web:** [Proyecto_Tesis_Deslizamiento](https://github.com/VictorNikolai/Proyecto_Tesis_Deslizamiento)
+**Probar los modelos peruanos:** [deslizamientos-peru en Hugging Face](https://nikolaivictor-deslizamientos-peru.static.hf.space)
+**Código del sistema:** [Proyecto_Tesis_Deslizamiento](https://github.com/VictorNikolai/Proyecto_Tesis_Deslizamiento) (rama `modelos-peru`)
 
 ## Por qué La Convención
 
@@ -124,8 +125,30 @@ Así se ve el huaico de Echarate (antes, después, imagen aérea y las prediccio
 
 Los detalles están en [`informes/metricas_reformuladas.md`](informes/metricas_reformuladas.md) y [`informes/estudios_caso.md`](informes/estudios_caso.md).
 
+## La aplicación
+
+Los dos modelos ajustados con estos datos se pueden usar en [deslizamientos-peru](https://nikolaivictor-deslizamientos-peru.static.hf.space). Se dibuja un rectángulo o se escribe una coordenada, y el servidor (Render, plan gratuito) descarga Sentinel-2, arma el mosaico y devuelve la máscara en GeoTIFF y GeoJSON.
+
+![La aplicación con los modelos peruanos](docs/img/app_datos_peruanos.jpg)
+
+- **Búsqueda por coordenadas:** acepta grados decimales (`-12.86, -72.69`) o UTM 18S como en los registros de INDECI (`E 760000 N 8577000`). También se puede abrir un punto directo con un enlace: `?lat=-13.2050&lon=-72.6230&lado=3`.
+- **Siempre temporada seca:** se elige el año, y el servidor arma el mosaico de junio a septiembre con hasta seis escenas de menos de 20 % de nubes, igual que los datos de entrenamiento. No dejamos elegir otras fechas porque los modelos no vieron la temporada de lluvias.
+- **Umbral de cada modelo:** 0.45 para la U-Net y 0.70 para DeepLabV3+, los elegidos en validación. Por defecto no se filtra por pendiente, como en la evaluación.
+- **Lo que aún no hace:** el filtro de WorldCover (zonas urbanas y agua) y la combinación de modelos de la versión final. Por eso puede marcar algo de más sobre techos o playas de río.
+
+Para probar con eventos reales de INDECI, estas son las cicatrices de los estudios de caso:
+
+| Evento | Coordenada de la cicatriz | Año a elegir |
+| :--- | :--- | :--- |
+| Alud de Santa Teresa, 23/02/2020 | -13.2050, -72.6230 | 2020 |
+| Deslizamiento de Vilcabamba, 27/03/2021 | -13.0938, -73.0589 | 2021 |
+| Huaico de Echarate, 16/02/2021 | -12.7470, -72.5620 | 2021 (está en el cauce: no se marca) |
+
+Revisamos los requisitos del sistema contra su código: de 19, se cumplen 16, uno cambió (la entrada pasó de 14 a 6 canales, porque los datos del especialista solo tienen seis) y dos quedan a medias, la meta de IoU y la comprobación de la huella del modelo contra un manifiesto.
+
 ## Qué falta
 
+- Programar en el servidor el filtro WorldCover y la combinación de modelos de la versión final.
 - Remarcar con el especialista los 55 parches de la prueba con más desacuerdo (lista y láminas en la rama `mejora-iou`).
 - Usar la imagen anterior y la actual juntas como entrada, para que el modelo vea el cambio y no solo suelo desnudo.
 - Entrenar en GPU con una pérdida que cuide el borde.
@@ -137,8 +160,8 @@ Los detalles están en [`informes/metricas_reformuladas.md`](informes/metricas_r
 
 Las recetas (canales, normalización, umbral y filtro) están en `modelos_ajustados/`. Los archivos ONNX se descargan desde la sección *Releases*.
 
-- `unet_v6`: el que recomendamos (umbral 0.45, con filtro WorldCover).
-- `deeplabv3plus_v6`: alternativa (umbral 0.60).
+- `unet_v6`: el que recomendamos (umbral 0.45, con filtro WorldCover). En la aplicación se llama `unet_laconvencion`; es el mismo archivo (SHA-256 `5419f7e3…`).
+- `deeplabv3plus_v6`: alternativa (umbral 0.70). En la aplicación, `deeplabv3plus_laconvencion` (SHA-256 `94e56a68…`).
 - `unet_b1_v5` y `deeplabv3plus_b2_v5`: los usados en la evaluación final.
 
 ## Cómo usarlo
