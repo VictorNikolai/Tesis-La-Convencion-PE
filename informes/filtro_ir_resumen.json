@@ -1,0 +1,365 @@
+{
+  "se_aplica_filtro_ir": true,
+  "regla_ir": "NDVI > 0.40",
+  "val_base_v9": {
+    "iou_0px": 0.1633,
+    "f1_0px": 0.2808,
+    "iou_1px": 0.1783,
+    "f1_1px": 0.3026,
+    "iou_2px": 0.1883,
+    "f1_2px": 0.317,
+    "obj10_f1": 0.0759,
+    "obj10_prec": 0.15,
+    "obj10_rec": 0.0508,
+    "obj50_f1": 0.0938,
+    "obj50_rec": 0.0682,
+    "obj200_f1": 0.1667,
+    "obj200_rec": 0.1875,
+    "obj200_tp": 3,
+    "obj200_tot": 16,
+    "fa_ha_km2": 0.0263
+  },
+  "val_mejor_ir": {
+    "regla": "NDVI > 0.40",
+    "lc_iou": 0.1702,
+    "fa_lc": 0.0158,
+    "perdidas_val": 0,
+    "cumple": true
+  },
+  "posthoc_v9": {
+    "iou": {
+      "counts": [
+        2983,
+        11812,
+        5709
+      ],
+      "iou": 0.1455,
+      "iou_ic95": [
+        0.0456,
+        0.286
+      ],
+      "f1": 0.254,
+      "f1_ic95": [
+        0.0873,
+        0.4448
+      ],
+      "prec": 0.2016,
+      "prec_ic95": [
+        0.0627,
+        0.4348
+      ],
+      "rec": 0.3432,
+      "rec_ic95": [
+        0.1257,
+        0.5914
+      ],
+      "fp_rate": 0.7984,
+      "fp_rate_ic95": [
+        0.5652,
+        0.9373
+      ]
+    },
+    "o50": {
+      "counts": [
+        13,
+        13,
+        36
+      ],
+      "iou": 0.2097,
+      "iou_ic95": [
+        0.0732,
+        0.3429
+      ],
+      "f1": 0.3467,
+      "f1_ic95": [
+        0.1363,
+        0.5107
+      ],
+      "prec": 0.2653,
+      "prec_ic95": [
+        0.0952,
+        0.4524
+      ],
+      "rec": 0.5,
+      "rec_ic95": [
+        0.2308,
+        0.7274
+      ],
+      "fp_rate": 0.7347,
+      "fp_rate_ic95": [
+        0.5476,
+        0.9048
+      ]
+    },
+    "o200": {
+      "counts": [
+        8,
+        3,
+        36
+      ],
+      "iou": 0.1702,
+      "iou_ic95": [
+        0.0345,
+        0.325
+      ],
+      "f1": 0.2909,
+      "f1_ic95": [
+        0.0666,
+        0.4906
+      ],
+      "prec": 0.1818,
+      "prec_ic95": [
+        0.037,
+        0.3448
+      ],
+      "rec": 0.7273,
+      "rec_ic95": [
+        0.25,
+        1.0
+      ],
+      "fp_rate": 0.8182,
+      "fp_rate_ic95": [
+        0.6552,
+        0.963
+      ]
+    }
+  },
+  "posthoc_ir": {
+    "iou": {
+      "counts": [
+        2349,
+        6768,
+        6343
+      ],
+      "iou": 0.1519,
+      "iou_ic95": [
+        0.0353,
+        0.3044
+      ],
+      "f1": 0.2638,
+      "f1_ic95": [
+        0.0682,
+        0.4667
+      ],
+      "prec": 0.2577,
+      "prec_ic95": [
+        0.0669,
+        0.5123
+      ],
+      "rec": 0.2702,
+      "rec_ic95": [
+        0.0692,
+        0.5177
+      ],
+      "fp_rate": 0.7423,
+      "fp_rate_ic95": [
+        0.4877,
+        0.9331
+      ]
+    },
+    "o50": {
+      "counts": [
+        9,
+        17,
+        25
+      ],
+      "iou": 0.1765,
+      "iou_ic95": [
+        0.0535,
+        0.3333
+      ],
+      "f1": 0.3,
+      "f1_ic95": [
+        0.1017,
+        0.5
+      ],
+      "prec": 0.2647,
+      "prec_ic95": [
+        0.0811,
+        0.4865
+      ],
+      "rec": 0.3462,
+      "rec_ic95": [
+        0.1071,
+        0.643
+      ],
+      "fp_rate": 0.7353,
+      "fp_rate_ic95": [
+        0.5135,
+        0.9189
+      ]
+    },
+    "o200": {
+      "counts": [
+        7,
+        4,
+        25
+      ],
+      "iou": 0.1944,
+      "iou_ic95": [
+        0.027,
+        0.4
+      ],
+      "f1": 0.3256,
+      "f1_ic95": [
+        0.0525,
+        0.5714
+      ],
+      "prec": 0.2188,
+      "prec_ic95": [
+        0.0294,
+        0.4287
+      ],
+      "rec": 0.6364,
+      "rec_ic95": [
+        0.1429,
+        0.9231
+      ],
+      "fp_rate": 0.7812,
+      "fp_rate_ic95": [
+        0.5713,
+        0.9706
+      ]
+    }
+  },
+  "prueba2_v9": {
+    "TOTAL_349": {
+      "n_parches": 349,
+      "fa_ha_km2": 0.0157,
+      "parches_con_marca": 8,
+      "pct_con_marca": 2.3,
+      "px_fa": 896
+    },
+    "altoandino": {
+      "n_parches": 49,
+      "fa_ha_km2": 0.0614,
+      "parches_con_marca": 3,
+      "pct_con_marca": 6.1,
+      "px_fa": 493
+    },
+    "chacra_o_pasto": {
+      "n_parches": 9,
+      "fa_ha_km2": 0.0,
+      "parches_con_marca": 0,
+      "pct_con_marca": 0.0,
+      "px_fa": 0
+    },
+    "rio": {
+      "n_parches": 34,
+      "fa_ha_km2": 0.0,
+      "parches_con_marca": 0,
+      "pct_con_marca": 0.0,
+      "px_fa": 0
+    },
+    "carretera": {
+      "n_parches": 8,
+      "fa_ha_km2": 0.0,
+      "parches_con_marca": 0,
+      "pct_con_marca": 0.0,
+      "px_fa": 0
+    },
+    "poblado": {
+      "n_parches": 6,
+      "fa_ha_km2": 0.0692,
+      "parches_con_marca": 1,
+      "pct_con_marca": 16.7,
+      "px_fa": 68
+    },
+    "bosque_ladera": {
+      "n_parches": 243,
+      "fa_ha_km2": 0.0084,
+      "parches_con_marca": 4,
+      "pct_con_marca": 1.6,
+      "px_fa": 335
+    }
+  },
+  "prueba2_ir": {
+    "TOTAL_349": {
+      "n_parches": 349,
+      "fa_ha_km2": 0.005,
+      "parches_con_marca": 3,
+      "pct_con_marca": 0.9,
+      "px_fa": 286
+    },
+    "altoandino": {
+      "n_parches": 49,
+      "fa_ha_km2": 0.0208,
+      "parches_con_marca": 1,
+      "pct_con_marca": 2.0,
+      "px_fa": 167
+    },
+    "chacra_o_pasto": {
+      "n_parches": 9,
+      "fa_ha_km2": 0.0,
+      "parches_con_marca": 0,
+      "pct_con_marca": 0.0,
+      "px_fa": 0
+    },
+    "rio": {
+      "n_parches": 34,
+      "fa_ha_km2": 0.0,
+      "parches_con_marca": 0,
+      "pct_con_marca": 0.0,
+      "px_fa": 0
+    },
+    "carretera": {
+      "n_parches": 8,
+      "fa_ha_km2": 0.0,
+      "parches_con_marca": 0,
+      "pct_con_marca": 0.0,
+      "px_fa": 0
+    },
+    "poblado": {
+      "n_parches": 6,
+      "fa_ha_km2": 0.0692,
+      "parches_con_marca": 1,
+      "pct_con_marca": 16.7,
+      "px_fa": 68
+    },
+    "bosque_ladera": {
+      "n_parches": 243,
+      "fa_ha_km2": 0.0013,
+      "parches_con_marca": 1,
+      "pct_con_marca": 0.4,
+      "px_fa": 51
+    }
+  },
+  "fa39_por_tipo": {
+    "b": {
+      "n_v9": 16,
+      "px_v9": 5700,
+      "n_elim": 5,
+      "px_elim": 3329
+    },
+    "d": {
+      "n_v9": 5,
+      "px_v9": 1625,
+      "n_elim": 0,
+      "px_elim": 0
+    },
+    "a": {
+      "n_v9": 9,
+      "px_v9": 2183,
+      "n_elim": 6,
+      "px_elim": 1356
+    },
+    "e": {
+      "n_v9": 3,
+      "px_v9": 571,
+      "n_elim": 0,
+      "px_elim": 0
+    },
+    "c": {
+      "n_v9": 4,
+      "px_v9": 861,
+      "n_elim": 0,
+      "px_elim": 0
+    },
+    "f": {
+      "n_v9": 2,
+      "px_v9": 51,
+      "n_elim": 2,
+      "px_elim": 51
+    }
+  }
+}
